@@ -1,6 +1,6 @@
 import { useState, useEffect} from 'react'
-import { Row, Col, Card, Button, message, Badge,  } from 'antd'
-import { PlusOutlined, MinusOutlined} from '@ant-design/icons';
+import { Row, Col, Card, Button, message, Badge, Affix, BackTop } from 'antd'
+import { PlusOutlined, MinusOutlined, UpCircleTwoTone } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { cardProps, currencyFE, numbersOnly } from '../../util/config'
 import { rxGetDishes } from '../../apis'
@@ -31,15 +31,11 @@ const ListDishes = () => {
    * ORDER
    * ------
    */
-  const handleAddOrder = (dish) => {
-    //TODO
-    message.success('Agregado')
-  }
-
   const handleGenerateOrder = () => {
     if(orders.length){
         setVisibleOrder(true)
     }else {
+        setVisibleOrder(false)
         message.info("No tiene platos elegidos.")
     }
   }
@@ -90,8 +86,11 @@ const ListDishes = () => {
             }
         })
         const result = resultOrd.filter(o => o.nQuantity !== 0)
+        if(result.length === 0){
+            setVisibleOrder(false)
+        }
         setOrders(result)
-    }
+    } 
   }
 
   const quantityByDish = (dish) => {
@@ -111,7 +110,9 @@ const ListDishes = () => {
   return (
     <div>
         <div>LISTA DE PLATOS</div>
-        <Button type='primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
+        <Affix offsetTop={20}>
+            <Button type='primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
+        </Affix>
         <Row gutter={12}>
             <Col xs={24} sm={24} md={12} lg={8}>
                 {
@@ -148,6 +149,9 @@ const ListDishes = () => {
                     ))
                 }
             </Col>
+            <BackTop>
+                <UpCircleTwoTone/>
+            </BackTop>
         </Row>
         {
             visibleOrder && orders?.length &&

@@ -26,3 +26,21 @@ export const rxGetDishes = async (cb = null) => {
     message.error('Error del servidor.')
   }
 }
+
+/**
+ * ---------------
+ * GENERATE ORDER
+ * ---------------
+ */
+ export const rxGenerateOrder = async (order, cb = null) => {
+  try {
+    const docRef = await addDoc(collection(db, 'orders'), order)
+    if(docRef){
+      message.success("Orden generada.")
+      cb && cb()
+    }
+  } catch (error) {
+    console.log(error)
+    message.error('Error del servidor.')
+  }
+}
