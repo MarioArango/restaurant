@@ -3,6 +3,15 @@ export const cardProps = {
     size: "small",
 }
 
+export const tableProps = {
+  size: "small",
+  pagination: false,
+  bordered: false,
+  sticky: true,
+  scroll: { y: `45vh`, x: `80vh` },
+  footer: (records) => `TOTAL REGISTROS: ${records && records.length}`,
+}
+
 export const requiredField = [{ required: true, message: "Campo requerido" }]
 
 export const getBase64 = (file) =>
@@ -47,3 +56,15 @@ export const dateFormatList = [
   "YYYY-MM-DD HH:mm",
   "DD/MM/YYYY hh:mm A"
 ]
+
+export const customScroll = (query = ".ant-table-body") => {
+  const vpHeight = window.innerHeight
+  const tableBody = window.document.querySelector(query)
+  if (tableBody) {
+    const tblBoundle = tableBody.getBoundingClientRect()
+    const tblHeight = (vpHeight - ((tblBoundle.top) + 30 + 50 + 55))
+    const data = { y: tblHeight, x: `80vh` }
+    return data
+  }
+  return { y: `45vh`, x: `80vh` }
+}

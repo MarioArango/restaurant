@@ -5,12 +5,15 @@ import currency from 'currency-formatter';
 import { cardProps, currencyFE, numbersOnly } from '../../util/config'
 import { rxGetDishes } from '../../apis'
 import OrderSummary from './OrderSummary';
+import RestrictedComponent from '../../components/RestrictedComponent';
+import { useAuth } from '../../context/AuthContext';
 
 const ListDishes = () => {
-  const [listDishes, setListDishes] = useState([])  
-  const [orders, setOrders] = useState([])  
-  const [visibleOrder, setVisibleOrder] = useState(false)
-
+  const auth = useAuth();
+  const [listDishes, setListDishes] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [visibleOrder, setVisibleOrder] = useState(false);
+  console.log(auth, "auth")
   /**
    * --------------
    * GET ALL DISHES 
@@ -108,10 +111,9 @@ const ListDishes = () => {
    }, [])
 
   return (
-    <div>
-        <div>LISTA DE PLATOS</div>
+    <RestrictedComponent permission={auth}>
         <Affix offsetTop={20}>
-            <Button type='primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
+            <Button type='primary' className='bg-primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
         </Affix>
         <Row gutter={12}>
             <Col xs={24} sm={24} md={12} lg={8}>
@@ -135,7 +137,7 @@ const ListDishes = () => {
                                 <Button  block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
                                     <MinusOutlined jey="del"/>
                                 </Button>,
-                                <Button type='primary' block onClick={() => handleAddQtyDish(d)}>
+                                <Button type='primary' className='bg-primary' block onClick={() => handleAddQtyDish(d)}>
                                     <PlusOutlined key="add" />
                                 </Button>
                             ]}
@@ -165,7 +167,8 @@ const ListDishes = () => {
                 handleDelQtyDish={handleDelQtyDish}
             />
         }
-    </div>
+    
+    </RestrictedComponent>
   )
 }
 

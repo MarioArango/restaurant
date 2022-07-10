@@ -116,7 +116,7 @@ const AddDish = () => {
         >
           <Row gutter={12}>
             <Col xs={24} sm={24} md={24} lg={12}>
-              <Item label="Imagenes del plato." required={requiredField}>
+              <Item label="Imagenes del plato." rules={requiredField}>
                 <Upload
                   name="sPhoto"
                   listType="picture-card"
@@ -132,7 +132,7 @@ const AddDish = () => {
             </Col>
             <Col span={24}>
               <Item label="Nombre" name="sName">
-                <Input required={requiredField}/>
+                <Input rules={requiredField}/>
               </Item>
             </Col>
             <Col span={24}>
@@ -142,7 +142,7 @@ const AddDish = () => {
             </Col>
             <Col span={24}>
               <Item label="Precio" name="nPrice">
-                <Input onKeyDown={currencyOnly} required={requiredField}/>
+                <Input onKeyDown={currencyOnly} rules={requiredField}/>
               </Item>
             </Col>
             <Col span={24}>

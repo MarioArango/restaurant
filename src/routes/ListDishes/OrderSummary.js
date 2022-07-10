@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import moment from 'moment'
 import currency from 'currency-formatter'
-import { Row, Col, Modal, List, Skeleton, Avatar, Button, Popconfirm, Divider} from 'antd'
+import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider} from 'antd'
 import { PlusOutlined, MinusOutlined, DeleteOutlined} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
@@ -35,7 +35,6 @@ const OrderSummary = (props) => {
             }
         }))
 
-        console.log(order, "order")
         setLoadingGenOrder(true)
         // rxGenerateOrder(order, () => {
         //     setLoadingGenOrder(false)
@@ -70,23 +69,14 @@ const OrderSummary = (props) => {
    console.log(orders, "orders")
 
    return (
-    <Modal
+    <Drawer
+        title="Basic Drawer"
+        placement="right"
+        closable={false}
+        onClose={handleCancel}
         visible={visibleOrder}
-        title="Resumen de Pedido"
-        bodyStyle={{ paddingBlock: 0 }}
-        width="75%"
-        onCancel={handleCancel}
-        maskClosable={false}
-        destroyOnClose
-        loading={loadingGenOrder}
-        footer={[
-            <Popconfirm placement="top" title='¿Desea generar el pedido?' onConfirm={handleSendOrder} okText="Sí" cancelText="No">
-                <Button icon={<SendOutlined />} type='primary'>
-                    Enviar
-                </Button>
-            </Popconfirm>
-        ]}
-    >
+        key="right"
+      >
         <Row gutter={12}>
             <Col span={24}>
                 <List
@@ -105,6 +95,7 @@ const OrderSummary = (props) => {
                                 />,
                                 <Button 
                                     type="primary"
+                                    className='bg-primary'
                                     shape="circle" 
                                     icon={<PlusOutlined/>} 
                                     onClick={() => handleAddQtyDish(dish)} 
@@ -144,8 +135,21 @@ const OrderSummary = (props) => {
             <Col span={16}>
                 <strong>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</strong>
             </Col>
+            <Col span={24}>
+                <Popconfirm placement="top" title='¿Desea generar el pedido?' onConfirm={handleSendOrder} okText="Sí" cancelText="No">
+                    <Button
+                        type="primary" 
+                        icon={<SendOutlined />}
+                        loading={loadingGenOrder}
+                        className="bg-primary"
+                        block
+                    >
+                        Enviar
+                    </Button>
+                </Popconfirm>
+            </Col>
         </Row>
-    </Modal>
+      </Drawer>
   )
 }
 
