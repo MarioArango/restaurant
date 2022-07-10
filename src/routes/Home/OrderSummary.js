@@ -21,6 +21,7 @@ const OrderSummary = (props) => {
    const [loadingGenOrder, setLoadingGenOrder] = useState(false)
 
    const handleSendOrder = () => {
+    //FALTA IMPLEMENTAR LA LOGICA DE LA ORDEN - DEPENDE DEL CLIENTE
         const orderInit = orders.map(o => ({
             priceTotal: calculatePriceTotalByDish(o), 
             state: 'pending',
@@ -66,11 +67,10 @@ const OrderSummary = (props) => {
     })
     return priceTotal
    } 
-   console.log(orders, "orders")
 
    return (
     <Drawer
-        title="Basic Drawer"
+        title="Resumen de Pedido"
         placement="right"
         closable={false}
         onClose={handleCancel}

@@ -2,23 +2,16 @@ import { useState, useEffect} from 'react'
 import { Row, Col, Card, Button, message, Badge, Affix, BackTop } from 'antd'
 import { PlusOutlined, MinusOutlined, UpCircleTwoTone } from '@ant-design/icons';
 import currency from 'currency-formatter';
-import { cardProps, currencyFE, numbersOnly } from '../../util/config'
+import { cardProps, currencyFE } from '../../util/config'
 import { rxGetDishes } from '../../apis'
 import OrderSummary from './OrderSummary';
-import RestrictedComponent from '../../components/RestrictedComponent';
-import { useAuth } from '../../context/AuthContext';
 
-const ListDishes = () => {
-  const auth = useAuth();
+const Home = () => {
   const [listDishes, setListDishes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [visibleOrder, setVisibleOrder] = useState(false);
-  console.log(auth, "auth")
-  /**
-   * --------------
-   * GET ALL DISHES 
-   * --------------
-   */
+
+  //TODO: GET ALL DISHES 
   const getDishes = () => {
     rxGetDishes((querySnapshot) => {
         const dishes = []
@@ -29,11 +22,7 @@ const ListDishes = () => {
     })
   }
 
-  /**
-   * ------
-   * ORDER
-   * ------
-   */
+  //TODO: SHOW ORDER SUMMARY
   const handleGenerateOrder = () => {
     if(orders.length){
         setVisibleOrder(true)
@@ -43,6 +32,7 @@ const ListDishes = () => {
     }
   }
   
+  //TODO: ADD DISH TO ORDER
   const handleAddQtyDish = (dish) => {
     if(orders.length === 0){
         setOrders([{...dish, nQuantity: dish.nQuantity + 1}])
@@ -71,6 +61,7 @@ const ListDishes = () => {
     }
   }
  
+  //TODO: DELETE DISH TO ORDER
   const handleDelQtyDish = (dish) => {
     const orderUp = orders.filter(o => o.nIdDish === dish.nIdDish);
     if(orderUp.length === 1 && orderUp[0].nQuantity > 0){
@@ -96,22 +87,25 @@ const ListDishes = () => {
     } 
   }
 
+  //TODO: QUANTITY TOTAL BY DISH
   const quantityByDish = (dish) => {
     const orderMatch = orders.filter(o => o.nIdDish === dish.nIdDish)
     return orderMatch[0]?.nQuantity?? 0
   }
 
+  //TODO: DISABLED BUTTON DELETE DISH
   const disabledDelete = (dish) => {
     const orderMatch = orders.filter(o => o.nIdDish === dish.nIdDish)
     return orderMatch.length === 0 ? true : orderMatch[0].nQuantity === 0? true : false
   }
 
+  //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
-       getDishes()
+       getDishes();
    }, [])
 
   return (
-    <RestrictedComponent permission={auth}>
+    <>
         <Affix offsetTop={20}>
             <Button type='primary' className='bg-primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
         </Affix>
@@ -168,8 +162,8 @@ const ListDishes = () => {
             />
         }
     
-    </RestrictedComponent>
+    </>
   )
 }
 
-export default ListDishes
+export default Home;

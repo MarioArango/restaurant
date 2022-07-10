@@ -3,8 +3,8 @@ import { createContext, useContext } from "react";
 export const contextAuth = createContext();
 
 export const useAuth = () => {
-    const data = useContext(contextAuth);
-    return data
+    const auth = useContext(contextAuth);
+    return auth;
 }
 
 export const AuthProvider = ({ children }) => {
