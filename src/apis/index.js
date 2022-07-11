@@ -1,6 +1,6 @@
 import { db } from '../firebase/firebaseConfig';
 import { auth } from '../firebase/firebaseConfig';
-import { doc, addDoc, getDoc, onSnapshot, collection } from "firebase/firestore";
+import { doc, addDoc, getDoc, deleteDoc, updateDoc, onSnapshot, collection } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { message } from 'antd';
 
@@ -21,9 +21,30 @@ export const rxAddDishes = async (dish, cb = null) => {
     }
 }
 
+export const rxUpdateDish = async (nIdDish, dish, cb = null) => {
+    try {
+      await updateDoc(collection(db, 'dishes', nIdDish), dish);
+      message.success("Plato actualizado.")
+      cb && cb()
+    } catch (error) {
+      message.error('Error del servidor.')
+    }
+}
+
+
 export const rxGetDishes = async (cb = null) => {
   try {
     onSnapshot(collection(db, 'dishes'), cb)
+  } catch (error) {
+    message.error('Error del servidor.')
+  }
+}
+
+export const rxDeleteDish = async (nIdDish, cb = null) => {
+  try {
+    await deleteDoc(doc(db, 'dishes', nIdDish))
+    message.success("Eliminado.")
+    cb && cb()
   } catch (error) {
     message.error('Error del servidor.')
   }
@@ -62,6 +83,16 @@ export const rxGetDishes = async (cb = null) => {
   }
 } 
 
+export const rxUpdateUser = async (nIdUser, user, cb = null) => {
+  try {
+    await updateDoc(collection(db, 'users', nIdUser), user);
+    message.success("Usuario actualizado.")
+    cb && cb()
+  } catch (error) {
+    message.error('Error del servidor.')
+  }
+} 
+
 export const rxGetUsers = async (cb = null) => {
   try {
     onSnapshot(collection(db, 'users'), cb)
@@ -70,9 +101,11 @@ export const rxGetUsers = async (cb = null) => {
   }
 }
 
-export const rxDeleteUser = async (cb = null) => {
+export const rxDeleteUser = async (nIdUser, cb = null) => {
   try {
-    //falta implementar
+    await deleteDoc(doc(db, 'users', nIdUser))
+    message.success("Eliminado.")
+    cb && cb()
   } catch (error) {
     message.error('Error del servidor.')
   }

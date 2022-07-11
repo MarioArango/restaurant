@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button, message, Select} from 'antd';
-import { rxRegisterUser } from '../../apis';
+import { rxRegisterUser, rxUpdateUser } from '../../apis';
 import { requiredField } from '../../util/config';
 
 const { Item } = Form;
@@ -32,13 +32,23 @@ const FormUser = (props) => {
               sPassword: values.sPassword,
               sRol: values.sRol
           }
-          rxRegisterUser(user, () => {
-              message.success("Registrado")
-              setLoadingCreateUser(false)
-              resetFields()
-              setUserSelected(null)
-              setView(false)
-          })
+          if(userSelected){
+            rxUpdateUser(userSelected.nIdUser, user, () => {
+                message.success("Actualizado")
+                setLoadingCreateUser(false)
+                resetFields()
+                setUserSelected(null)
+                setView(false)
+            })
+          }else {
+            rxRegisterUser(user, () => {
+                message.success("Registrado")
+                setLoadingCreateUser(false)
+                resetFields()
+                setUserSelected(null)
+                setView(false)
+            })
+          }
       })
   }
   //TODO: CLOSE FORM USER
@@ -51,7 +61,8 @@ const FormUser = (props) => {
     if(userSelected && view){
         setFieldsValue({
             sUsername: userSelected.sUsername,
-            sPassword: userSelected.sPassword
+            sPassword: userSelected.sPassword,
+            sRol: userSelected.sRol,
         })
     }
   }, [userSelected])
@@ -60,7 +71,7 @@ const FormUser = (props) => {
     <>
         {
             view && (
-                <Modal
+            <Modal
                     title={userSelected? <div><UserOutlined/> Editar usuario</div> : <div><UserAddOutlined/> Registrar Usuario</div>}
                     visible={view}
                     bodyStyle={{ padding: 10 }}
@@ -115,7 +126,7 @@ const FormUser = (props) => {
                             </Col>
                         </Row>
                     </Form>
-                </Modal>
+            </Modal>
             )
         }
     </>

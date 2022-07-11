@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, Card, Tooltip, Modal } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
 import { DeleteTwoTone, EditOutlined, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormUser from './FormUser';
@@ -9,6 +9,7 @@ const Users = () => {
   const [listUsers, setListUsers] = useState([]);
   const [ view, setView ] = useState(false);
   const [ userSelected, setUserSelected ] = useState(null);
+  const [ loadingDelete, setLoadingDelete ] = useState(false);
 
   const handleViewFormUser = () => {
     setView(true)
@@ -39,7 +40,10 @@ const Users = () => {
         cancelText: "Cancelar",
         cancelButtonProps: { type: "text" },
         onOk: () => {
-            // rxDeleteUser()
+            setLoadingDelete(true)
+            rxDeleteUser(user.nIdUser, () => {
+                setLoadingDelete(false)
+            })
         },
         onCancel: () => { }
       })
@@ -81,7 +85,9 @@ const Users = () => {
                     <EditTwoTone onClick={() => handleEditUser(user)} />
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                    <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
+                    <Spin spinning={loadingDelete}>
+                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
+                    </Spin>
                 </Tooltip>
             </div>
         )

@@ -114,31 +114,38 @@ const Home = () => {
         <Row gutter={12}>
                 {
                     listDishes?.map((d, index)=> (
-                        <Col xs={24} sm={8} md={8} lg={8}>
-                            <Card
-                                key={index}
-                                {...cardProps}
-                                actions={[
-                                    <Button block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
-                                        <MinusOutlined jey="del"/>
-                                    </Button>,
-                                    <Button type='primary' className='bg-primary' block onClick={() => handleAddQtyDish(d)}>
-                                        <PlusOutlined key="add" />
-                                    </Button>
-                                ]}
-                            >
-                                <Badge count={quantityByDish(d)} color="blue" size="large">
+                        <div key={index} className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-16 pb-2 hover:shadow-gray-500 hover:p-1">
+                            <Badge count={quantityByDish(d)} color="blue" size="large">
+                                <div className="card">
+                                <div className="card-header mx-4 mt-6 bg-cover">
                                         <img
-                                            alt="Imagen del plato."
+                                            className="rounded-lg cursor-pointer border bg-cover w-full"
                                             src={d.sPhoto}
+                                            alt="Imagen del plato."
                                         />
-                                </Badge>
-                                <div className='m-2 flex justify-between'>
-                                    <div className='font-bold text-xl'>{d.sName}</div>
-                                    <div className='font-bold text-xl'>S/. {d.nPrice ? currency.format(Number(d.nPrice), currencyFE) : '0.00'}</div>
                                 </div>
-                            </Card>
-                        </Col>
+                                <div className="card-body mx-4 mt-2">
+                                    <div className='flex justify-between'>
+                                    <h4 className="font-semibold text-xl">{d.sName}</h4>
+                                    <h4 className="font-semibold text-2xl">S/. {d.nPrice ? currency.format(d.nPrice, currencyFE) : '0.00'}</h4>
+                                    </div>
+                                    <p className="opcacity-60 mb-4">
+                                    The time is now for it to be okay to be great. People in this
+                                    world shun people for being great. For being a bright color. For
+                                    standing out.
+                                    </p>
+                                    <div className='flex justify-between'>
+                                        <Button className='mr-1' block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
+                                            <MinusOutlined jey="del"/>
+                                        </Button>
+                                        <Button className='bg-primary ml-1' type='primary' block onClick={() => handleAddQtyDish(d)}>
+                                            <PlusOutlined key="add" />
+                                        </Button>
+                                    </div>
+                                </div>
+                                </div>
+                            </Badge>
+                        </div>
                     ))
                 }
             <BackTop>
@@ -157,7 +164,6 @@ const Home = () => {
                 handleDelQtyDish={handleDelQtyDish}
             />
         }
-    
     </>
   )
 }
