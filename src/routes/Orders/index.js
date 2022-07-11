@@ -38,7 +38,7 @@ const Orders = () => {
                 loading={false}
                 dataSource={[]}
                 rowKey={(order) => order.nIdOrder}
-                rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "gx-outline-record gx-pointer" : "gx-pointer"}
+                rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                 scroll={customScroll()}
                 onRow={(order) => ({
                     onClick: () => {

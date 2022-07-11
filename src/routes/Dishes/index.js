@@ -89,7 +89,7 @@ const Dishes = () => {
                 loading={false}
                 dataSource={listDishes}
                 rowKey={(dish) => dish.nIdDish}
-                rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "gx-outline-record gx-pointer" : "gx-pointer"}
+                rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                 scroll={customScroll()}
                 onRow={(dish) => ({
                     onClick: () => {

@@ -106,45 +106,41 @@ const Home = () => {
 
   return (
     <>
-        <Affix offsetTop={20}>
-            <Button type='primary' className='bg-primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
-        </Affix>
+        <div className='flex justify-end'>
+            <Affix offsetTop={20} className="mb-5">
+                <Button type='primary' className='bg-primary' onClick={handleGenerateOrder}>Generar Pedido</Button>
+            </Affix>
+        </div>
         <Row gutter={12}>
-            <Col xs={24} sm={24} md={12} lg={8}>
                 {
                     listDishes?.map((d, index)=> (
-                        <Card
-                            key={index}
-                            {...cardProps}
-                            title={d.sName}
-                            cover={
+                        <Col xs={24} sm={8} md={8} lg={8}>
+                            <Card
+                                key={index}
+                                {...cardProps}
+                                actions={[
+                                    <Button block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
+                                        <MinusOutlined jey="del"/>
+                                    </Button>,
+                                    <Button type='primary' className='bg-primary' block onClick={() => handleAddQtyDish(d)}>
+                                        <PlusOutlined key="add" />
+                                    </Button>
+                                ]}
+                            >
                                 <Badge count={quantityByDish(d)} color="blue" size="large">
-                                    <img
-                                        alt="Imagen del plato."
-                                        src={d.sPhoto}
-                                        width="100%"
-                                    />
+                                        <img
+                                            alt="Imagen del plato."
+                                            src={d.sPhoto}
+                                        />
                                 </Badge>
-                                
-                            }
-                            actions={[
-                                <Button  block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
-                                    <MinusOutlined jey="del"/>
-                                </Button>,
-                                <Button type='primary' className='bg-primary' block onClick={() => handleAddQtyDish(d)}>
-                                    <PlusOutlined key="add" />
-                                </Button>
-                            ]}
-                        >
-                            <Row gutter={12}>
-                                <Col span={20}>
-                                    <div>S/. {d.nPrice ? currency.format(Number(d.nPrice), currencyFE) : '0.00'}</div>
-                                </Col>
-                            </Row>
-                        </Card>
+                                <div className='m-2 flex justify-between'>
+                                    <div className='font-bold text-xl'>{d.sName}</div>
+                                    <div className='font-bold text-xl'>S/. {d.nPrice ? currency.format(Number(d.nPrice), currencyFE) : '0.00'}</div>
+                                </div>
+                            </Card>
+                        </Col>
                     ))
                 }
-            </Col>
             <BackTop>
                 <UpCircleTwoTone/>
             </BackTop>

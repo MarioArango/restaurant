@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Table, Card, Tooltip, Modal } from 'antd';
+import { DeleteTwoTone, EditOutlined, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers } from '../../apis';
@@ -73,15 +73,15 @@ const Users = () => {
         key: "",
         dataIndex: "",
         title: "",
-        width: 100,
+        width: 50,
         align: "center",
         render: (_, user) => (
             <div className='flex justify-around'>
                 <Tooltip title="Editar">
-                    <EditOutlined onClick={() => handleEditUser(user)} />
+                    <EditTwoTone onClick={() => handleEditUser(user)} />
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                    <DeleteOutlined onClick={() => handleDeleteUser(user)} />
+                    <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
                 </Tooltip>
             </div>
         )
@@ -117,7 +117,7 @@ const Users = () => {
                 loading={false}
                 dataSource={listUsers}
                 rowKey={(user) => user.nIdUser}
-                rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "gx-outline-record gx-pointer" : "gx-pointer"}
+                rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                 scroll={customScroll()}
                 onRow={(user) => ({
                     onClick: () => {

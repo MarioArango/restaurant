@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import moment from 'moment'
 import currency from 'currency-formatter'
 import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider} from 'antd'
-import { PlusOutlined, MinusOutlined, DeleteOutlined} from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, DeleteOutlined, DeleteTwoTone} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
 import { rxGenerateOrder } from '../../apis';
@@ -102,15 +102,15 @@ const OrderSummary = (props) => {
                                     key="add"
                                 />,
                                 <Popconfirm 
-                                    placement="top" 
+                                    placement="left" 
                                     title='¿Eliminar plato?' 
                                     onConfirm={() => handleDelTotalQtyDish(dish)} 
-                                    okText="Sí" 
+                                    okText="Sí"
                                     cancelText="No"
                                 >
                                     <Button 
                                         shape="circle" 
-                                        icon={<DeleteOutlined/>} 
+                                        icon={ <DeleteTwoTone twoToneColor="#ed4956"/>}
                                         key="del-total"
                                     />
                                 </Popconfirm>
@@ -129,12 +129,10 @@ const OrderSummary = (props) => {
                 />
             </Col>
             <Divider/>
-            <Col span={8}>
-                <strong>TOTAL:</strong>
-            </Col>
-            <Col span={16}>
-                <strong>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</strong>
-            </Col>
+            <div className='flex justify-between w-screen px-2 mb-3'>
+                <div className='font-bold text-xl'>TOTAL:</div>
+                <div className='font-bold text-xl'>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</div>
+            </div>
             <Col span={24}>
                 <Popconfirm placement="top" title='¿Desea generar el pedido?' onConfirm={handleSendOrder} okText="Sí" cancelText="No">
                     <Button
