@@ -85,10 +85,13 @@ export const rxDeleteDish = async (nIdDish, cb = null) => {
 
 export const rxUpdateUser = async (nIdUser, user, cb = null) => {
   try {
+    console.log(nIdUser, "nIdUser")
+    console.log(user, "user")
     await updateDoc(collection(db, 'users', nIdUser), user);
     message.success("Usuario actualizado.")
     cb && cb()
   } catch (error) {
+    console.log(error, "error")
     message.error('Error del servidor.')
   }
 } 

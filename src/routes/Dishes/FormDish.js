@@ -3,7 +3,7 @@ import { PlusOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
 import convert from 'client-side-image-resize';
 import { Upload, Modal, Form, Row, Col, Input, Button, message, Card } from 'antd';
 import { requiredField, cardProps, getBase64, getFileFromBase64, currencyOnly } from '../../util/config';
-import { rxAddDishes } from '../../apis';
+import { rxAddDishes, rxUpdateDish } from '../../apis';
 
 const { Item } = Form
 const FormDish = (props) => {
@@ -75,7 +75,7 @@ const FormDish = (props) => {
 
   //TODO: VERIFY SIZE AND TYPE IMAGE
    const beforeUpload  = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpeg'
     if (!isJpgOrPng) {
       message.error('Solo puedes cargar imagenes de tipo JPG/PNG')
     }
@@ -176,58 +176,50 @@ const FormDish = (props) => {
                 destroyOnClose
                 loading={loadingAddDish}
             >
-                <Card
-                    {...cardProps}
-                    hoverable
-                    style={{width: 240}}
-                    loading={loadingAddDish}
-                    bordered
+                <Form
+                    name="form-save-dish"
+                    form={form}
+                    onFinish={handleSaveDish}
+                    layout="vertical"
                 >
-                    <Form
-                        name="form-save-dish"
-                        form={form}
-                        onFinish={handleSaveDish}
-                        layout="vertical"
-                    >
-                        <Row gutter={12}>
-                            <Col xs={24} sm={24} md={24} lg={12}>
-                                <Item label="Imagen del plato." rules={requiredField}>
-                                    <Upload
-                                      name="sPhoto"
-                                      listType="picture-card"
-                                      accept=".png,.jpg"
-                                      fileList={fileList}
-                                      onPreview={handlePreview}
-                                      onChange={handleChange}
-                                      beforeUpload={beforeUpload}
-                                    >
-                                    {fileList.length >= 1 ? null : uploadButton}
-                                    </Upload>
-                                </Item>
-                            </Col>
-                            <Col>
-                            </Col>
-                            <Col span={24}>
-                                <Item label="Nombre" name="sName">
-                                    <Input rules={requiredField}/>
-                                </Item>
-                            </Col>
-                            <Col span={24}>
-                                <Item label="Tipo" name="sType">
-                                    <Input/>
-                                </Item>
-                            </Col>
-                            <Col span={24}>
-                                <Item label="Precio" name="nPrice">
-                                    <Input onKeyDown={currencyOnly} rules={requiredField}/>
-                                </Item>
-                            </Col>
-                            <Col span={24}>
-                                <Button className='bg-primary' htmlType='submit' type='primary'><SaveOutlined />Agregar</Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Card>
+                    <Row gutter={12}>
+                        <Col span={24}>
+                            <Item rules={requiredField}>
+                                <Upload
+                                  name="sPhoto"
+                                  listType="picture-card"
+                                  accept=".png,.jpg,.jpeg"
+                                  fileList={fileList}
+                                  onPreview={handlePreview}
+                                  onChange={handleChange}
+                                  beforeUpload={beforeUpload}
+                                >
+                                  {fileList.length >= 1 ? null : uploadButton}
+                                </Upload>
+                            </Item>
+                        </Col>
+                        <Col>
+                        </Col>
+                        <Col span={24}>
+                            <Item label="Nombre" name="sName">
+                                <Input rules={requiredField}/>
+                            </Item>
+                        </Col>
+                        <Col span={24}>
+                            <Item label="Tipo" name="sType">
+                                <Input rules={requiredField}/>
+                            </Item>
+                        </Col>
+                        <Col span={24}>
+                            <Item label="Precio" name="nPrice">
+                                <Input onKeyDown={currencyOnly} rules={requiredField}/>
+                            </Item>
+                        </Col>
+                        <Col span={24}>
+                            <Button block className='bg-primary' htmlType='submit' type='primary'><SaveOutlined />Agregar</Button>
+                        </Col>
+                    </Row>
+                </Form>
                 <Modal 
                     visible={previewVisible} 
                     title={previewTitle} 

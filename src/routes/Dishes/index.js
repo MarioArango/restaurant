@@ -45,10 +45,10 @@ const Dishes = () => {
         cancelText: "Cancelar",
         cancelButtonProps: { type: "text" },
         onOk: () => {
-                setLoadingDelete(true)
+            setLoadingDelete(true)
             rxDeleteDish(dish.nIdDish, () => {
-                setLoadingDelete(false)
-            })
+            setLoadingDelete(false)
+        })
         },
         onCancel: () => { }
       })
@@ -80,10 +80,10 @@ const Dishes = () => {
     {
         key: "nPrice",
         dataIndex: "nPrice",
-        title: "nPrice",
+        title: "Precio unit.",
         width: 80,
         align: "right",
-        render: value => "S/." + (value.nPrice ? currency.format(Number(value.nPrice), currencyFE) : '0.00')
+        render: value => value ? currency.format(Number(value), currencyFE) : '0.00'
     },
     {
         key: "",
@@ -110,6 +110,8 @@ const Dishes = () => {
   useEffect(() => {
     getDishes();
   }, [])
+
+  console.log(listDishes, "listDishes")
 
   return (
     <>

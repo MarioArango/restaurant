@@ -42,8 +42,8 @@ const Users = () => {
         onOk: () => {
             setLoadingDelete(true)
             rxDeleteUser(user.nIdUser, () => {
-                setLoadingDelete(false)
-            })
+            setLoadingDelete(false)
+        })
         },
         onCancel: () => { }
       })
@@ -93,7 +93,6 @@ const Users = () => {
         )
     }
   ]
-
   
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
