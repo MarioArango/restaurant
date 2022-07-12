@@ -21,27 +21,28 @@ const OrderSummary = (props) => {
    const [loadingGenOrder, setLoadingGenOrder] = useState(false)
 
    const handleSendOrder = () => {
-    //FALTA IMPLEMENTAR LA LOGICA DE LA ORDEN - DEPENDE DEL CLIENTE
-        const orderInit = orders.map(o => ({
-            priceTotal: calculatePriceTotalByDish(o), 
-            state: 'pending',
-            created: moment().format(dateFormatList[2]),
-            nQuantity: o.nQuantity,
-            dish: {
-                nIdDish: o.nIdDish,
-                nPrice: o.nPrice,
-                sName: o.sName,
-                sPhoto: o.sPhoto,
-                sType: o.sType
-            }
+        const orderFormat = orders.map(o => ({
+            nPriceTotal: calculatePriceTotalByDish(o), 
+            nQuantityTotal: o.nQuantity,
+            nIdDish: o.nIdDish,
+            sName: o.sName,
+            nPrice: o.nPrice,
+            sPhoto: o.sPhoto,
+            sType: o.sType
         }))
 
-        setLoadingGenOrder(true)
-        // rxGenerateOrder(order, () => {
-        //     setLoadingGenOrder(false)
-        //     setOrders([])
-        //     setVisibleOrder(false)
-        // })
+        const orderToSend = {
+            dCreated: moment().format(dateFormatList[2]),
+            sState: 'pending',
+            dishes: orderFormat
+        }
+
+        setLoadingGenOrder(true);
+        rxGenerateOrder(orderToSend, () => {
+            setOrders([])
+            setVisibleOrder(false)
+            setLoadingGenOrder(false)
+        })
    }
 
    const handleDelTotalQtyDish = (dish) => {

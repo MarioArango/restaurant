@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react'
-import { Row, Col, Card, Button, message, Badge, Affix, BackTop, Tooltip } from 'antd'
+import { Row, Col, Card, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd'
 import { PlusOutlined, MinusOutlined, UpCircleTwoTone, ShoppingTwoTone, ShoppingOutlined, UpOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { cardProps, currencyFE } from '../../util/config'
@@ -11,15 +11,19 @@ const Home = () => {
   const [listDishes, setListDishes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [visibleOrder, setVisibleOrder] = useState(false);
+  const [loadingGetDishes, setLoadingGetDishes] = useState(false);
 
   //TODO: GET ALL DISHES 
   const getDishes = () => {
+    setLoadingGetDishes(true);
     rxGetDishes((querySnapshot) => {
-        const dishes = []
+        setLoadingGetDishes(false);
+        const dishes = [];
         querySnapshot.forEach(doc => {
             dishes.push({...doc.data(), nIdDish: doc.id}) 
         })
-        setListDishes(dishes)
+        setListDishes(dishes);
+        setLoadingGetDishes(false);
     })
   }
 
@@ -106,7 +110,7 @@ const Home = () => {
    }, [])
 
   return (
-    <>
+    <Spin spinning={loadingGetDishes}>
         <div className='flex justify-end'>
             <Affix offsetTop={20} className="mb-5">
                 <Button 
@@ -176,7 +180,7 @@ const Home = () => {
                 handleDelQtyDish={handleDelQtyDish}
             />
         }
-    </>
+    </Spin>
   )
 }
 

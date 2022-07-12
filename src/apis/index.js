@@ -67,6 +67,24 @@ export const rxDeleteDish = async (nIdDish, cb = null) => {
   }
 }
 
+export const rxGetOrders = async (cb = null) => {
+  try {
+    onSnapshot(collection(db, 'orders'), cb)
+  } catch (error) {
+    message.error('Error del servidor.')
+  }
+}
+
+export const rxUpdateOrder = async (nIdOrder, order, cb = null) => {
+  try {
+    await updateDoc(collection(db, 'orders', nIdOrder), order);
+    message.success("Pedido actualizado.")
+    cb && cb()
+  } catch (error) {
+    message.error('Error del servidor.')
+  }
+}
+
 /**
  * --------------
  * REGISTER USER

@@ -56,8 +56,9 @@ const LayoutApp = ({children}) => {
       style={{
         textAlign: 'center',
       }}
+      className="bg-gray-300"
     >
-      Restaurante @Copyright
+      <p className='font-medium'>Restaurante @Copyright</p>
     </Footer>
   </Layout>
   )
