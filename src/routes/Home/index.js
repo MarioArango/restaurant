@@ -110,8 +110,8 @@ const Home = () => {
    }, [])
 
   return (
-    <Spin spinning={loadingGetDishes}>
-        <div className='flex justify-end'>
+    <Spin spinning={loadingGetDishes} className="">
+        <div className='flex justify-end mt-2'>
             <Affix offsetTop={20} className="mb-5">
                 <Button 
                     type='primary' 
@@ -126,8 +126,8 @@ const Home = () => {
         <Row gutter={12}>
             {
                 listDishes?.map((d, index)=> (
-                    <Col xs={24} sm={12} md={12} lg={8} xl={6}>
-                        <div key={index} className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-500 hover:px-[1px]">
+                    <Col xs={24} sm={12} md={12} lg={8} xl={6} key={index}>
+                        <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-500 hover:px-[1px]">
                             <Badge count={quantityByDish(d)} color="blue" className='p-0'>
                                 <div className="card">
                                     <div className="card-header mx-4 mt-6 bg-cover">

@@ -3,57 +3,65 @@ import { useNavigate } from "react-router-dom";
 import { Card, Form, Row, Col, Input, Button, message} from 'antd';
 import { rxLoginUser } from '../../apis';
 import { cardProps, requiredField } from '../../util/config';
-import { GoogleOutlined, IdcardOutlined, SafetyOutlined, SecurityScanOutlined, UserOutlined } from '@ant-design/icons';
+import { IdcardOutlined } from '@ant-design/icons';
+import { setAuth } from '../../Storage';
 
 const { Item } = Form;
 
 const Login = () => {
-   //TODO: HOOKS INHERED FROM ANTD
-   const [form] = Form.useForm();
-   const { validateFields, resetFields, setFieldsValue } = form;
+  //TODO: HOOKS INHERED FROM ANTD
+  const [form] = Form.useForm();
+  const { validateFields, resetFields } = form;
 
   const [loadingLoginUser, setLoadingLoginUser] = useState(false)
 
   const navigate = useNavigate()
 
-  const handleSubmit = () => {
+  const handleLogin = () => {
     validateFields().then((values) => {
       setLoadingLoginUser(true)
-      rxLoginUser(values.username, values.password, (user) => {
-          message.success("Bienvenido")
-          setLoadingLoginUser(false)
-          resetFields()
-          navigate('/')
+      rxLoginUser(values.sUsername, values.sPassword, (isValidate) => {
+        if(isValidate){
+            setAuth(({isValidate: true, sUsername: values.sUsername}));
+            message.success("Bienvenido")
+            setLoadingLoginUser(false)
+            resetFields()
+            navigate('/home')
+        }else {
+            setLoadingLoginUser(false)
+            message.error("Credenciales incorrectas")
+            navigate('/login')
+        }
       })
   })
 }
   return (
-    <div className='w-screen flex place-content-center'>
+    <div className='h-screen flex justify-center items-center'>
         <Card
-        {...cardProps}
-        style={{ width: "350px", height: "270px" }}
-        bodyStyle={{ padding: 10 }}
-        title={
-            <div className='flex justify-between'> 
-                Bienvenido 
-                <IdcardOutlined className='mt-1' />
-            </div>}
-
+            {...cardProps}
+            style={{ width: "350px", height: "270px" }}
+            bodyStyle={{ padding: 10 }}
+            title={
+                <div className='flex justify-between'> 
+                    Bienvenido 
+                    <IdcardOutlined className='mt-1' />
+                </div>
+            }
         >
         <Form
             name='form-user'
             form={form}
-            onFinish={handleSubmit}
+            onFinish={handleLogin}
             layout="vertical"
         >
             <Row gutter={12}>
                 <Col span={24}>
-                    <Item label="Usuario" name="username" rules={requiredField}>
+                    <Item label="Usuario" name="sUsername" rules={requiredField}>
                         <Input/>
                     </Item>
                 </Col>
                 <Col span={24}>
-                    <Item label="Contraseña" name="password" rules={requiredField}>
+                    <Item label="Contraseña" name="sPassword" rules={requiredField}>
                         <Input.Password />
                     </Item>
                 </Col>
@@ -70,7 +78,7 @@ const Login = () => {
                 </Col>
             </Row>
         </Form>
-        </Card>
+    </Card>
     </div>
   )
 }

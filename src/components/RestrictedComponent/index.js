@@ -1,10 +1,12 @@
 import { Navigate } from 'react-router-dom'
+import { useAuth } from '../../Storage'
 
-const RestrictedComponent = ({ children, auth }) => {
+const RestrictedComponent = ({ children }) => {
+  const auth = useAuth();
   return (
     <>
       {
-        true ? children : <Navigate to="/login" replace={true}/>
+        auth?.isValidate ? children : <Navigate to="/login" replace={true}/>
       }
     </>
   )

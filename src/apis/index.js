@@ -1,6 +1,6 @@
 import { db } from '../firebase/firebaseConfig';
 import { auth } from '../firebase/firebaseConfig';
-import { doc, addDoc, getDoc, deleteDoc, updateDoc, onSnapshot, collection } from "firebase/firestore";
+import { doc, addDoc, getDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { message } from 'antd';
 
@@ -137,13 +137,19 @@ export const rxDeleteUser = async (nIdUser, cb = null) => {
  * LOGIN USER
  * -----------
  */
-export const rxLoginUser = async (email, password, cb = null) => {
+export const rxLoginUser = async (sUsername, sPassword, cb = null) => {
   try {
-    const docSnap = await getDoc(doc(db, "users"))
-    if (docSnap.exists()) {
-      cb && cb(docSnap.data())
-    } else {
-      message.error('Credenciales incorrectas.')
+    const q = query(collection(db, "users"), where("sUsername", "==", sUsername), where("sPassword", "==", sPassword));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot?.docs?.length > 0){
+      querySnapshot.forEach((doc) => {
+        const user = doc.data();
+        if(user.sUsername === sUsername && user.sPassword === sPassword){
+          cb && cb(true)
+        }
+      })
+    }else {
+      cb && cb(false)
     }
   } catch (error) {
     message.error('Error del servidor.')
