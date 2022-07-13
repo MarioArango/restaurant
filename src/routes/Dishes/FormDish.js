@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { PlusOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import convert from 'client-side-image-resize';
-import { Upload, Modal, Form, Row, Col, Input, Button, message, Card } from 'antd';
-import { requiredField, cardProps, getBase64, getFileFromBase64, currencyOnly } from '../../util/config';
+import { Upload, Modal, Form, Row, Col, Input, Button, message, Tooltip } from 'antd';
+import { requiredField, currencyOnly } from '../../util/config';
 import { rxAddDishes, rxUpdateDish } from '../../apis';
 
 const { Item } = Form
@@ -17,9 +17,6 @@ const FormDish = (props) => {
 
   //TODO: STATE OWN COMPONENT
   const [loadingAddDish, setLoadingAddDish] = useState(false);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState([])
   const [fileB64, setFileB64] = useState("")
 
@@ -30,8 +27,7 @@ const FormDish = (props) => {
   //TODO: SAVE DISH FORM
   const handleSaveDish = () => {
     validateFields().then((values) => {
-      const sPhotoDish = fileList[0]?.thumbUrl;
-      if(sPhotoDish && fileB64){
+      if(fileB64){
         setLoadingAddDish(true)
         const dish = {
           sPhoto: fileB64?? '',
@@ -40,6 +36,7 @@ const FormDish = (props) => {
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0
         } 
+        console.log(dish, "dish")
         if(dishSelected){
           rxUpdateDish(dishSelected.nIdDish, dish, () => {
             setLoadingAddDish(false)
@@ -75,9 +72,9 @@ const FormDish = (props) => {
 
   //TODO: VERIFY SIZE AND TYPE IMAGE
    const beforeUpload  = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpeg'
+    const isJpgOrPng = file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/jpeg'
     if (!isJpgOrPng) {
-      message.error('Solo puedes cargar imagenes de tipo JPG/PNG')
+      message.error('Solo puedes cargar imagenes de tipo JPG/PNG/JPEG')
     }
     const isLt2M = file.size / 1024 / 1024 < 2
     if (!isLt2M) {
@@ -94,8 +91,8 @@ const FormDish = (props) => {
   const changeSizeImage = (img) => {
     convert({ 
       file: img,  
-      width: 400, 
-      height: 400,
+      width: 300, 
+      height: 300,
       type: 'jpg'
       }).then(resp => {
         const reader = new FileReader();
@@ -104,10 +101,7 @@ const FormDish = (props) => {
           setFileB64(base64String)
         }
         reader.readAsDataURL(resp);
-      }).catch(error => {
-        // console.log(error, "error")
       })
-    
   }
 
   //TODO: STATE FILE 
@@ -118,55 +112,29 @@ const FormDish = (props) => {
     setFileList(newFileList)
   }
 
-  //TODO: SHOW PREVIEW IMAGE DISH'S PHOTO 
-   const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  }
-
-  //TODO: CLOSE PREVIEW IMAGE DISH'S PHOTO
-   const handleCancelPreview = () => setPreviewVisible(false);
-
    //TODO: CLOSE FORM DISH
    const handleCancel = () => {
     setDishSelected(null);
-    setPreviewVisible(false);
     setView(false);
    }
 
    useEffect(() => {
     if(dishSelected && view){
-      console.log(dishSelected, "dishSelected")
-      //FALTA EDITAR FOTO
-      getFileFromBase64(dishSelected.sPhoto, "Imagen " + dishSelected.sName, "text/plain").then(r => {
-          console.log(r, "r")
-          // setFileList([r])
-
-          handleChange({fileList: [r]})
-          setFileB64(dishSelected.sPhoto)
-          setPreviewImage(dishSelected.sPhoto)
-          setFieldsValue({
-              sName: dishSelected.sName,
-              sType: dishSelected.sType,
-              nPrice: dishSelected.nPrice
-          })
-        })
-        
+      setFileB64(dishSelected.sPhoto);
+      setFieldsValue({
+          sName: dishSelected.sName,
+          sType: dishSelected.sType,
+          nPrice: dishSelected.nPrice
+      });
     }
    }, [dishSelected])
 
-   console.log(fileList, "filelist")
-  
   return (
     <>
         {
             view && (
             <Modal
-                title={dishSelected? "Editar Plato" : "Registrar Usuario"}
+                title={dishSelected? "Editar Plato" : "Registrar Plato"}
                 visible={view}
                 bodyStyle={{ padding: 10 }}
                 width="350px"
@@ -185,17 +153,35 @@ const FormDish = (props) => {
                     <Row gutter={12}>
                         <Col span={24}>
                             <Item rules={requiredField}>
-                                <Upload
-                                  name="sPhoto"
-                                  listType="picture-card"
-                                  accept=".png,.jpg,.jpeg"
-                                  fileList={fileList}
-                                  onPreview={handlePreview}
-                                  onChange={handleChange}
-                                  beforeUpload={beforeUpload}
-                                >
-                                  {fileList.length >= 1 ? null : uploadButton}
-                                </Upload>
+                              {
+                                  fileB64 ?
+                                  <div>
+                                    <Tooltip title="Eliminar imagen.">
+                                      <Button 
+                                      className='ml-[298px]'
+                                        onClick={() => {
+                                          setFileB64("")
+                                          setFileList([])
+                                        }}
+                                        icon={<DeleteTwoTone twoToneColor="#ed4956"/>}
+                                      />
+                                    </Tooltip>
+                                    <img src={fileB64} alt="Imagen del plato"/>
+                                  </div>
+                                  :
+                                  <div className='ml-[115px]'>
+                                    <Upload
+                                    name="sPhoto"
+                                    listType="picture-card"
+                                    accept=".png,.jpg,.jpeg"
+                                    fileList={fileList}
+                                    onChange={handleChange}
+                                    beforeUpload={beforeUpload}
+                                  >
+                                    {fileList.length >= 1 ? null : uploadButton}
+                                  </Upload>
+                                  </div>
+                                }
                             </Item>
                         </Col>
                         <Col>
@@ -220,14 +206,6 @@ const FormDish = (props) => {
                         </Col>
                     </Row>
                 </Form>
-                <Modal 
-                    visible={previewVisible} 
-                    title={previewTitle} 
-                    footer={null} 
-                    onCancel={handleCancelPreview}
-                    >
-                    <img alt="Imagen del plato."style={{width: '100%'}} src={previewImage}/>
-                </Modal>
             </Modal>
         )}       
     </>

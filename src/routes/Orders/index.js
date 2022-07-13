@@ -1,6 +1,6 @@
 import { useState, useEffect} from 'react';
 import currency from 'currency-formatter'
-import { CheckSquareTwoTone, ScheduleOutlined} from '@ant-design/icons';
+import { ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Tooltip, Spin, Button } from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
 import { rxGetOrders, rxUpdateOrder } from '../../apis';
@@ -11,7 +11,7 @@ const Orders = () => {
   const [ dishSelected, setDishSelected ] = useState(null);
   const [loadingGetOrders, setLoadingGetOrders]= useState(false);
   const [loadingUpdateStateOrders, setLoadingUpdateStateOrders]= useState(false);
-  const [listOrders, setListOrders]= useState(false);
+  const [listOrders, setListOrders]= useState([]);
 
   //TODO: GET ALL ORDERS 
   const getOrders = () => {
@@ -76,7 +76,7 @@ const Orders = () => {
                         block
                         onClick={() => handleChangeStateOrder(order)}
                     >
-                        Recibido
+                        Atender
                     </Button>
                     
                 </Spin>
@@ -89,7 +89,7 @@ const Orders = () => {
     {
         key: "index",
         title: "#",
-        width: 40,
+        width: 20,
         align: "center",
         render: (_, __, index) => index + 1,
     },
@@ -97,39 +97,37 @@ const Orders = () => {
         key: "sName",
         dataIndex: "sName",
         title: "Plato",
-        width: 80,
+        width: 30,
         align: "center",
     },
-    {
-        key: "sType",
-        dataIndex: "sType",
-        title: "Tipo",
-        width: 60,
-        align: "center",
-    },
+    // {
+    //     key: "sType",
+    //     dataIndex: "sType",
+    //     title: "Tipo",
+    //     width: 60,
+    //     align: "center",
+    // },
     {
         key: "nQuantityTotal",
         dataIndex: "nQuantityTotal",
         title: "Cantidad",
-        width: 60,
+        width: 30,
         align: "right",
     },
-    {
-        key: "priceTotal",
-        dataIndex: "priceTotal",
-        title: "Precio Total",
-        width: 60,
-        align: "right",
-        render: value => value ? currency.format(value, currencyFE) : '0.00'
-    }
+    // {
+    //     key: "priceTotal",
+    //     dataIndex: "priceTotal",
+    //     title: "Precio Total",
+    //     width: 60,
+    //     align: "right",
+    //     render: value => value ? currency.format(value, currencyFE) : '0.00'
+    // }
   ]
 
     //TODO: INIT - GET ALL DISHES FOR CLIENTS
     useEffect(() => {
         getOrders();
     }, [])
-
-    console.log(listOrders, "listOrders")
 
   return (
         <Card
@@ -146,7 +144,7 @@ const Orders = () => {
                     dataSource={listOrders}
                     rowKey={(order) => order.nIdOrder}
                     rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                    scroll={customScroll()}
+                    scroll={{x: "80vw", y: "100vh"}}
                     onRow={(order) => ({
                         onClick: () => {
                             setOrderSelected(order)
@@ -163,12 +161,13 @@ const Orders = () => {
                                 dataSource={order.dishes}
                                 rowKey={(dish) => dish.nIdDish}
                                 rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                                scroll={customScroll()}
+                                // scroll={customScroll()}
                                 onRow={(dish) => ({
                                     onClick: () => {
                                         setDishSelected(dish)
                                     }
                                 })}
+                                footer={null}
                             />
                         )
                     }}

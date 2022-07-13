@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import moment from 'moment'
 import currency from 'currency-formatter'
 import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider} from 'antd'
-import { PlusOutlined, MinusOutlined, DeleteOutlined, DeleteTwoTone} from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, DeleteTwoTone} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
 import { rxGenerateOrder } from '../../apis';

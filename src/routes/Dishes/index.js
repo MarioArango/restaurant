@@ -11,6 +11,7 @@ const Dishes = () => {
   const [listDishes, setListDishes] = useState([]);
   const [ view, setView ] = useState(false);
   const [ dishSelected, setDishSelected ] = useState(null);
+  const [ loadingGetDishes, setLoadingGetDishes ] = useState(false);
   const [ loadingDelete, setLoadingDelete ] = useState(false);
 
   //TODO: SHOW FORM DISH
@@ -20,12 +21,14 @@ const Dishes = () => {
 
   //TODO: GET ALL DISHES 
   const getDishes = () => {
+    setLoadingGetDishes(true);
     rxGetDishes((querySnapshot) => {
         const dishes = []
         querySnapshot.forEach(doc => {
             dishes.push({...doc.data(), nIdDish: doc.id}) 
         })
         setListDishes(dishes)
+        setLoadingGetDishes(false);
     })
   }
 
@@ -111,8 +114,6 @@ const Dishes = () => {
     getDishes();
   }, [])
 
-  console.log(listDishes, "listDishes")
-
   return (
     <>
         <Card
@@ -133,7 +134,7 @@ const Dishes = () => {
                 {...tableProps}
                 bordered
                 columns={columns}
-                loading={false}
+                loading={loadingGetDishes}
                 dataSource={listDishes}
                 rowKey={(dish) => dish.nIdDish}
                 rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}

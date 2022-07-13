@@ -26,7 +26,7 @@ const Login = () => {
             message.success("Bienvenido")
             setLoadingLoginUser(false)
             resetFields()
-            navigate('/home')
+            navigate('/')
         }else {
             setLoadingLoginUser(false)
             message.error("Credenciales incorrectas")

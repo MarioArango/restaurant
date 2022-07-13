@@ -12,7 +12,7 @@ function App() {
   return (
     <Routes>
       <Route exact path="/login" element={<Login/>} />
-      <Route exact path="/home" element={<RestrictedComponent><LayoutApp><Home/></LayoutApp></RestrictedComponent>} />
+      <Route exact path="/" element={<RestrictedComponent><LayoutApp><Home/></LayoutApp></RestrictedComponent>} />
       <Route exact path="/orders" element={<RestrictedComponent><LayoutApp><Orders/></LayoutApp></RestrictedComponent>} />
       <Route exact path="/users" element={<RestrictedComponent><LayoutApp><Users/></LayoutApp></RestrictedComponent>} />
       <Route exact path="/dishes" element={<RestrictedComponent><LayoutApp><Dishes/></LayoutApp></RestrictedComponent>} />

@@ -24,12 +24,6 @@ export const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
 });
 
-export const getFileFromBase64 = async (url, filename, mimeType) => {
-  const res = await fetch(url);
-  const buf = await res.arrayBuffer();
-  return new File([buf], filename, { type: mimeType });
-};
-
 export const currencyFE = {
   decimal: ".",
   thousand: ",",

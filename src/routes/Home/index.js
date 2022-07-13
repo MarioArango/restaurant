@@ -1,8 +1,8 @@
 import { useState, useEffect} from 'react'
-import { Row, Col, Card, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd'
-import { PlusOutlined, MinusOutlined, UpCircleTwoTone, ShoppingTwoTone, ShoppingOutlined, UpOutlined } from '@ant-design/icons';
+import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd'
+import { PlusOutlined, MinusOutlined, ShoppingOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
-import { cardProps, currencyFE } from '../../util/config'
+import { currencyFE } from '../../util/config'
 import { rxGetDishes } from '../../apis'
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png'
@@ -106,7 +106,7 @@ const Home = () => {
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
-       getDishes();
+    getDishes();
    }, [])
 
   return (
@@ -164,7 +164,7 @@ const Home = () => {
             }
             <BackTop duration={500} className='hover:p-[1px]' >
                 <Tooltip title="Subir">
-                    <img src={rowTop} width="40px"/>
+                    <img src={rowTop} width="40px" alt="subir"/>
                 </Tooltip>
             </BackTop>
         </Row>

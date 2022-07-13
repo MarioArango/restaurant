@@ -1,29 +1,21 @@
-import { Avatar, Breadcrumb, Button, Dropdown, Layout, Mentions, Menu } from 'antd';
+import { Avatar, Layout, Menu } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Storage';
 const { Header, Content, Footer } = Layout;
 
 const LayoutApp = ({children}) => {
+  //TODO: GET AUTH LOCAL STORAGE
   const auth = useAuth();
   
+  //TODO: REDIRECT
   const navigate = useNavigate();
 
+  //TODO: CLEAR AUTH AND GOT TO LOGIN
   const handleLogout = () => {
     clearAuth();
     navigate("/login")
   }
-
-  const menu = (
-    <Mentions
-      items={[
-        {
-          key: '1',
-          label: <Button className='bg-primary' type='primary' onClick={handleLogout}>Cerrar sesión</Button>
-        }
-      ]}
-    />
-  );
 
   return (
     <Layout className="layout">
@@ -50,7 +42,7 @@ const LayoutApp = ({children}) => {
             {
               key: "1",
               label: "Panel",
-              onClick: () => {navigate('/home')}
+              onClick: () => {navigate('/')}
             },
             {
               key: "2",
@@ -59,7 +51,7 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "3",
-              label: "Platos registrado",
+              label: "Platos",
               onClick: () => {navigate('/dishes')}
             },
             {
@@ -85,7 +77,9 @@ const LayoutApp = ({children}) => {
           padding: '0 15px',
         }}
       >
-        { children }
+        <div className='h-screen'>
+          { children }
+        </div>
       </Content>
       <Footer
         style={{

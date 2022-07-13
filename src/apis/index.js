@@ -1,7 +1,5 @@
 import { db } from '../firebase/firebaseConfig';
-import { auth } from '../firebase/firebaseConfig';
-import { doc, addDoc, getDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
 import { message } from 'antd';
 
 /**
@@ -34,7 +32,8 @@ export const rxUpdateDish = async (nIdDish, dish, cb = null) => {
 
 export const rxGetDishes = async (cb = null) => {
   try {
-    onSnapshot(collection(db, 'dishes'), cb)
+    const querySnapshot = await getDocs(collection(db, 'dishes'), cb);
+    cb && cb(querySnapshot)
   } catch (error) {
     message.error('Error del servidor.')
   }
@@ -116,7 +115,8 @@ export const rxUpdateUser = async (nIdUser, user, cb = null) => {
 
 export const rxGetUsers = async (cb = null) => {
   try {
-    onSnapshot(collection(db, 'users'), cb)
+    const querySnapshot = await getDocs(collection(db, 'users'), cb);
+    cb && cb(querySnapshot)
   } catch (error) {
     message.error('Error del servidor.')
   }

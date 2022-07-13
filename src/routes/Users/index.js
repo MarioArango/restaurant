@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
-import { DeleteTwoTone, EditOutlined, EditTwoTone, PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers } from '../../apis';
@@ -10,6 +10,7 @@ const Users = () => {
   const [ view, setView ] = useState(false);
   const [ userSelected, setUserSelected ] = useState(null);
   const [ loadingDelete, setLoadingDelete ] = useState(false);
+  const [loadingCreateUser, setLoadingCreateUser] = useState(false)
 
   const handleViewFormUser = () => {
     setView(true)
@@ -53,7 +54,7 @@ const Users = () => {
     {
         key: "index",
         title: "#",
-        width: 40,
+        width: 5,
         align: "center",
         render: (_, __, index) => index + 1,
     },
@@ -61,7 +62,7 @@ const Users = () => {
         key: "sUsername",
         dataIndex: "sUsername",
         title: "Usuario",
-        width: 100,
+        width: 20,
         align: "center",
         render: (value) => value ? value : "-"
     },
@@ -69,7 +70,7 @@ const Users = () => {
         key: "sRol",
         dataIndex: "sRol",
         title: "Rol",
-        width: 100,
+        width: 20,
         align: "center",
         render: (value) => value ? value : "-"
     },
@@ -77,7 +78,7 @@ const Users = () => {
         key: "",
         dataIndex: "",
         title: "",
-        width: 50,
+        width: 20,
         align: "center",
         render: (_, user) => (
             <div className='flex justify-around'>
@@ -97,7 +98,7 @@ const Users = () => {
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
     getUsers();
-  }, [])
+  }, [loadingDelete, loadingCreateUser])
 
   return (
     <>
@@ -140,7 +141,10 @@ const Users = () => {
             view={view}
             setView={setView} 
             userSelected={userSelected} 
-            setUserSelected={setUserSelected}/>
+            setUserSelected={setUserSelected}
+            loadingCreateUser={loadingCreateUser}
+            setLoadingCreateUser={setLoadingCreateUser}
+          />
         }
     </>
   )

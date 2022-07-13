@@ -13,11 +13,10 @@ const FormUser = (props) => {
     view,
     setView,
     userSelected,
-    setUserSelected
+    setUserSelected,
+    loadingCreateUser, 
+    setLoadingCreateUser
   } = props;
-
-  //TODO: STATE OWN COMPONENT
-  const [loadingCreateUser, setLoadingCreateUser] = useState(false)
 
   //TODO: METHODS INHERED FROM ANTD
   const [form] = Form.useForm();
