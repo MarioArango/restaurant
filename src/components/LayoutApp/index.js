@@ -1,6 +1,6 @@
 import { Avatar, Layout, Menu } from 'antd';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Storage';
 const { Header, Content, Footer } = Layout;
 
@@ -41,33 +41,32 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "1",
-              label: "Panel",
-              onClick: () => {navigate('/')}
+              label: "Carta",
+              // onClick: () => {navigate('/')}
             },
             {
               key: "2",
-              label: "Pedidos",
-              onClick: () => {navigate('/orders')}
+              label: <Link to="/orders">Pedidos</Link>,
             },
             {
               key: "3",
               label: "Platos",
-              onClick: () => {navigate('/dishes')}
+              // onClick: () => {navigate('/dishes')}
             },
             {
               key: "4",
               label: "Usuarios",
-              onClick: () => {navigate('/users')}
+              // onClick: () => {navigate('/users')}
             },
             {
               key: "5",
               label: "Reporte de ventas",
-              onClick: () => {navigate('/report-sales')}
+              // onClick: () => {navigate('/report-sales')}
             },
             {
               key: "6",
               label: "Cerrar sesión",
-              onClick: () => {handleLogout()}
+              // onClick: () => {handleLogout()}
             }
           ]}
         />

@@ -126,6 +126,7 @@ const Orders = () => {
 
     //TODO: INIT - GET ALL DISHES FOR CLIENTS
     useEffect(() => {
+        console.log('entro')
         getOrders();
     }, [])
 
