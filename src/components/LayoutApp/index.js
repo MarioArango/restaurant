@@ -1,7 +1,7 @@
 import { Avatar, Layout, Menu } from 'antd';
 import React from 'react';
 import { Link, useNavigate} from 'react-router-dom';
-import { useAuth, clearAuth } from '../../Storage';
+import { useAuth, clearAuth } from '../../Hooks/auth';
 const { Header, Content, Footer } = Layout;
 
 const LayoutApp = ({children}) => {

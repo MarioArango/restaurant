@@ -1,41 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import currency from 'currency-formatter';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { Button, Table, Card, Modal, Tooltip, Spin} from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
 import FormDish from './FormDish';
-import { rxGetDishes, rxDeleteDish } from '../../apis';
+import { 
+    rxGetDishes, 
+    rxDeleteDish, 
+    rxDishSelected, 
+    rxShowFormDishes 
+} from '../../appRedux/actions';
 
 const Dishes = () => {
-  //TODO: STATE OWN COMPONENT
-  const [listDishes, setListDishes] = useState([]);
-  const [ view, setView ] = useState(false);
-  const [ dishSelected, setDishSelected ] = useState(null);
-  const [ loadingGetDishes, setLoadingGetDishes ] = useState(false);
-  const [ loadingDelete, setLoadingDelete ] = useState(false);
+  //TODO: REDUX STATE
+  const { 
+    listDishes, 
+    loadingListDishes, 
+    dishSelected,
+    showFormDishes,
+    loadingDelete
+  } = useSelector(({ dishes }) => dishes);
 
   //TODO: SHOW FORM DISH
   const handleViewFormDish = () => {
-    setView(true)
-  }
-
-  //TODO: GET ALL DISHES 
-  const getDishes = () => {
-    setLoadingGetDishes(true);
-    rxGetDishes((querySnapshot) => {
-        const dishes = []
-        querySnapshot.forEach(doc => {
-            dishes.push({...doc.data(), nIdDish: doc.id}) 
-        })
-        setListDishes(dishes)
-        setLoadingGetDishes(false);
-    })
+    rxShowFormDishes(true)
   }
 
    //TODO: EDIT DISH
    const handleEditDish = (dish) => {
-    setDishSelected(dish)
-    setView(true)
+    rxDishSelected(dish)
+    rxShowFormDishes(true)
   }
 
   //TODO: DELETE DISH
@@ -48,10 +42,7 @@ const Dishes = () => {
         cancelText: "Cancelar",
         cancelButtonProps: { type: "text" },
         onOk: () => {
-            setLoadingDelete(true)
-            rxDeleteDish(dish.nIdDish, () => {
-            setLoadingDelete(false)
-        })
+            rxDeleteDish(dish.nIdDish)
         },
         onCancel: () => { }
       })
@@ -111,7 +102,7 @@ const Dishes = () => {
 
   //TODO: GET ALL DISHES IN THE BUSINESS
   useEffect(() => {
-    getDishes();
+    rxGetDishes();
   }, [])
 
   return (
@@ -134,14 +125,14 @@ const Dishes = () => {
                 {...tableProps}
                 bordered
                 columns={columns}
-                loading={loadingGetDishes}
+                loading={loadingListDishes}
                 dataSource={listDishes}
                 rowKey={(dish) => dish.nIdDish}
                 rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                 scroll={customScroll()}
                 onRow={(dish) => ({
                     onClick: () => {
-                        setDishSelected(dish)
+                        rxDishSelected(dish)
                     },
                     onDoubleClick: () => {
                         handleViewFormDish()
@@ -150,12 +141,7 @@ const Dishes = () => {
             />
         </Card>
         { 
-          view && 
-          <FormDish 
-            view={view}
-            setView={setView} 
-            dishSelected={dishSelected} 
-            setDishSelected={setDishSelected}/>
+          showFormDishes && <FormDish/>
         }
     </>
   )

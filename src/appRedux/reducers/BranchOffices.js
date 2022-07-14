@@ -7,7 +7,7 @@ import {
 const initialState = {
 };
 
-const Menu = (state = initialState, { type, payload }) => {
+const BranchOffices = (state = initialState, { type, payload }) => {
     switch (type) {
         // //FILTER PROMOTIONS
         // case START_FILTER_PROMOTIONS: {
@@ -36,4 +36,4 @@ const Menu = (state = initialState, { type, payload }) => {
     }
 };
 
-export default Menu;
+export default BranchOffices;

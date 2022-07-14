@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button, message, Select} from 'antd';
-import { rxRegisterUser, rxUpdateUser } from '../../apis';
 import { requiredField } from '../../util/config';
+import { rxRegisterUser, rxUpdateUser } from '../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;

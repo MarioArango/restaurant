@@ -3,7 +3,7 @@ import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormUser from './FormUser';
-import { rxDeleteUser, rxGetUsers } from '../../apis';
+import { rxDeleteUser, rxGetUsers } from '../../appRedux/actions';
 
 const Users = () => {
   const [listUsers, setListUsers] = useState([]);

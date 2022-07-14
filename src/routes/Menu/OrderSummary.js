@@ -5,7 +5,7 @@ import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider} 
 import { PlusOutlined, MinusOutlined, DeleteTwoTone} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
-import { rxGenerateOrder } from '../../apis';
+import { rxGenerateOrder } from '../../appRedux/actions';
 
 const OrderSummary = (props) => {
    const {

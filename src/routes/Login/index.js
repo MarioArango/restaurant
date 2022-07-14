@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Row, Col, Input, Button, message} from 'antd';
-import { rxLoginUser } from '../../apis';
+import { rxLoginUser } from '../../appRedux/actions';
 import { cardProps, requiredField } from '../../util/config';
 import { IdcardOutlined } from '@ant-design/icons';
-import { setAuth } from '../../Storage';
+import { setAuth } from '../../Hooks/auth';
 
 const { Item } = Form;
 

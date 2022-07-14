@@ -1,13 +1,21 @@
 import { message } from 'antd';
 import {
-   
+    FETCH_GENERATE_ORDER_START,
+    FETCH_GENERATE_ORDER_SUCCESS,
+    FETCH_GENERATE_ORDER_ERROR,
+    FETCH_GET_ORDERS_START,
+    FETCH_GET_ORDERS_SUCCESS,
+    FETCH_GET_ORDERS_ERROR,
+    FETCH_UPDATE_ORDER_START,
+    FETCH_UPDATE_ORDER_SUCCESS,
+    FETCH_UPDATE_ORDER_ERROR
 } from "../types";
 
 
 const initialState = {
 };
 
-const Menu = (state = initialState, { type, payload }) => {
+const Orders = (state = initialState, { type, payload }) => {
     switch (type) {
         // //FILTER PROMOTIONS
         // case START_FILTER_PROMOTIONS: {
@@ -36,4 +44,4 @@ const Menu = (state = initialState, { type, payload }) => {
     }
 };
 
-export default Menu;
+export default Orders;

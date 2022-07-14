@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../../Storage'
+import { useAuth } from '../../Hooks/auth'
 
 const RestrictedComponent = ({ children }) => {
   const auth = useAuth();

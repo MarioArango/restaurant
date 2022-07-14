@@ -2,12 +2,12 @@ import { useState, useEffect} from 'react'
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd'
 import { PlusOutlined, MinusOutlined, ShoppingOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
-import { currencyFE } from '../../util/config'
-import { rxGetDishes } from '../../apis'
+import { currencyFE } from '../../util/config';
+import { rxGetDishes } from '../../appRedux/actions';
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png'
 
-const Home = () => {
+const Menu = () => {
   const [listDishes, setListDishes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [visibleOrder, setVisibleOrder] = useState(false);
@@ -184,4 +184,4 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default Menu;

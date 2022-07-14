@@ -3,7 +3,7 @@ import currency from 'currency-formatter'
 import { ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Tooltip, Spin, Button } from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
-import { rxGetOrders, rxUpdateOrder } from '../../apis';
+import { rxGetOrders, rxUpdateOrder } from '../../appRedux/actions';
 
 const Orders = () => {
   //TODO: STATE OWN COMPONENT

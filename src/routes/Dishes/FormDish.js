@@ -3,20 +3,19 @@ import { DeleteTwoTone, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import convert from 'client-side-image-resize';
 import { Upload, Modal, Form, Row, Col, Input, Button, message, Tooltip } from 'antd';
 import { requiredField, currencyOnly } from '../../util/config';
-import { rxAddDishes, rxUpdateDish } from '../../apis';
+import { rxAddDishes, rxUpdateDish, rxDishSelected, rxShowFormDishes } from '../../appRedux/actions';
 
 const { Item } = Form
 const FormDish = (props) => {
-  //TODO: PROPS INHERID INSTANCE COMPONENT
+  //TODO: REDUX STATE
   const { 
-    view,
-    setView,
     dishSelected,
-    setDishSelected
-  } = props;
+    showFormDishes,
+    loadingAddDish,
+    loadingUpdateDish
+  } = useSelector(({ dishes }) => dishes);
 
   //TODO: STATE OWN COMPONENT
-  const [loadingAddDish, setLoadingAddDish] = useState(false);
   const [fileList, setFileList] = useState([])
   const [fileB64, setFileB64] = useState("")
 
@@ -28,7 +27,6 @@ const FormDish = (props) => {
   const handleSaveDish = () => {
     validateFields().then((values) => {
       if(fileB64){
-        setLoadingAddDish(true)
         const dish = {
           sPhoto: fileB64?? '',
           sName: values.sName?? '',
@@ -39,17 +37,15 @@ const FormDish = (props) => {
         console.log(dish, "dish")
         if(dishSelected){
           rxUpdateDish(dishSelected.nIdDish, dish, () => {
-            setLoadingAddDish(false)
             setFileList([])
             resetFields()
-            setView(false)
+            rxShowFormDishes(false)
           })
         }else {
             rxAddDishes(dish, () => {
-              setLoadingAddDish(false)
               setFileList([])
               resetFields()
-              setView(false)
+              rxShowFormDishes(false)
             })
         }
       }else {
@@ -114,12 +110,12 @@ const FormDish = (props) => {
 
    //TODO: CLOSE FORM DISH
    const handleCancel = () => {
-    setDishSelected(null);
-    setView(false);
+    rxDishSelected (null);
+    rxShowFormDishes(false);
    }
 
    useEffect(() => {
-    if(dishSelected && view){
+    if(dishSelected && showFormDishes){
       setFileB64(dishSelected.sPhoto);
       setFieldsValue({
           sName: dishSelected.sName,
@@ -132,17 +128,17 @@ const FormDish = (props) => {
   return (
     <>
         {
-            view && (
+            showFormDishes && (
             <Modal
                 title={dishSelected? "Editar Plato" : "Registrar Plato"}
-                visible={view}
+                visible={showFormDishes}
                 bodyStyle={{ padding: 10 }}
                 width="350px"
                 onCancel={handleCancel}
                 footer={null}
                 maskClosable={false}
                 destroyOnClose
-                loading={loadingAddDish}
+                loading={loadingAddDish || loadingUpdateDish}
             >
                 <Form
                     name="form-save-dish"
