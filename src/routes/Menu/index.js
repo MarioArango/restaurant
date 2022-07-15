@@ -1,54 +1,50 @@
-import { useState, useEffect} from 'react'
-import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd'
+import { useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd';
 import { PlusOutlined, MinusOutlined, ShoppingOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { currencyFE } from '../../util/config';
-import { rxGetDishes } from '../../appRedux/actions';
 import OrderSummary from './OrderSummary';
-import rowTop from '../../assets/flecha-hacia-arriba.png'
+import rowTop from '../../assets/flecha-hacia-arriba.png';
+import { 
+    rxGetDishes, 
+    rxShowOrderSummary,
+    rxOrderSummary
+} from '../../appRedux/actions';
+
 
 const Menu = () => {
-  const [listDishes, setListDishes] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [visibleOrder, setVisibleOrder] = useState(false);
-  const [loadingGetDishes, setLoadingGetDishes] = useState(false);
+  const {
+    listDishes,
+    loadingListDishes,
+    showOrderSummary,
+    orderSummary
+  } = useSelector(({dishes}) => dishes)
 
-  //TODO: GET ALL DISHES 
-  const getDishes = () => {
-    setLoadingGetDishes(true);
-    rxGetDishes((querySnapshot) => {
-        setLoadingGetDishes(false);
-        const dishes = [];
-        querySnapshot.forEach(doc => {
-            dishes.push({...doc.data(), nIdDish: doc.id}) 
-        })
-        setListDishes(dishes);
-        setLoadingGetDishes(false);
-    })
-  }
+  const dispatch = useDispatch()
 
   //TODO: SHOW ORDER SUMMARY
   const handleGenerateOrder = () => {
-    if(orders.length){
-        setVisibleOrder(true)
+    if(orderSummary.length){
+        dispatch(rxShowOrderSummary(true))
     }else {
-        setVisibleOrder(false)
+        dispatch(rxShowOrderSummary(false))
         message.info("No tiene platos elegidos.")
     }
   }
   
   //TODO: ADD DISH TO ORDER
   const handleAddQtyDish = (dish) => {
-    if(orders.length === 0){
-        setOrders([{...dish, nQuantity: dish.nQuantity + 1}])
+    if(orderSummary.length === 0){
+        dispatch(rxOrderSummary([{...dish, nQuantity: dish.nQuantity + 1}]))
     }else {
-        const orderUp = orders.filter(o => o.nIdDish === dish.nIdDish)
+        const orderUp = orderSummary.filter(o => o.nIdDish === dish.nIdDish)
         if(orderUp.length === 1){
             const ordUp = {
                 ...orderUp[0],
                 nQuantity: orderUp[0]?.nQuantity + 1
             }
-            const resultOrd = orders.map(o => {
+            const resultOrd = orderSummary.map(o => {
                 if(o.nIdDish === ordUp.nIdDish){
                     return {
                         ...ordUp
@@ -58,23 +54,23 @@ const Menu = () => {
                     ...o
                 }
             })
-            setOrders(resultOrd)
+            dispatch(rxOrderSummary(resultOrd))
         }
         if(orderUp.length === 0){
-            setOrders([...orders, {...dish, nQuantity: dish.nQuantity + 1}])
+            dispatch(rxOrderSummary([...orderSummary, {...dish, nQuantity: dish.nQuantity + 1}]))
         }
     }
   }
  
   //TODO: DELETE DISH TO ORDER
   const handleDelQtyDish = (dish) => {
-    const orderUp = orders.filter(o => o.nIdDish === dish.nIdDish);
+    const orderUp = orderSummary.filter(o => o.nIdDish === dish.nIdDish);
     if(orderUp.length === 1 && orderUp[0].nQuantity > 0){
         const ordUp = {
             ...orderUp[0],
             nQuantity: orderUp[0]?.nQuantity - 1
         }
-        const resultOrd = orders.map(o => {
+        const resultOrd = orderSummary.map(o => {
             if(o.nIdDish === ordUp.nIdDish){
                 return {
                     ...ordUp
@@ -86,31 +82,31 @@ const Menu = () => {
         })
         const result = resultOrd.filter(o => o.nQuantity !== 0)
         if(result.length === 0){
-            setVisibleOrder(false)
+            dispatch(rxShowOrderSummary(false))
         }
-        setOrders(result)
+        dispatch(rxOrderSummary(result))
     } 
   }
 
   //TODO: QUANTITY TOTAL BY DISH
   const quantityByDish = (dish) => {
-    const orderMatch = orders.filter(o => o.nIdDish === dish.nIdDish)
+    const orderMatch = orderSummary.filter(o => o.nIdDish === dish.nIdDish)
     return orderMatch[0]?.nQuantity?? 0
   }
 
   //TODO: DISABLED BUTTON DELETE DISH
   const disabledDelete = (dish) => {
-    const orderMatch = orders.filter(o => o.nIdDish === dish.nIdDish)
+    const orderMatch = orderSummary.filter(o => o.nIdDish === dish.nIdDish)
     return orderMatch.length === 0 ? true : orderMatch[0].nQuantity === 0? true : false
   }
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
-    getDishes();
+    dispatch(rxGetDishes());
    }, [])
 
   return (
-    <Spin spinning={loadingGetDishes} className="">
+    <Spin spinning={loadingListDishes} className="">
         <div className='flex justify-end mt-2'>
             <Affix offsetTop={20} className="mb-5">
                 <Button 
@@ -169,12 +165,8 @@ const Menu = () => {
             </BackTop>
         </Row>
         {
-            visibleOrder && orders?.length &&
+            showOrderSummary && orderSummary?.length &&
             <OrderSummary 
-                visibleOrder={visibleOrder} 
-                setVisibleOrder={setVisibleOrder} 
-                orders={orders}
-                setOrders={setOrders}
                 quantityByDish={quantityByDish}
                 handleAddQtyDish={handleAddQtyDish}
                 handleDelQtyDish={handleDelQtyDish}

@@ -39,7 +39,7 @@ export const rxUpdateDish = (nIdDish, dish, cb = null) => async dispatch => {
   dispatch({type: FETCH_UPDATE_DISH_START})
     try {
       await updateDoc(collection(db, 'dishes', nIdDish), dish);
-    dispatch({type: FETCH_UPDATE_DISH_SUCCESS})
+      dispatch({type: FETCH_UPDATE_DISH_SUCCESS})
       message.success("Plato actualizado.")
       cb && cb()
     } catch (error) {

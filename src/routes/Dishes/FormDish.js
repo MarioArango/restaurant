@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { DeleteTwoTone, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import convert from 'client-side-image-resize';
 import { Upload, Modal, Form, Row, Col, Input, Button, message, Tooltip } from 'antd';
@@ -14,6 +15,8 @@ const FormDish = (props) => {
     loadingAddDish,
     loadingUpdateDish
   } = useSelector(({ dishes }) => dishes);
+
+  const dispatch = useDispatch();
 
   //TODO: STATE OWN COMPONENT
   const [fileList, setFileList] = useState([])
@@ -36,17 +39,15 @@ const FormDish = (props) => {
         } 
         console.log(dish, "dish")
         if(dishSelected){
-          rxUpdateDish(dishSelected.nIdDish, dish, () => {
+          dispatch(rxUpdateDish(dishSelected.nIdDish, dish, () => {
             setFileList([])
             resetFields()
-            rxShowFormDishes(false)
-          })
+          }))
         }else {
-            rxAddDishes(dish, () => {
+          dispatch(rxAddDishes(dish, () => {
               setFileList([])
               resetFields()
-              rxShowFormDishes(false)
-            })
+            }))
         }
       }else {
         message.warning("Ingrese una imagen del plato.")
@@ -110,8 +111,8 @@ const FormDish = (props) => {
 
    //TODO: CLOSE FORM DISH
    const handleCancel = () => {
-    rxDishSelected (null);
-    rxShowFormDishes(false);
+    dispatch(rxDishSelected (null));
+    dispatch(rxShowFormDishes(false));
    }
 
    useEffect(() => {

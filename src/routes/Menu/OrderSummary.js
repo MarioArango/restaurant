@@ -1,27 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment'
 import currency from 'currency-formatter'
 import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider} from 'antd'
 import { PlusOutlined, MinusOutlined, DeleteTwoTone} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
-import { rxGenerateOrder } from '../../appRedux/actions';
+import { 
+    rxGenerateOrder,
+    rxShowOrderSummary,
+    rxOrderSummary
+ } from '../../appRedux/actions';
 
 const OrderSummary = (props) => {
-   const {
-    visibleOrder,
-    setVisibleOrder,
-    orders,
-    setOrders,
-    quantityByDish,
-    handleAddQtyDish,
-    handleDelQtyDish
-   } = props
+  const {
+      quantityByDish,
+      handleAddQtyDish,
+      handleDelQtyDish
+     } = props;
+     
+  const {
+    showOrderSummary,
+    orderSummary,
+    loadingGenerateOrder
+  } = useSelector(({}))
 
-   const [loadingGenOrder, setLoadingGenOrder] = useState(false)
+  const dispatch = useDispatch()
 
    const handleSendOrder = () => {
-        const orderFormat = orders.map(o => ({
+        const orderFormat = orderSummary.map(o => ({
             nPriceTotal: calculatePriceTotalByDish(o), 
             nQuantityTotal: o.nQuantity,
             nIdDish: o.nIdDish,
@@ -36,25 +43,19 @@ const OrderSummary = (props) => {
             sState: 'pending',
             dishes: orderFormat
         }
-
-        setLoadingGenOrder(true);
-        rxGenerateOrder(orderToSend, () => {
-            setOrders([])
-            setVisibleOrder(false)
-            setLoadingGenOrder(false)
-        })
+        rxGenerateOrder(orderToSend)
    }
 
    const handleDelTotalQtyDish = (dish) => {
-    const ordersUp = orders.filter(o => o.nIdDish !== dish.nIdDish)
+    const ordersUp = orderSummary.filter(o => o.nIdDish !== dish.nIdDish)
     if(ordersUp.length === 0){
-        setVisibleOrder(false)
+        dispatch(rxShowOrderSummary(false))
     }
-    setOrders(ordersUp)
+    dispatch(rxOrderSummary(ordersUp))
    }
 
    const handleCancel = () => {
-    setVisibleOrder(false)
+    dispatch(rxShowOrderSummary(false))
    }
 
    const calculatePriceTotalByDish = (dish) => {
@@ -63,7 +64,7 @@ const OrderSummary = (props) => {
 
    const calculatePriceTotalOrder = () => {
     let priceTotal = 0;
-    orders.forEach(o => {
+    orderSummary.forEach(o => {
         priceTotal += Number(o.nPrice)*Number(o.nQuantity)
     })
     return priceTotal
@@ -75,7 +76,7 @@ const OrderSummary = (props) => {
         placement="right"
         closable={false}
         onClose={handleCancel}
-        visible={visibleOrder}
+        visible={showOrderSummary}
         key="right"
         footer={
             <div>
@@ -88,7 +89,7 @@ const OrderSummary = (props) => {
                         <Button
                             type="primary" 
                             icon={<SendOutlined />}
-                            loading={loadingGenOrder}
+                            loading={loadingGenerateOrder}
                             className="bg-primary"
                             block
                         >
@@ -104,7 +105,7 @@ const OrderSummary = (props) => {
                 <List
                     loading={false}
                     itemLayout="horizontal"
-                    dataSource={orders}
+                    dataSource={orderSummary}
                     renderItem={(dish, index) => (
                         <List.Item key={index}>
                             <Skeleton avatar title={false} loading={false} active>
@@ -156,4 +157,4 @@ const OrderSummary = (props) => {
   )
 }
 
-export default OrderSummary
+export default OrderSummary;

@@ -98,7 +98,8 @@ const Menu = (state = initialState, { type, payload }) => {
         case FETCH_ADD_DISHES_SUCCESS: {
             return {
                 ...state,
-                loadingAddDish: false
+                loadingAddDish: false,
+                showFormDishes: false
             }
         }
 
@@ -119,7 +120,8 @@ const Menu = (state = initialState, { type, payload }) => {
         case FETCH_UPDATE_DISH_SUCCESS: {
             return {
                 ...state,
-                loadingUpdateDish: false
+                loadingUpdateDish: false,
+                showFormDishes: false,
             }
         }
 

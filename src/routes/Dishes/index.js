@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { Button, Table, Card, Modal, Tooltip, Spin} from 'antd';
@@ -21,15 +22,17 @@ const Dishes = () => {
     loadingDelete
   } = useSelector(({ dishes }) => dishes);
 
+  const dispatch = useDispatch();
+
   //TODO: SHOW FORM DISH
   const handleViewFormDish = () => {
-    rxShowFormDishes(true)
+    dispatch(rxShowFormDishes(true))
   }
 
    //TODO: EDIT DISH
    const handleEditDish = (dish) => {
-    rxDishSelected(dish)
-    rxShowFormDishes(true)
+    dispatch(rxDishSelected(dish))
+    dispatch(rxShowFormDishes(true))
   }
 
   //TODO: DELETE DISH
@@ -42,7 +45,7 @@ const Dishes = () => {
         cancelText: "Cancelar",
         cancelButtonProps: { type: "text" },
         onOk: () => {
-            rxDeleteDish(dish.nIdDish)
+            dispatch(rxDeleteDish(dish.nIdDish))
         },
         onCancel: () => { }
       })
@@ -102,7 +105,7 @@ const Dishes = () => {
 
   //TODO: GET ALL DISHES IN THE BUSINESS
   useEffect(() => {
-    rxGetDishes();
+    dispatch(rxGetDishes());
   }, [])
 
   return (
@@ -132,7 +135,7 @@ const Dishes = () => {
                 scroll={customScroll()}
                 onRow={(dish) => ({
                     onClick: () => {
-                        rxDishSelected(dish)
+                        dispatch(rxDishSelected(dish))
                     },
                     onDoubleClick: () => {
                         handleViewFormDish()

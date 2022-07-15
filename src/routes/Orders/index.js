@@ -1,38 +1,29 @@
-import { useState, useEffect} from 'react';
+import { useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter'
 import { ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Tooltip, Spin, Button } from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
-import { rxGetOrders, rxUpdateOrder } from '../../appRedux/actions';
+import { 
+    rxGetOrders, 
+    rxUpdateOrder, 
+    rxOrderSelected,
+    rxDishSelected
+} from '../../appRedux/actions';
 
 const Orders = () => {
-  //TODO: STATE OWN COMPONENT
-  const [ orderSelected, setOrderSelected ] = useState(null);
-  const [ dishSelected, setDishSelected ] = useState(null);
-  const [loadingGetOrders, setLoadingGetOrders]= useState(false);
-  const [loadingUpdateStateOrders, setLoadingUpdateStateOrders]= useState(false);
-  const [listOrders, setListOrders]= useState([]);
+    const { 
+        loadingGetOrders,
+        listOrders,
+        orderSelected,
+        dishSelected,
+        loadingUpdateStateOrders
+    } = useSelector(({ orders}) => orders)
 
-  //TODO: GET ALL ORDERS 
-  const getOrders = () => {
-      setLoadingGetOrders(true);
-      rxGetOrders((querySnapshot) => {
-          setLoadingGetOrders(false);
-          const orders = [];
-          querySnapshot.forEach(doc => {
-              orders.push({...doc.data(), nIdOrder: doc.id}) 
-          })
-          setListOrders(orders);
-          setLoadingGetOrders(false);
-      })
-    }
+    const dispatch = useDispatch()
+
   const handleChangeStateOrder = (order) => {
-    setLoadingUpdateStateOrders(true);
-    rxUpdateOrder(order.nIdOrder, order, () => {
-        setOrderSelected(null)
-        setDishSelected(null)
-        setLoadingUpdateStateOrders(false)
-    })
+    dispatch(rxUpdateOrder(order.nIdOrder, order))
   }
 
   //TODO: COLUMNS TABLE
@@ -127,7 +118,7 @@ const Orders = () => {
     //TODO: INIT - GET ALL DISHES FOR CLIENTS
     useEffect(() => {
         console.log('entro')
-        getOrders();
+        dispatch(rxGetOrders())
     }, [])
 
   return (
@@ -148,7 +139,7 @@ const Orders = () => {
                     scroll={{x: "80vw", y: "100vh"}}
                     onRow={(order) => ({
                         onClick: () => {
-                            setOrderSelected(order)
+                            dispatch(rxOrderSelected(order))
                         }
                     })}
                     expandable={{
@@ -165,7 +156,7 @@ const Orders = () => {
                                 // scroll={customScroll()}
                                 onRow={(dish) => ({
                                     onClick: () => {
-                                        setDishSelected(dish)
+                                        dispatch(rxDishSelected(dish))
                                     }
                                 })}
                                 footer={null}
