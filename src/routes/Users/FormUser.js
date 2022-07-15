@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
-import { Modal, Form, Row, Col, Input, Button, message, Select} from 'antd';
+import { Modal, Form, Row, Col, Input, Button, Select} from 'antd';
 import { requiredField } from '../../util/config';
-import { rxRegisterUser, rxUpdateUser } from '../../appRedux/actions';
+import { rxRegisterUser, rxUpdateUser, rxShowFormUser } from '../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;
 
-const FormUser = (props) => {
-  //TODO: PROPS INHERID INSTANCE
-  const {
-    view,
-    setView,
-    userSelected,
-    setUserSelected,
-    loadingCreateUser, 
-    setLoadingCreateUser
-  } = props;
+const FormUser = () => {
+    const {
+        showFormUser,
+        userSelected,
+        loadingCreateUser,
+        loadingUpdateUser
+    } = useSelector(({users}) => users);
+
+    const dispatch = useDispatch();
 
   //TODO: METHODS INHERED FROM ANTD
   const [form] = Form.useForm();
@@ -25,39 +25,30 @@ const FormUser = (props) => {
   //TODO: REGISTER USER
   const handleSubmit = () => {
       validateFields().then((values) => {
-          setLoadingCreateUser(true);
           const user = {
               sUsername: values.sUsername,
               sPassword: values.sPassword,
               sRol: values.sRol
           }
           if(userSelected){
-            rxUpdateUser(userSelected.nIdUser, user, () => {
-                message.success("Actualizado")
-                setLoadingCreateUser(false)
+            dispatch(rxUpdateUser(userSelected.nIdUser, user, () => {
                 resetFields()
-                setUserSelected(null)
-                setView(false)
-            })
+            }))
           }else {
-            rxRegisterUser(user, () => {
-                message.success("Registrado")
-                setLoadingCreateUser(false)
+            dispatch(rxRegisterUser(user, () => {
                 resetFields()
-                setUserSelected(null)
-                setView(false)
-            })
+            }))
           }
       })
   }
   //TODO: CLOSE FORM USER
   const handleCancel = () => {
-    setView(false)
+    dispatch(rxShowFormUser(false))
   }
 
   //TODO: ONLY EDIT
   useEffect(() => {
-    if(userSelected && view){
+    if(userSelected && showFormUser){
         setFieldsValue({
             sUsername: userSelected.sUsername,
             sPassword: userSelected.sPassword,
@@ -69,17 +60,17 @@ const FormUser = (props) => {
   return (
     <>
         {
-            view && (
+            showFormUser && (
             <Modal
                     title={userSelected? <div><UserOutlined/> Editar usuario</div> : <div><UserAddOutlined/> Registrar Usuario</div>}
-                    visible={view}
+                    visible={showFormUser}
                     bodyStyle={{ padding: 10 }}
                     width="350px"
                     onCancel={handleCancel}
                     footer={null}
                     maskClosable={false}
                     destroyOnClose
-                    loading={loadingCreateUser}
+                    loading={loadingCreateUser || loadingUpdateUser}
                 >
                     <Form
                         name='form-user'

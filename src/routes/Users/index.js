@@ -1,35 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormUser from './FormUser';
-import { rxDeleteUser, rxGetUsers } from '../../appRedux/actions';
+import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../appRedux/actions';
 
 const Users = () => {
-  const [listUsers, setListUsers] = useState([]);
-  const [ view, setView ] = useState(false);
-  const [ userSelected, setUserSelected ] = useState(null);
-  const [ loadingDelete, setLoadingDelete ] = useState(false);
-  const [loadingCreateUser, setLoadingCreateUser] = useState(false)
+  const { 
+    loadingListUsers,
+    listUsers,
+    showFormUser,
+    userSelected,
+    loadingDelete,
+    loadingCreateUser
+  } = useSelector(({users}) => users);
+
+  const dispatch = useDispatch();
 
   const handleViewFormUser = () => {
-    setView(true)
+    dispatch(rxShowFormUser(true))
   }
 
-    //TODO: GET ALL DISHES 
-    const getUsers = () => {
-        rxGetUsers((querySnapshot) => {
-            const users = []
-            querySnapshot.forEach(doc => {
-                users.push({...doc.data(), nIdUser: doc.id}) 
-            })
-            setListUsers(users)
-        })
-      }
   //TODO: EDIT USER
   const handleEditUser = (user) => {
-    setUserSelected(user)
-    setView(true)
+    dispatch(rxUserSelected(user))
+    dispatch(rxShowFormUser(true))
   }
   //TODO: DELETE USER
   const handleDeleteUser = (user) => {
@@ -41,10 +37,7 @@ const Users = () => {
         cancelText: "Cancelar",
         cancelButtonProps: { type: "text" },
         onOk: () => {
-            setLoadingDelete(true)
-            rxDeleteUser(user.nIdUser, () => {
-            setLoadingDelete(false)
-        })
+            dispatch(rxDeleteUser(user.nIdUser))
         },
         onCancel: () => { }
       })
@@ -97,7 +90,7 @@ const Users = () => {
   
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
-    getUsers();
+    dispatch(rxGetUsers());
   }, [loadingDelete, loadingCreateUser])
 
   return (
@@ -120,14 +113,14 @@ const Users = () => {
                 {...tableProps}
                 bordered
                 columns={columns}
-                loading={false}
+                loading={loadingListUsers}
                 dataSource={listUsers}
                 rowKey={(user) => user.nIdUser}
                 rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                 scroll={customScroll()}
                 onRow={(user) => ({
                     onClick: () => {
-                        setUserSelected(user)
+                        dispatch(rxUserSelected(user))
                     },
                     onDoubleClick: () => {
                         handleViewFormUser()
@@ -136,18 +129,11 @@ const Users = () => {
             />
         </Card>
         { 
-          view && 
-          <FormUser 
-            view={view}
-            setView={setView} 
-            userSelected={userSelected} 
-            setUserSelected={setUserSelected}
-            loadingCreateUser={loadingCreateUser}
-            setLoadingCreateUser={setLoadingCreateUser}
-          />
+          showFormUser && 
+          <FormUser />
         }
     </>
   )
 }
 
-export default Users
+export default Users;

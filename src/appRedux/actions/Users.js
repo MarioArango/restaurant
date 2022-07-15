@@ -17,6 +17,8 @@ import {
   FETCH_LOGIN_USER_START,
   FETCH_LOGIN_USER_SUCCESS,
   FETCH_LOGIN_USER_ERROR,
+  SHOW_FORM_USER,
+  USER_SELECTED
 } from '../types'
 
 export const rxRegisterUser = (user, cb = null) => async dispatch => {
@@ -25,6 +27,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       const docRef = await addDoc(collection(db, 'users'), user);
       if(docRef){
         dispatch({type: FETCH_REGISTER_USER_SUCCESS})
+        message.success("Registrado")
         cb && cb()
       }
     } catch (error) {
@@ -40,8 +43,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       console.log(user, "user")
       await updateDoc(collection(db, 'users', nIdUser), user);
       dispatch({type: FETCH_UPDATE_USER_SUCCESS})
-
-      message.success("Usuario actualizado.")
+      message.success("Actualizado.")
       cb && cb()
     } catch (error) {
     dispatch({type: FETCH_UPDATE_USER_ERROR})
@@ -54,21 +56,23 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
     dispatch({type: FETCH_GET_USERS_START})
     try {
       const querySnapshot = await getDocs(collection(db, 'users'), cb);
-    dispatch({type: FETCH_GET_USERS_SUCCESS})
-      cb && cb(querySnapshot)
+      const users = []
+      querySnapshot.forEach(doc => {
+          users.push({...doc.data(), nIdUser: doc.id}) 
+      })
+      dispatch({type: FETCH_GET_USERS_SUCCESS, payload: users})
     } catch (error) {
     dispatch({type: FETCH_GET_USERS_ERROR})
       message.error('Error del servidor.')
     }
   }
   
-  export const rxDeleteUser = (nIdUser, cb = null) => async dispatch => {
+  export const rxDeleteUser = (nIdUser) => async dispatch => {
     dispatch({type: FETCH_DELETE_USER_START})
     try {
       await deleteDoc(doc(db, 'users', nIdUser))
-    dispatch({type: FETCH_DELETE_USER_SUCCESS})
+      dispatch({type: FETCH_DELETE_USER_SUCCESS})
       message.success("Eliminado.")
-      cb && cb()
     } catch (error) {
     dispatch({type: FETCH_DELETE_USER_ERROR})
       message.error('Error del servidor.')
@@ -98,3 +102,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       message.error('Error del servidor.')
     }
   }
+
+  export const rxShowFormUser = (payload) => ({type: SHOW_FORM_USER, payload});
+
+  export const rxUserSelected = (payload) => ({type: USER_SELECTED, payload});
