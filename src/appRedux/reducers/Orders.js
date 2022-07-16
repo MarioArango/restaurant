@@ -16,7 +16,7 @@ import {
 
 const initialState = {
     loadingGenerateOrder: false,
-    loadingPromotions: false,
+    loadingGetOrders: false,
     listOrders: [],
     orderSelected: null,
     orderDishSelected: null,

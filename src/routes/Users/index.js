@@ -12,8 +12,9 @@ const Users = () => {
     listUsers,
     showFormUser,
     userSelected,
-    loadingDelete,
-    loadingCreateUser
+    loadingDeleteUser,
+    loadingCreateUser,
+    loadingUpdateUser
   } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
@@ -79,7 +80,7 @@ const Users = () => {
                     <EditTwoTone onClick={() => handleEditUser(user)} />
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDelete}>
+                    <Spin spinning={loadingDeleteUser}>
                         <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
                     </Spin>
                 </Tooltip>
@@ -91,7 +92,7 @@ const Users = () => {
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
     dispatch(rxGetUsers());
-  }, [loadingDelete, loadingCreateUser])
+  }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
   return (
     <>

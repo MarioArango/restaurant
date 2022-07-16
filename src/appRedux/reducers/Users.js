@@ -25,7 +25,7 @@ const initialState = {
     listUsers: [],
     showFormUser: false,
     userSelected: null,
-    loadingDelete: false,
+    loadingDeleteUser: false,
     loadingCreateUser: false,
     loadingUpdateUser: false,
     loadingLoginUser: false,
@@ -37,7 +37,7 @@ const Users = (state = initialState, { type, payload }) => {
         case FETCH_GET_USERS_START: {
             return {
                 ...state,
-                loadingPromotions: true
+                loadingListUsers: true
             }
         }
         case FETCH_GET_USERS_SUCCESS: {
@@ -50,7 +50,7 @@ const Users = (state = initialState, { type, payload }) => {
         case FETCH_GET_USERS_ERROR: {
             return {
                 ...state,
-                loadingPromotions: false
+                loadingListUsers: false
             }
         }
 
@@ -74,19 +74,19 @@ const Users = (state = initialState, { type, payload }) => {
         case FETCH_DELETE_USER_START: {
             return {
                 ...state,
-                loadingDelete: true
+                loadingDeleteUser: true
             }
         }
         case FETCH_DELETE_USER_SUCCESS: {
             return {
                 ...state,
-                loadingDelete: false
+                loadingDeleteUser: false
             }
         }
         case FETCH_DELETE_USER_ERROR: {
             return {
                 ...state,
-                loadingDelete: false
+                loadingDeleteUser: false
             }
         }
 

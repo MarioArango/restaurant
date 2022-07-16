@@ -18,7 +18,7 @@ const LayoutApp = ({children}) => {
   }
 
   return (
-    <Layout className="layout">
+    <Layout className="layout flex-col">
       <Header>
         <div className="logo" />
         <Menu
@@ -59,10 +59,14 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "5",
-              label: <Link to="/users">Ventas</Link>
+              label: <Link to="/sales">Ventas</Link>
             },
             {
               key: "6",
+              label: <Link to="/branch-offices">Sucursales</Link>
+            },
+            {
+              key: "7",
               label: "Cerrar sesión",
               onClick: () => { handleLogout() }
             }
@@ -75,7 +79,7 @@ const LayoutApp = ({children}) => {
         }}
       >
         <div className='h-screen'>
-          { children }
+            { children }
         </div>
       </Content>
       <Footer
