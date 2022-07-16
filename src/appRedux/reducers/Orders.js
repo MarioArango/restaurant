@@ -62,7 +62,7 @@ const Orders = (state = initialState, { type, payload }) => {
         case FETCH_GET_ORDERS_SUCCESS: {
             return {
                 ...state,
-                loadingPromotions: false,
+                loadingGetOrders: false,
                 listOrders: payload
             }
         }

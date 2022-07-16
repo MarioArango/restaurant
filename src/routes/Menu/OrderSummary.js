@@ -43,7 +43,7 @@ const OrderSummary = (props) => {
             sState: 'pending',
             dishes: orderFormat
         }
-        rxGenerateOrder(orderToSend)
+        dispatch(rxGenerateOrder(orderToSend))
    }
 
    const handleDelTotalQtyDish = (dish) => {
@@ -151,7 +151,6 @@ const OrderSummary = (props) => {
                 />
             </Col>
             <Divider/>
-            
         </Row>
       </Drawer>
   )

@@ -1,5 +1,6 @@
 import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import currency from 'currency-formatter'
 import { ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Tooltip, Spin, Button } from 'antd';
@@ -12,18 +13,31 @@ import {
 } from '../../appRedux/actions';
 
 const Orders = () => {
-    const { 
-        loadingGetOrders,
-        listOrders,
-        orderSelected,
-        orderDishSelected,
-        loadingUpdateStateOrders
-    } = useSelector(state => state.get("orders"))
+  const { 
+      loadingGetOrders,
+      listOrders,
+      orderSelected,
+      orderDishSelected,
+      loadingUpdateStateOrders
+  } = useSelector(state => state.get("orders"))
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
+
+  let { pathname } = useLocation();
 
   const handleChangeStateOrder = (order) => {
-    dispatch(rxUpdateOrder(order.nIdOrder, order))
+    if(order.sState === "pending"){
+        const updOrder = {
+            sState: "process"
+        }
+        dispatch(rxUpdateOrder(order.nIdOrder, updOrder))
+    }
+    if(order.sState === "process"){
+        const updOrder = {
+            sState: "finished"
+        }
+        dispatch(rxUpdateOrder(order.nIdOrder, updOrder))
+    }
   }
 
   //TODO: COLUMNS TABLE
@@ -31,7 +45,7 @@ const Orders = () => {
     {
         key: "index",
         title: "#",
-        width: 40,
+        width: 20,
         align: "center",
         render: (_, __, index) => index + 1,
     },
@@ -59,19 +73,17 @@ const Orders = () => {
         width: 50,
         align: "center",
         render: (_, order) => (
-            <Tooltip title="">
-                <Spin spinning={loadingUpdateStateOrders}>
-                    <Button 
-                        type='primary'
-                        className='bg-primary'
-                        block
-                        onClick={() => handleChangeStateOrder(order)}
-                    >
-                        Atender
-                    </Button>
-                    
-                </Spin>
-            </Tooltip>
+            <Spin spinning={loadingUpdateStateOrders}>
+                <Button 
+                    disabled={order.sState === "finished"}
+                    type='primary'
+                    className='bg-primary'
+                    block
+                    onClick={() => handleChangeStateOrder(order)}
+                >
+                    Atender
+                </Button>
+            </Spin>
         )
     }
   ]
@@ -80,7 +92,7 @@ const Orders = () => {
     {
         key: "index",
         title: "#",
-        width: 20,
+        width: 5,
         align: "center",
         render: (_, __, index) => index + 1,
     },
@@ -88,7 +100,7 @@ const Orders = () => {
         key: "sName",
         dataIndex: "sName",
         title: "Plato",
-        width: 30,
+        width: 46,
         align: "center",
     },
     // {
@@ -102,7 +114,7 @@ const Orders = () => {
         key: "nQuantityTotal",
         dataIndex: "nQuantityTotal",
         title: "Cantidad",
-        width: 30,
+        width: 14,
         align: "right",
     },
     // {
@@ -115,11 +127,19 @@ const Orders = () => {
     // }
   ]
 
-    //TODO: INIT - GET ALL DISHES FOR CLIENTS
-    useEffect(() => {
-        console.log('entro')
-        dispatch(rxGetOrders())
-    }, [])
+  //TODO: INIT - GET ALL DISHES FOR CLIENTS
+  useEffect(() => {
+      if(pathname === "/orders"){
+          let unsub;
+          dispatch(rxGetOrders((us) => {
+              unsub = us
+          }))  
+          return () => {
+              console.log('unsub')
+              unsub()
+          }
+      }
+  }, [])
 
   return (
         <Card
@@ -145,6 +165,7 @@ const Orders = () => {
                     expandable={{
                         columnWidth: 10,
                         defaultExpandAllRows: true,
+                        expandRowByClick: true,
                         expandedRowRender: (order) => (
                             <Table
                                 {...tableProps}

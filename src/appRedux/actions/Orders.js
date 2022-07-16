@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, orderBy } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_GENERATE_ORDER_START,
@@ -34,14 +34,17 @@ export const rxGenerateOrder = (order) => async dispatch => {
   export const rxGetOrders = (cb = null) => async dispatch => {
     dispatch({type: FETCH_GET_ORDERS_START})
     try {
-      onSnapshot(collection(db, 'orders'), (querySnapshot) => {
+      const q = query(collection(db, 'orders'), orderBy("dCreated", "desc"));
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        console.log("rxGetOrders")
         const orders = [];
         querySnapshot.forEach(doc => {
             orders.push({...doc.data(), nIdOrder: doc.id}) 
         })
-        dispatch({type: FETCH_GET_ORDERS_SUCCESS, payload: orders })
+        const result = orders.filter(o => o.sState !== "finished")
+        dispatch({type: FETCH_GET_ORDERS_SUCCESS, payload: result })
       })
-      
+      cb && cb(unsub)
     } catch (error) {
       dispatch({type: FETCH_GET_ORDERS_ERROR})
       message.error('Error del servidor.')
@@ -51,10 +54,11 @@ export const rxGenerateOrder = (order) => async dispatch => {
   export const rxUpdateOrder = (nIdOrder, order) => async dispatch => {
     dispatch({type: FETCH_UPDATE_ORDER_START})
     try {
-      await updateDoc(collection(db, 'orders', nIdOrder), order);
+      await updateDoc(doc(db, 'orders', nIdOrder), order);
       message.success("Pedido actualizado.")
       dispatch({type: FETCH_UPDATE_ORDER_SUCCESS})
     } catch (error) {
+      console.log(error)
       dispatch({type: FETCH_UPDATE_ORDER_ERROR})
       message.error('Error del servidor.')
     }
@@ -66,6 +70,4 @@ export const rxGenerateOrder = (order) => async dispatch => {
 
   export const rxShowOrderSummary = (payload) => ({type: SHOW_ORDER_SUMMARY, payload})
 
-  export const rxOrderSummary = (payload) =>{
-    console.log(payload, "entro order")
-    return ({type: ORDER_SUMMARY, payload})}
+  export const rxOrderSummary = (payload) =>({type: ORDER_SUMMARY, payload})
