@@ -56,7 +56,7 @@ const Users = () => {
         key: "sUsername",
         dataIndex: "sUsername",
         title: "Usuario",
-        width: 20,
+        width: 45,
         align: "center",
         render: (value) => value ? value : "-"
     },
@@ -77,7 +77,9 @@ const Users = () => {
         render: (_, user) => (
             <div className='flex justify-around'>
                 <Tooltip title="Editar">
-                    <EditTwoTone onClick={() => handleEditUser(user)} />
+                    <Spin spinning={loadingUpdateUser}>
+                        <EditTwoTone onClick={() => handleEditUser(user)} />
+                    </Spin>
                 </Tooltip>
                 <Tooltip title="Eliminar">
                     <Spin spinning={loadingDeleteUser}>

@@ -3,20 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button, Select} from 'antd';
 import { requiredField } from '../../util/config';
-import { rxRegisterUser, rxUpdateUser, rxShowFormUser } from '../../appRedux/actions';
+import { rxRegisterUser, rxUpdateUser, rxShowFormUser, rxGetBranchOffices } from '../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;
 
 const FormUser = () => {
-    const {
-        showFormUser,
-        userSelected,
-        loadingCreateUser,
-        loadingUpdateUser
-    } = useSelector(state => state.get("users"));
+  const {
+      showFormUser,
+      userSelected,
+      loadingCreateUser,
+      loadingUpdateUser
+  } = useSelector(state => state.get("users"));
 
-    const dispatch = useDispatch();
+  const { 
+      loadingListBranchOff,
+      listBranchOffices,
+      showFormBranchOffice,
+      loadingDeleteBranchOff,
+      loadingCreateBranchOff,
+      loadingUpdateBranchOff
+    } = useSelector(state => state.get("branchOffices"));  
+    
+  const dispatch = useDispatch();
 
   //TODO: METHODS INHERED FROM ANTD
   const [form] = Form.useForm();
@@ -25,20 +34,21 @@ const FormUser = () => {
   //TODO: REGISTER USER
   const handleSubmit = () => {
       validateFields().then((values) => {
-          const user = {
-              sUsername: values.sUsername,
-              sPassword: values.sPassword,
-              sRol: values.sRol
-          }
-          if(userSelected){
-            dispatch(rxUpdateUser(userSelected.nIdUser, user, () => {
-                resetFields()
-            }))
-          }else {
-            dispatch(rxRegisterUser(user, () => {
-                resetFields()
-            }))
-          }
+        const user = {
+            sUsername: values.sUsername,
+            sPassword: values.sPassword, //falta encritptar contraseña, con esto basta
+            sRol: values.sRol,
+            sBranchOfficesAssigned: values.sBranchOffices
+        }
+        if(userSelected){
+          dispatch(rxUpdateUser(userSelected.nIdUser, user, () => {
+              resetFields()
+          }))
+        }else {
+          dispatch(rxRegisterUser(user, () => {
+              resetFields()
+          }))
+        }
       })
   }
   //TODO: CLOSE FORM USER
@@ -53,9 +63,15 @@ const FormUser = () => {
             sUsername: userSelected.sUsername,
             sPassword: userSelected.sPassword,
             sRol: userSelected.sRol,
+            sBranchOfficesAssigned: userSelected.sBranchOfficesAssigned
         })
     }
   }, [userSelected])
+
+   //TODO: INIT - GET ALL BRANCHOFFICES
+   useEffect(() => {
+    dispatch(rxGetBranchOffices());
+  }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (
     <>
@@ -79,7 +95,7 @@ const FormUser = () => {
                         onFinish={handleSubmit}
                         layout="vertical"
                         initialValues={{
-                            sRol: "cliente"
+                            sRol: "mozo"
                         }}
                     >
                         <Row gutter={12}>
@@ -96,9 +112,26 @@ const FormUser = () => {
                             <Col span={24}>
                                 <Item label="Rol" name="sRol" rules={requiredField}>
                                     <Select>
-                                        <Option value="cliente">Cliente</Option>
+                                        <Option value="mozo">Mozo</Option>
                                         <Option value="chef">Chef</Option>
                                         <Option value="administrador">Administrador</Option>
+                                    </Select>
+                                </Item>
+                            </Col>
+                            <Col span={24}>
+                                <Item label="Sucursal" name="sBranchOffices" rules={requiredField}>
+                                    <Select
+                                        mode="multiple"
+                                        loading={loadingListBranchOff}
+                                        className="w-full"
+                                    >
+                                        {
+                                            loadingListBranchOff.map((s, index) => (
+                                            <Option key={index} value={s.nIdBranchOffice}>
+                                                {s.sBranchOffice}
+                                            </Option>
+                                            ))
+                                        }
                                     </Select>
                                 </Item>
                             </Col>

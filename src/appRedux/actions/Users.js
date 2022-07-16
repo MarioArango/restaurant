@@ -41,7 +41,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
     try {
       console.log(nIdUser, "nIdUser")
       console.log(user, "user")
-      await updateDoc(collection(db, 'users', nIdUser), user);
+      await updateDoc(doc(db, 'users', nIdUser), user);
       dispatch({type: FETCH_UPDATE_USER_SUCCESS})
       message.success("Actualizado.")
       cb && cb()
@@ -90,7 +90,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
           if(user.sUsername === sUsername && user.sPassword === sPassword){
             dispatch({type: FETCH_LOGIN_USER_SUCCESS})
             message.success("Bienvenido")
-            cb && cb(true)
+            cb && cb(true, user)
           }else {
             dispatch({type: FETCH_LOGIN_USER_ERROR})
             cb && cb(false)

@@ -1,10 +1,21 @@
-import { Avatar, Layout, Menu } from 'antd';
-import React from 'react';
+import { useEffect } from 'react';
+import { Avatar, Layout, Menu, Select } from 'antd';
+import { useDispatch, useSelector} from 'react-redux';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
+// import {  } from '../../appRedux/actions';
+
 const { Header, Content, Footer } = Layout;
+const { Option } = Select;
 
 const LayoutApp = ({children}) => {
+  //TODO: REDUX STATE
+  // const { 
+
+  // } = useSelector(state => state.get(""));
+
+  const dispatch = useDispatch();
+
   //TODO: GET AUTH LOCAL STORAGE
   const auth = useAuth();
   
@@ -15,6 +26,10 @@ const LayoutApp = ({children}) => {
   const handleLogout = () => {
     clearAuth();
     navigate("/login")
+  }
+
+  const handleSelectBrachOffice = (value, option) => {
+
   }
 
   return (
@@ -85,10 +100,32 @@ const LayoutApp = ({children}) => {
       <Footer
         style={{
           textAlign: 'center',
+          paddingBlock: "10px",
+          paddingInline: "20px"
         }}
         className="bg-gray-300"
       >
-        <p className='font-medium'>Restaurante @Copyright</p>
+        <div className='flex justify-between items-center'>
+          <div>
+            <Select
+              // value={auth.nIdBranchOffice}
+              loading={false}
+              style={{width: 200}}
+              onSelect={handleSelectBrachOffice}
+            >
+              {
+                [].map((s, index) => (
+                  <Option key={index} value={s.nIdBranchOffice}>
+                    {s.sBranchOffice}
+                  </Option>
+                ))
+              }
+            </Select>
+          </div>
+          <div>
+            <p className='font-medium'>Restaurante @Copyright</p>
+          </div>
+        </div>
       </Footer>
     </Layout>
   )

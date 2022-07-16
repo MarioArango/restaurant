@@ -40,7 +40,7 @@ export const rxGetBranchOffices = (cb = null) => async dispatch => {
       const querySnapshot = await getDocs(collection(db, 'branchOffices'), cb);
       const branchOffices = []
       querySnapshot.forEach(doc => {
-        branchOffices.push({...doc.data(), nIdUser: doc.id}) 
+        branchOffices.push({...doc.data(), nIdBranchOffice: doc.id}) 
       })
       dispatch({type: FETCH_GET_BRANCHOFFICES_SUCCESS, payload: branchOffices})
     } catch (error) {
@@ -49,10 +49,10 @@ export const rxGetBranchOffices = (cb = null) => async dispatch => {
     }
   }
 
-  export const rxDeleteBranchOffice = (nIdUser) => async dispatch => {
+  export const rxDeleteBranchOffice = (nIdBranchOffice) => async dispatch => {
     dispatch({type: FETCH_DELETE_BRANCHOFFICE_START})
     try {
-      await deleteDoc(doc(db, 'branchOffices', nIdUser))
+      await deleteDoc(doc(db, 'branchOffices', nIdBranchOffice))
       dispatch({type: FETCH_DELETE_BRANCHOFFICE_SUCCESS})
       message.success("Eliminado.")
     } catch (error) {
@@ -68,7 +68,7 @@ export const rxGetBranchOffices = (cb = null) => async dispatch => {
   export const rxUpdateBranchOffice = (nIdBranchOffice, branchOffice, cb = null) => async dispatch =>{
     dispatch({type: FETCH_UPDATE_BRANCHOFFICE_START})
     try {
-      await updateDoc(collection(db, 'branchOffices', nIdBranchOffice), branchOffice);
+      await updateDoc(doc(db, 'branchOffices', nIdBranchOffice), branchOffice);
       dispatch({type: FETCH_UPDATE_BRANCHOFFICE_SUCCESS})
       message.success("Actualizado.")
       cb && cb()

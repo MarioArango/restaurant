@@ -22,9 +22,14 @@ const Login = () => {
 
   const handleLogin = () => {
     validateFields().then((values) => {
-        dispatch(rxLoginUser(values.sUsername, values.sPassword, (isValidate) => {
+        dispatch(rxLoginUser(values.sUsername, values.sPassword, (isValidate, user) => {
         if(isValidate){
-            setAuth(({isValidate: true, sUsername: values.sUsername}));
+            setAuth(({
+                isValidate: true, 
+                sUsername: user.sUsername,
+                sBranchOfficesAssigned: user.sBranchOfficesAssigned,
+                sRol: user.sRol
+            }));
             resetFields()
             navigate('/')
         }else {

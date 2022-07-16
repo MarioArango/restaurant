@@ -48,7 +48,7 @@ const BranchOffices = () => {
     {
         key: "index",
         title: "#",
-        width: 5,
+        width: 15,
         align: "center",
         render: (_, __, index) => index + 1,
     },
@@ -64,12 +64,14 @@ const BranchOffices = () => {
         key: "",
         dataIndex: "",
         title: "",
-        width: 20,
+        width: 30,
         align: "center",
         render: (_, branchOffice) => (
             <div className='flex justify-around'>
                 <Tooltip title="Editar">
-                    <EditTwoTone onClick={() => handleEditBranchOffice(branchOffice)} />
+                    <Spin spinning={loadingUpdateBranchOff}>
+                        <EditTwoTone onClick={() => handleEditBranchOffice(branchOffice)} />
+                    </Spin>
                 </Tooltip>
                 <Tooltip title="Eliminar">
                     <Spin spinning={loadingDeleteBranchOff}>

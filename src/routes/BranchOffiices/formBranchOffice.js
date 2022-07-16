@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import { SaveOutlined, ShopOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button } from 'antd';
 import { requiredField } from '../../util/config';
 import { rxRegisterBranchOffice, rxUpdateBranchOffice, rxShowFormBranchOff } from '../../appRedux/actions';
@@ -27,6 +27,8 @@ const FormBranchOffice = () => {
           const branchOffice = {
             sBranchOffice: values.sBranchOffice
           }
+          console.log(branchOfficeSelected, "branchOfficeSelected")
+          console.log(branchOffice, "branchOffice")
           if(branchOfficeSelected){
             dispatch(rxUpdateBranchOffice(branchOfficeSelected.nIdBranchOffice, branchOffice, () => {
                 resetFields()
@@ -57,7 +59,7 @@ const FormBranchOffice = () => {
         {
             showFormBranchOffice && (
             <Modal
-                    title={branchOfficeSelected? <div><UserOutlined/> Editar Sucursal</div> : <div><UserAddOutlined/> Registrar Sucursal</div>}
+                    title={branchOfficeSelected? <div><ShopOutlined /> Editar Sucursal</div> : <div><ShopOutlined /> Registrar Sucursal</div>}
                     visible={showFormBranchOffice}
                     bodyStyle={{ padding: 10 }}
                     width="350px"
