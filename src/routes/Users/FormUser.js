@@ -14,7 +14,7 @@ const FormUser = () => {
         userSelected,
         loadingCreateUser,
         loadingUpdateUser
-    } = useSelector(({users}) => users);
+    } = useSelector(state => state.get("users"));
 
     const dispatch = useDispatch();
 

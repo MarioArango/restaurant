@@ -20,7 +20,7 @@ const Dishes = () => {
     dishSelected,
     showFormDishes,
     loadingDelete
-  } = useSelector(({ dishes }) => dishes);
+  } = useSelector(state => state.get("dishes"));
 
   const dispatch = useDispatch();
 

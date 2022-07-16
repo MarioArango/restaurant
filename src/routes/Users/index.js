@@ -14,7 +14,7 @@ const Users = () => {
     userSelected,
     loadingDelete,
     loadingCreateUser
-  } = useSelector(({users}) => users);
+  } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 

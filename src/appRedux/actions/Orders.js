@@ -1,4 +1,4 @@
-import { db } from '../firebase/firebaseConfig';
+import { db } from '../../firebase/firebaseConfig';
 import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
 import { message } from 'antd';
 import {
@@ -12,7 +12,7 @@ import {
   FETCH_UPDATE_ORDER_SUCCESS,
   FETCH_UPDATE_ORDER_ERROR,
   ORDER_SELECTED,
-  DISH_SELECTED,
+  ORDER_DISH_SELECTED,
   SHOW_ORDER_SUMMARY,
   ORDER_SUMMARY
 } from '../types'
@@ -62,8 +62,10 @@ export const rxGenerateOrder = (order) => async dispatch => {
 
   export const rxOrderSelected = (payload) => ({type: ORDER_SELECTED, payload})
 
-  export const rxDishSelected = (payload) => ({type: DISH_SELECTED, payload})
+  export const rxOrderDishSelected = (payload) => ({type: ORDER_DISH_SELECTED, payload})
 
   export const rxShowOrderSummary = (payload) => ({type: SHOW_ORDER_SUMMARY, payload})
 
-  export const rxOrderSummary = (payload) => ({type: ORDER_SUMMARY, payload})
+  export const rxOrderSummary = (payload) =>{
+    console.log(payload, "entro order")
+    return ({type: ORDER_SUMMARY, payload})}

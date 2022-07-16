@@ -23,7 +23,7 @@ const OrderSummary = (props) => {
     showOrderSummary,
     orderSummary,
     loadingGenerateOrder
-  } = useSelector(({}))
+  } = useSelector(state => state.get("orders"))
 
   const dispatch = useDispatch()
 

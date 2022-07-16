@@ -14,7 +14,7 @@ const FormDish = (props) => {
     showFormDishes,
     loadingAddDish,
     loadingUpdateDish
-  } = useSelector(({ dishes }) => dishes);
+  } = useSelector(state => state.get("dishes"));
 
   const dispatch = useDispatch();
 

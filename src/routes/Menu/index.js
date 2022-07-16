@@ -6,22 +6,15 @@ import currency from 'currency-formatter';
 import { currencyFE } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png';
-import { 
-    rxGetDishes, 
-    rxShowOrderSummary,
-    rxOrderSummary
-} from '../../appRedux/actions';
+import { rxGetDishes, rxShowOrderSummary, rxOrderSummary } from '../../appRedux/actions';
 
 
 const Menu = () => {
-  const {
-    listDishes,
-    loadingListDishes,
-    showOrderSummary,
-    orderSummary
-  } = useSelector(({dishes}) => dishes)
+  const { listDishes, loadingListDishes } = useSelector(state => state.get("dishes"));
+  
+  const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   //TODO: SHOW ORDER SUMMARY
   const handleGenerateOrder = () => {

@@ -41,32 +41,30 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "1",
-              label: "Carta",
-              // onClick: () => {navigate('/')}
+              label: "Menu",
+              label: <Link to="/">Menu</Link>,
             },
             {
               key: "2",
-              label: <Link to="/orders">Pedidos</Link>,
+              label: <Link to="/orders">Pedidos</Link>
             },
             {
               key: "3",
               label: "Platos",
-              // onClick: () => {navigate('/dishes')}
+              label: <Link to="/dishes">Platos</Link>
             },
             {
               key: "4",
-              label: "Usuarios",
-              // onClick: () => {navigate('/users')}
+              label: <Link to="/users">Usuarios</Link>
             },
             {
               key: "5",
-              label: "Reporte de ventas",
-              // onClick: () => {navigate('/report-sales')}
+              label: <Link to="/users">Ventas</Link>
             },
             {
               key: "6",
               label: "Cerrar sesión",
-              // onClick: () => {handleLogout()}
+              onClick: () => { handleLogout() }
             }
           ]}
         />

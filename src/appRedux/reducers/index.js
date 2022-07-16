@@ -5,13 +5,13 @@ import Menu from './Menu';
 import Orders from './Orders';
 import Users from './Users';
 
-const reducers = combineReducers({
+const rootReducer = combineReducers({
     branchOffices: BranchOffices,
     dishes: Dishes,
     menu: Menu,
     orders: Orders,
-    users: Users,
+    users: Users
 })
 
-export default reducers;
+export default rootReducer;
 

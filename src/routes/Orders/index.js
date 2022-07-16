@@ -8,7 +8,7 @@ import {
     rxGetOrders, 
     rxUpdateOrder, 
     rxOrderSelected,
-    rxDishSelected
+    rxOrderDishSelected
 } from '../../appRedux/actions';
 
 const Orders = () => {
@@ -16,9 +16,9 @@ const Orders = () => {
         loadingGetOrders,
         listOrders,
         orderSelected,
-        dishSelected,
+        orderDishSelected,
         loadingUpdateStateOrders
-    } = useSelector(({ orders}) => orders)
+    } = useSelector(state => state.get("orders"))
 
     const dispatch = useDispatch()
 
@@ -152,11 +152,11 @@ const Orders = () => {
                                 columns={columnsDishes}
                                 dataSource={order.dishes}
                                 rowKey={(dish) => dish.nIdDish}
-                                rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                                rowClassName={(dish) => dish?.nIdDish === orderDishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                                 // scroll={customScroll()}
                                 onRow={(dish) => ({
                                     onClick: () => {
-                                        dispatch(rxDishSelected(dish))
+                                        dispatch(rxOrderDishSelected(dish))
                                     }
                                 })}
                                 footer={null}

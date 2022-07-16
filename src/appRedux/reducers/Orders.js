@@ -9,8 +9,9 @@ import {
     FETCH_UPDATE_ORDER_SUCCESS,
     FETCH_UPDATE_ORDER_ERROR,
     ORDER_SELECTED,
-    DISH_SELECTED,
-    SHOW_ORDER_SUMMARY
+    ORDER_DISH_SELECTED,
+    SHOW_ORDER_SUMMARY,
+    ORDER_SUMMARY
 } from "../types";
 
 const initialState = {
@@ -18,7 +19,7 @@ const initialState = {
     loadingPromotions: false,
     listOrders: [],
     orderSelected: null,
-    dishSelected: null,
+    orderDishSelected: null,
     loadingUpdateStateOrders: false,
     showOrderSummary: false,
     orderSummary: []
@@ -82,10 +83,10 @@ const Orders = (state = initialState, { type, payload }) => {
         }
 
         //TODO: ORDER SELECTED
-        case DISH_SELECTED: {
+        case ORDER_DISH_SELECTED: {
             return {
                 ...state,
-                dishSelected: payload
+                orderDishSelected: payload
             }
         }
 
@@ -102,7 +103,7 @@ const Orders = (state = initialState, { type, payload }) => {
                 ...state,
                 loadingUpdateStateOrders: false,
                 orderSelected: null,
-                dishSelected: null
+                orderDishSelected: null
             }
         }
 
@@ -122,7 +123,7 @@ const Orders = (state = initialState, { type, payload }) => {
         }
 
         //TODO: ORDER SUMMARY
-        case SHOW_ORDER_SUMMARY: {
+        case ORDER_SUMMARY: {
             return {
                 ...state,
                 orderSummary: payload

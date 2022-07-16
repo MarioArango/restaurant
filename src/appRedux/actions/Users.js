@@ -1,4 +1,4 @@
-import { db } from '../firebase/firebaseConfig';
+import { db } from '../../firebase/firebaseConfig';
 import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
 import { message } from 'antd';
 import {
@@ -88,10 +88,13 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         querySnapshot.forEach((doc) => {
           const user = doc.data();
           if(user.sUsername === sUsername && user.sPassword === sPassword){
+            dispatch({type: FETCH_LOGIN_USER_SUCCESS})
+            message.success("Bienvenido")
             cb && cb(true)
+          }else {
+            dispatch({type: FETCH_LOGIN_USER_ERROR})
+            cb && cb(false)
           }
-          dispatch({type: FETCH_LOGIN_USER_SUCCESS})
-        
         })
       }else {
         dispatch({type: FETCH_LOGIN_USER_ERROR})

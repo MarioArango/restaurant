@@ -28,6 +28,7 @@ const initialState = {
     loadingDelete: false,
     loadingCreateUser: false,
     loadingUpdateUser: false,
+    loadingLoginUser: false,
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -134,6 +135,28 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingUpdateUser: false
+            }
+        }
+
+        //TODO: LOGIN USER
+        case FETCH_LOGIN_USER_START: {
+            return {
+                ...state,
+                loadingLoginUser: true
+            }
+        }
+
+        case FETCH_LOGIN_USER_SUCCESS: {
+            return {
+                ...state,
+                loadingLoginUser: false
+            }
+        }
+
+        case FETCH_LOGIN_USER_ERROR: {
+            return {
+                ...state,
+                loadingLoginUser: false
             }
         }
 

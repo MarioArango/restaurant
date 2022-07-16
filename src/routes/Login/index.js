@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Row, Col, Input, Button, message} from 'antd';
 import { cardProps, requiredField } from '../../util/config';
@@ -9,32 +9,32 @@ import { rxLoginUser } from '../../appRedux/actions';
 const { Item } = Form;
 
 const Login = () => {
+
+  const { loadingLoginUser } = useSelector(state => state.get("users"));
+
+  const dispatch = useDispatch();
+
   //TODO: HOOKS INHERED FROM ANTD
   const [form] = Form.useForm();
   const { validateFields, resetFields } = form;
 
-  const [loadingLoginUser, setLoadingLoginUser] = useState(false)
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     validateFields().then((values) => {
-      setLoadingLoginUser(true)
-      rxLoginUser(values.sUsername, values.sPassword, (isValidate) => {
+        dispatch(rxLoginUser(values.sUsername, values.sPassword, (isValidate) => {
         if(isValidate){
             setAuth(({isValidate: true, sUsername: values.sUsername}));
-            message.success("Bienvenido")
-            setLoadingLoginUser(false)
             resetFields()
             navigate('/')
         }else {
-            setLoadingLoginUser(false)
             message.error("Credenciales incorrectas")
             navigate('/login')
         }
-      })
-  })
-}
+      }))
+    })
+  }
+
   return (
     <div className='h-screen flex justify-center items-center'>
         <Card
