@@ -15,6 +15,8 @@ const LayoutApp = ({children}) => {
     listBranchOffices
   } = useSelector(state => state.get("branchOffices"));
 
+  const { authSucursal } = useSelector(state => state.get("users"));
+
   const dispatch = useDispatch();
 
   //TODO: GET AUTH LOCAL STORAGE
@@ -36,6 +38,7 @@ const LayoutApp = ({children}) => {
   //TODO: INIT - GET ALL BRANCHOFFICES
   useEffect(() => {
     dispatch(rxGetBranchOffices());
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -62,7 +65,6 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "1",
-              label: "Menu",
               label: <Link to="/">Menu</Link>,
             },
             {
@@ -71,7 +73,6 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "3",
-              label: "Platos",
               label: <Link to="/dishes">Platos</Link>
             },
             {
@@ -114,22 +115,28 @@ const LayoutApp = ({children}) => {
         <div className='flex justify-between items-center'>
           <div>
             <Select
-              value={"authSucursalGeneral"}
+              value={authSucursal}
               loading={loadingListBranchOff}
               style={{width: 200}}
               onSelect={handleSelectBrachOffice}
             >
               {
-                listBranchOffices.map(bo => {
-                  auth.sBranchOfficesAssigned.map((s, index) => {
-                    if(bo.nIdBranchOffice === s.nIdBranchOffice){
-                      return (
-                        <Option key={index} value={s.nIdBranchOffice}>
-                          {s.sBranchOffice}
-                        </Option>
-                      )
+                listBranchOffices.map((bo, index) => {
+                  let verf = false;
+                  auth.sBranchOfficesAssigned.forEach(boId => {
+                    if(bo.nIdBranchOffice === boId){
+                      verf = true;
                     }
                   })
+                  if(verf){
+                    return (
+                      <Option key={index} value={bo.nIdBranchOffice}>
+                        {bo.sBranchOffice}
+                      </Option>
+                    )
+                  }else {
+                    return null
+                  }
                 })
               }
             </Select>

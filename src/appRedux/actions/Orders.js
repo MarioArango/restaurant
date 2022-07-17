@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, orderBy } from "firebase/firestore";
+import { doc, addDoc, updateDoc, onSnapshot, collection, where, query, orderBy } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_GENERATE_ORDER_START,

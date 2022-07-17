@@ -1,6 +1,3 @@
-export const k = "6b9481c3314d4a8ca6c636f96b156459a";
-export const v = "6d2e5a42062d45e89c88-996b264d121d";
-
 export const cardProps = {
     bodyStyle: {padding: 0},
     size: "small",
