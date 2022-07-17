@@ -35,11 +35,19 @@ const FormUser = () => {
   const handleSubmit = () => {
       validateFields().then((values) => {
         const sPassword = btoa(values.sPassword);
+        let sBranchOfficesAssigned = [];
+        listBranchOffices.forEach(bo => {
+            values.sBranchOffices.forEach(vbo => {
+                if(bo.nIdBranchOffice === vbo){
+                    sBranchOfficesAssigned.push(bo)
+                }
+            })
+        })
         const user = {
             sUsername: values.sUsername,
             sPassword,
             sRol: values.sRol,
-            sBranchOfficesAssigned: values.sBranchOffices
+            sBranchOfficesAssigned
         }
         if(userSelected){
           dispatch(rxUpdateUser(userSelected.nIdUser, user, () => {
@@ -127,7 +135,7 @@ const FormUser = () => {
                                         className="w-full"
                                     >
                                         {
-                                            loadingListBranchOff.map((s, index) => (
+                                            listBranchOffices.map((s, index) => (
                                             <Option key={index} value={s.nIdBranchOffice}>
                                                 {s.sBranchOffice}
                                             </Option>

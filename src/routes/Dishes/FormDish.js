@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteTwoTone, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import convert from 'client-side-image-resize';
-import { Upload, Modal, Form, Row, Col, Input, Button, message, Tooltip } from 'antd';
+import { Upload, Modal, Form, Row, Col, Input, Button, message, Tooltip, Select } from 'antd';
 import { requiredField, currencyOnly } from '../../util/config';
 import { rxAddDishes, rxUpdateDish, rxDishSelected, rxShowFormDishes } from '../../appRedux/actions';
 
-const { Item } = Form
-const FormDish = (props) => {
+const { Item } = Form;
+const { Option } = Select;
+
+const FormDish = () => {
   //TODO: REDUX STATE
   const { 
     dishSelected,
@@ -127,6 +129,7 @@ const FormDish = (props) => {
           nPrice: dishSelected.nPrice
       });
     }
+    // eslint-disable-next-line
    }, [dishSelected])
 
   return (
@@ -193,7 +196,10 @@ const FormDish = (props) => {
                         </Col>
                         <Col span={24}>
                             <Item label="Tipo" name="sType">
-                                <Input rules={requiredField}/>
+                                <Select>
+                                    <Option value="comida">Comida</Option>
+                                    <Option value="bebida">Bebida</Option>
+                                </Select>
                             </Item>
                         </Col>
                         <Col span={24}>

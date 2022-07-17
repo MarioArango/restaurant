@@ -100,6 +100,7 @@ const Menu = () => {
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
     dispatch(rxGetDishes(authSucursal));
+    // eslint-disable-next-line
    }, [authSucursal])
 
   return (
@@ -118,6 +119,10 @@ const Menu = () => {
                         Generar Pedido
                     </Button>
                 </Affix>
+            </div>
+            <div className='flex justify-around'>
+                <Button type='dashed'>Comidas</Button>
+                <Button type='dashed'>Bebidas</Button>
             </div>
             <Row gutter={12}>
                 {

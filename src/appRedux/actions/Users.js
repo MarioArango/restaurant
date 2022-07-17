@@ -83,7 +83,8 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxLoginUser = (sUsername, sPassword, cb = null) => async dispatch =>{
     dispatch({type: FETCH_LOGIN_USER_START})
     try {
-      const q = query(collection(db, "users"), where("sUsername", "==", sUsername), where("sPassword", "==", sPassword));
+      const sPasswordEncrypt = btoa(sPassword);
+      const q = query(collection(db, "users"), where("sUsername", "==", sUsername), where("sPassword", "==", sPasswordEncrypt));
       const querySnapshot = await getDocs(q);
       if(querySnapshot?.docs?.length > 0){
         querySnapshot.forEach((doc) => {
@@ -103,7 +104,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         cb && cb(false)
       }
     } catch (error) {
-    dispatch({type: FETCH_LOGIN_USER_ERROR})
+      dispatch({type: FETCH_LOGIN_USER_ERROR})
       message.error('Error del servidor.')
     }
   }

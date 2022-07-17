@@ -27,8 +27,6 @@ const FormBranchOffice = () => {
           const branchOffice = {
             sBranchOffice: values.sBranchOffice
           }
-          console.log(branchOfficeSelected, "branchOfficeSelected")
-          console.log(branchOffice, "branchOffice")
           if(branchOfficeSelected){
             dispatch(rxUpdateBranchOffice(branchOfficeSelected.nIdBranchOffice, branchOffice, () => {
                 resetFields()

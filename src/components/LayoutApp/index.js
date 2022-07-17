@@ -10,12 +10,7 @@ const { Option } = Select;
 
 const LayoutApp = ({children}) => {
   //TODO: REDUX STATE
-  const { 
-    loadingListBranchOff,
-    listBranchOffices
-  } = useSelector(state => state.get("branchOffices"));
-
-  const { authSucursal } = useSelector(state => state.get("users"));
+  const { authSucursal, loadingLoginUser } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
@@ -31,16 +26,10 @@ const LayoutApp = ({children}) => {
     navigate("/login")
   }
 
-  const handleSelectBrachOffice = (value) => {
-    dispatch(rxSetUserAuthSucursal(value));
+  const handleSelectBrachOffice = (_, option) => {
+    dispatch(rxSetUserAuthSucursal(option.data));
   }
-
-  //TODO: INIT - GET ALL BRANCHOFFICES
-  useEffect(() => {
-    dispatch(rxGetBranchOffices());
-    // eslint-disable-next-line
-  }, [])
-
+  
   return (
     <Layout className="layout flex-col">
       <Header>
@@ -77,11 +66,11 @@ const LayoutApp = ({children}) => {
             },
             {
               key: "4",
-              label: <Link to="/users">Usuarios</Link>
+              label: <Link to="/sales">Ventas</Link>
             },
             {
               key: "5",
-              label: <Link to="/sales">Ventas</Link>
+              label: <Link to="/users">Usuarios</Link>
             },
             {
               key: "6",
@@ -115,30 +104,18 @@ const LayoutApp = ({children}) => {
         <div className='flex justify-between items-center'>
           <div>
             <Select
-              value={authSucursal}
-              loading={loadingListBranchOff}
+              value={authSucursal.nIdBranchOffice}
+              loading={loadingLoginUser}
               style={{width: 200}}
               onSelect={handleSelectBrachOffice}
             >
               {
-                listBranchOffices.map((bo, index) => {
-                  let verf = false;
-                  auth.sBranchOfficesAssigned.forEach(boId => {
-                    if(bo.nIdBranchOffice === boId){
-                      verf = true;
-                    }
-                  })
-                  if(verf){
-                    return (
-                      <Option key={index} value={bo.nIdBranchOffice}>
-                        {bo.sBranchOffice}
-                      </Option>
-                    )
-                  }else {
-                    return null
-                  }
-                })
-              }
+                auth.sBranchOfficesAssigned?.map((boa, index) => (
+                  <Option key={index} value={boa.nIdBranchOffice} data={boa}>
+                    {boa.sBranchOffice}
+                  </Option>
+                ))
+              }              
             </Select>
           </div>
           <div>
