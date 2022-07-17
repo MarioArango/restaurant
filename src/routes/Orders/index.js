@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import currency from 'currency-formatter'
 import { ScheduleOutlined} from '@ant-design/icons';
-import { Table, Card, Tag, Tooltip, Spin, Button } from 'antd';
+import { Table, Card, Tag, Tooltip, Spin, Button, Result } from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
+import { useAuth } from '../../Hooks/auth';
 import { 
     rxGetOrders, 
     rxUpdateOrder, 
@@ -21,8 +22,11 @@ const Orders = () => {
       loadingUpdateStateOrders
   } = useSelector(state => state.get("orders"))
 
+  const { authSucursal } = useSelector(state => state.get("users"));
+
   const dispatch = useDispatch()
 
+  const { sRol } = useAuth()
   let { pathname } = useLocation();
 
   const handleChangeStateOrder = (order) => {
@@ -131,7 +135,7 @@ const Orders = () => {
   useEffect(() => {
       if(pathname === "/orders"){
           let unsub;
-          dispatch(rxGetOrders((us) => {
+          dispatch(rxGetOrders(authSucursal, (us) => {
               unsub = us
           }))  
           return () => {
@@ -139,10 +143,13 @@ const Orders = () => {
               unsub()
           }
       }
-  }, [])
+  }, [authSucursal])
 
   return (
-        <Card
+    <>
+        {
+            sRol === "chef" || sRol === "administrador"?
+            <Card
             {...cardProps}
             title={<div><ScheduleOutlined/> Lista de Platos</div>}
         >
@@ -186,7 +193,14 @@ const Orders = () => {
                     }}
                 />
             }
-        </Card>
+            </Card>
+            : <Result
+                status="403"
+                title="403"
+                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
+            />
+        }
+    </>
   )
 }
 

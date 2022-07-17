@@ -34,9 +34,10 @@ const FormUser = () => {
   //TODO: REGISTER USER
   const handleSubmit = () => {
       validateFields().then((values) => {
+        const sPassword = btoa(values.sPassword);
         const user = {
             sUsername: values.sUsername,
-            sPassword: values.sPassword, //falta encritptar contraseña, con esto basta
+            sPassword,
             sRol: values.sRol,
             sBranchOfficesAssigned: values.sBranchOffices
         }

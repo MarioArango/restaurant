@@ -16,7 +16,8 @@ import {
     FETCH_LOGIN_USER_SUCCESS,
     FETCH_LOGIN_USER_ERROR,
     SHOW_FORM_USER,
-    USER_SELECTED
+    USER_SELECTED,
+    USER_AUTH_SUCURSAL
 } from "../types";
 
 
@@ -29,6 +30,7 @@ const initialState = {
     loadingCreateUser: false,
     loadingUpdateUser: false,
     loadingLoginUser: false,
+    authSucursal: null
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -157,6 +159,14 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingLoginUser: false
+            }
+        }
+
+        //TODO: USER AUTH SUCURSAL
+        case USER_AUTH_SUCURSAL: {
+            return {
+                ...state,
+                authSucursal: payload
             }
         }
 

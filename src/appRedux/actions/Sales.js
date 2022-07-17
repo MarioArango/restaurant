@@ -8,10 +8,11 @@ import {
     FETCH_GET_SALES_ERROR,
 } from '../types'
 
-export const rxGetSales = (cb = null) => async dispatch => {
+export const rxGetSales = (authSucursal, cb = null) => async dispatch => {
     dispatch({type: FETCH_GET_SALES_START})
     try {
-      const querySnapshot = await getDocs(collection(db, 'orders'), cb);
+      const q = query(collection(db, "orders"), where("nIdBranchOffice", "==", authSucursal));
+      const querySnapshot = await getDocs(q);
       const sales = []
       querySnapshot.forEach(doc => {
         sales.push({...doc.data(), nIdUser: doc.id}) 

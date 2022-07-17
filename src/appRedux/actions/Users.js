@@ -18,7 +18,8 @@ import {
   FETCH_LOGIN_USER_SUCCESS,
   FETCH_LOGIN_USER_ERROR,
   SHOW_FORM_USER,
-  USER_SELECTED
+  USER_SELECTED,
+  USER_AUTH_SUCURSAL
 } from '../types'
 
 export const rxRegisterUser = (user, cb = null) => async dispatch => {
@@ -87,7 +88,8 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       if(querySnapshot?.docs?.length > 0){
         querySnapshot.forEach((doc) => {
           const user = doc.data();
-          if(user.sUsername === sUsername && user.sPassword === sPassword){
+          const sPasswordDecryp = atob(user.sPassword);
+          if(user.sUsername === sUsername && sPasswordDecryp === sPassword){
             dispatch({type: FETCH_LOGIN_USER_SUCCESS})
             message.success("Bienvenido")
             cb && cb(true, user)
@@ -109,3 +111,5 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxShowFormUser = (payload) => ({type: SHOW_FORM_USER, payload});
 
   export const rxUserSelected = (payload) => ({type: USER_SELECTED, payload});
+
+  export const rxSetUserAuthSucursal = (payload) => ({type: USER_AUTH_SUCURSAL, payload});

@@ -50,10 +50,11 @@ export const rxUpdateDish = (nIdDish, dish, cb = null) => async dispatch => {
 }
 
 
-export const rxGetDishes = () => async dispatch => {
+export const rxGetDishes = (authSucursal) => async dispatch => {
   dispatch({type: FETCH_GET_DISHES_START})
   try {
-    const querySnapshot = await getDocs(collection(db, 'dishes'));
+    const q = query(collection(db, "dishes"), where("nIdBranchOffice", "==", authSucursal));
+    const querySnapshot = await getDocs(q);
     const dishes = [];
     querySnapshot.forEach(doc => {
       dishes.push({...doc.data(), nIdDish: doc.id}) 

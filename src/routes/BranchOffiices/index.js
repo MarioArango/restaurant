@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormBranchOffice from './formBranchOffice';
+import { useAuth } from '../../Hooks/auth';
 import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../appRedux/actions';
 
 const BranchOffices = () => {
@@ -18,6 +19,8 @@ const BranchOffices = () => {
   } = useSelector(state => state.get("branchOffices"));
 
   const dispatch = useDispatch();
+
+  const { sRol } = useAuth()
 
   const handleViewFormBranchOffice = () => {
     dispatch(rxShowFormBranchOff(true))
@@ -89,43 +92,53 @@ const BranchOffices = () => {
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (
-    <>
-        <Card
-            {...cardProps}
-            title="Lista de Sucursales"
-            extra={
-                <Button
-                    type="primary"
-                    className='bg-primary'
-                    icon={<PlusOutlined/>}
-                    onClick={handleViewFormBranchOffice}
-                >
-                    Agregar sucursal
-                </Button>
-            }
-        >
-            <Table
-                {...tableProps}
-                bordered
-                columns={columns}
-                loading={loadingListBranchOff}
-                dataSource={listBranchOffices}
-                rowKey={(branchOffice) => branchOffice.nIdBranchOffice}
-                rowClassName={(branchOffice) => branchOffice?.nIdBranchOffice === branchOfficeSelected?.nIdBranchOffice ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                scroll={customScroll()}
-                onRow={(branchOffice) => ({
-                    onClick: () => {
-                        dispatch(rxBranchOffSelected(branchOffice))
-                    },
-                    onDoubleClick: () => {
-                        handleViewFormBranchOffice()
+    <>  
+        {
+            sRol === "administrador"?
+                <>
+                    <Card
+                        {...cardProps}
+                        title="Lista de Sucursales"
+                        extra={
+                            <Button
+                                type="primary"
+                                className='bg-primary'
+                                icon={<PlusOutlined/>}
+                                onClick={handleViewFormBranchOffice}
+                            >
+                                Agregar sucursal
+                            </Button>
+                        }
+                    >
+                        <Table
+                            {...tableProps}
+                            bordered
+                            columns={columns}
+                            loading={loadingListBranchOff}
+                            dataSource={listBranchOffices}
+                            rowKey={(branchOffice) => branchOffice.nIdBranchOffice}
+                            rowClassName={(branchOffice) => branchOffice?.nIdBranchOffice === branchOfficeSelected?.nIdBranchOffice ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                            scroll={customScroll()}
+                            onRow={(branchOffice) => ({
+                                onClick: () => {
+                                    dispatch(rxBranchOffSelected(branchOffice))
+                                },
+                                onDoubleClick: () => {
+                                    handleViewFormBranchOffice()
+                                }
+                            })}
+                        />
+                    </Card>
+                    { 
+                        showFormBranchOffice && 
+                        <FormBranchOffice />
                     }
-                })}
+                </>
+            : <Result
+                status="403"
+                title="403"
+                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
-        </Card>
-        { 
-          showFormBranchOffice && 
-          <FormBranchOffice />
         }
     </>
   )

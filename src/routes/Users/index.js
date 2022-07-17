@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
+import { useAuth } from '../../Hooks/auth';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../appRedux/actions';
 
@@ -18,6 +19,8 @@ const Users = () => {
   } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
+
+  const { sRol } = useAuth()
 
   const handleViewFormUser = () => {
     dispatch(rxShowFormUser(true))
@@ -98,42 +101,51 @@ const Users = () => {
 
   return (
     <>
-        <Card
-            {...cardProps}
-            title="Lista de usuarios"
-            extra={
-                <Button
-                    type="primary"
-                    className='bg-primary'
-                    icon={<PlusOutlined/>}
-                    onClick={handleViewFormUser}
-                >
-                    Agregar usuario
-                </Button>
-            }
-        >
-            <Table
-                {...tableProps}
-                bordered
-                columns={columns}
-                loading={loadingListUsers}
-                dataSource={listUsers}
-                rowKey={(user) => user.nIdUser}
-                rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                scroll={customScroll()}
-                onRow={(user) => ({
-                    onClick: () => {
-                        dispatch(rxUserSelected(user))
-                    },
-                    onDoubleClick: () => {
-                        handleViewFormUser()
-                    }
-                })}
+        {sRol === "administrador" ?
+            <>
+                <Card
+                {...cardProps}
+                title="Lista de usuarios"
+                extra={
+                    <Button
+                        type="primary"
+                        className='bg-primary'
+                        icon={<PlusOutlined/>}
+                        onClick={handleViewFormUser}
+                    >
+                        Agregar usuario
+                    </Button>
+                }
+            >
+                <Table
+                    {...tableProps}
+                    bordered
+                    columns={columns}
+                    loading={loadingListUsers}
+                    dataSource={listUsers}
+                    rowKey={(user) => user.nIdUser}
+                    rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                    scroll={customScroll()}
+                    onRow={(user) => ({
+                        onClick: () => {
+                            dispatch(rxUserSelected(user))
+                        },
+                        onDoubleClick: () => {
+                            handleViewFormUser()
+                        }
+                    })}
+                />
+                </Card>
+                { 
+                showFormUser && 
+                <FormUser />
+                }
+            </>
+            : <Result
+                status="403"
+                title="403"
+                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
-        </Card>
-        { 
-          showFormUser && 
-          <FormUser />
         }
     </>
   )

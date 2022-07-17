@@ -16,6 +16,8 @@ const FormDish = (props) => {
     loadingUpdateDish
   } = useSelector(state => state.get("dishes"));
 
+  const { authSucursal } = useSelector(state => state.get("users"));
+
   const dispatch = useDispatch();
 
   //TODO: STATE OWN COMPONENT
@@ -35,7 +37,8 @@ const FormDish = (props) => {
           sName: values.sName?? '',
           sType: values.sType?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
-          nQuantity: 0
+          nQuantity: 0,
+          nIdBranchOffice: authSucursal
         } 
         console.log(dish, "dish")
         if(dishSelected){

@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
-import { Button, Table, Card, Modal, Tooltip, Spin} from 'antd';
+import { Button, Table, Card, Modal, Tooltip, Spin, Result} from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
+import { useAuth } from '../../Hooks/auth';
 import FormDish from './FormDish';
 import { 
     rxGetDishes, 
@@ -22,7 +23,11 @@ const Dishes = () => {
     loadingDelete
   } = useSelector(state => state.get("dishes"));
 
+  const { authSucursal } = useSelector(state => state.get("users"));
+
   const dispatch = useDispatch();
+
+  const { sRol } = useAuth()
 
   //TODO: SHOW FORM DISH
   const handleViewFormDish = () => {
@@ -105,46 +110,56 @@ const Dishes = () => {
 
   //TODO: GET ALL DISHES IN THE BUSINESS
   useEffect(() => {
-    dispatch(rxGetDishes());
-  }, [])
+    dispatch(rxGetDishes(authSucursal));
+  }, [authSucursal])
 
   return (
-    <>
-        <Card
-            {...cardProps}
-            title="Lista de Platos."
-            extra={
-                <Button
-                    type="primary"
-                    className='bg-primary'
-                    icon={<PlusOutlined/>}
-                    onClick={handleViewFormDish}
-                >
-                    Agregar plato
-                </Button>
-            }
-        >
-            <Table
-                {...tableProps}
-                bordered
-                columns={columns}
-                loading={loadingListDishes}
-                dataSource={listDishes}
-                rowKey={(dish) => dish.nIdDish}
-                rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                scroll={customScroll()}
-                onRow={(dish) => ({
-                    onClick: () => {
-                        dispatch(rxDishSelected(dish))
-                    },
-                    onDoubleClick: () => {
-                        handleViewFormDish()
-                    }
-                })}
+    <>  
+        {
+            sRol === "administrador"?
+            <>
+                <Card
+                {...cardProps}
+                title="Lista de Platos."
+                extra={
+                    <Button
+                        type="primary"
+                        className='bg-primary'
+                        icon={<PlusOutlined/>}
+                        onClick={handleViewFormDish}
+                    >
+                        Agregar plato
+                    </Button>
+                }
+            >
+                <Table
+                    {...tableProps}
+                    bordered
+                    columns={columns}
+                    loading={loadingListDishes}
+                    dataSource={listDishes}
+                    rowKey={(dish) => dish.nIdDish}
+                    rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                    scroll={customScroll()}
+                    onRow={(dish) => ({
+                        onClick: () => {
+                            dispatch(rxDishSelected(dish))
+                        },
+                        onDoubleClick: () => {
+                            handleViewFormDish()
+                        }
+                    })}
+                />
+                </Card>
+                { 
+                showFormDishes && <FormDish/>
+                }
+            </>
+            : <Result
+                status="403"
+                title="403"
+                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
-        </Card>
-        { 
-          showFormDishes && <FormDish/>
         }
     </>
   )

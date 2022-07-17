@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Layout, Menu, Select } from 'antd';
-import { useDispatch, useSelector} from 'react-redux';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
-// import {  } from '../../appRedux/actions';
+import { rxGetBranchOffices, rxSetUserAuthSucursal } from '../../appRedux/actions';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 
 const LayoutApp = ({children}) => {
   //TODO: REDUX STATE
-  // const { 
-
-  // } = useSelector(state => state.get(""));
+  const { 
+    loadingListBranchOff,
+    listBranchOffices
+  } = useSelector(state => state.get("branchOffices"));
 
   const dispatch = useDispatch();
 
@@ -28,9 +29,14 @@ const LayoutApp = ({children}) => {
     navigate("/login")
   }
 
-  const handleSelectBrachOffice = (value, option) => {
-
+  const handleSelectBrachOffice = (value) => {
+    dispatch(rxSetUserAuthSucursal(value));
   }
+
+  //TODO: INIT - GET ALL BRANCHOFFICES
+  useEffect(() => {
+    dispatch(rxGetBranchOffices());
+  }, [])
 
   return (
     <Layout className="layout flex-col">
@@ -108,17 +114,23 @@ const LayoutApp = ({children}) => {
         <div className='flex justify-between items-center'>
           <div>
             <Select
-              // value={auth.nIdBranchOffice}
-              loading={false}
+              value={"authSucursalGeneral"}
+              loading={loadingListBranchOff}
               style={{width: 200}}
               onSelect={handleSelectBrachOffice}
             >
               {
-                [].map((s, index) => (
-                  <Option key={index} value={s.nIdBranchOffice}>
-                    {s.sBranchOffice}
-                  </Option>
-                ))
+                listBranchOffices.map(bo => {
+                  auth.sBranchOfficesAssigned.map((s, index) => {
+                    if(bo.nIdBranchOffice === s.nIdBranchOffice){
+                      return (
+                        <Option key={index} value={s.nIdBranchOffice}>
+                          {s.sBranchOffice}
+                        </Option>
+                      )
+                    }
+                  })
+                })
               }
             </Select>
           </div>

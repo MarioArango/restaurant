@@ -25,6 +25,8 @@ const OrderSummary = (props) => {
     loadingGenerateOrder
   } = useSelector(state => state.get("orders"))
 
+  const { authSucursal } = useSelector(state => state.get("users"));
+
   const dispatch = useDispatch()
 
    const handleSendOrder = () => {
@@ -41,6 +43,7 @@ const OrderSummary = (props) => {
         const orderToSend = {
             dCreated: moment().format(dateFormatList[2]),
             sState: 'pending',
+            nIdBranchOffice: authSucursal,
             dishes: orderFormat
         }
         dispatch(rxGenerateOrder(orderToSend))

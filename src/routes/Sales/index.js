@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Table, Card, Collapse, Select, Form, DatePicker } from 'antd';
+import { Table, Card, Collapse, Select, Form, DatePicker, Result } from 'antd';
 import { cardProps, customScroll, tableProps } from '../../util/config';
-import { rxGetSales} from '../../appRedux/actions';
+import { useAuth } from '../../Hooks/auth';
+import { rxGetSales } from '../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -15,7 +16,13 @@ const Sales = () => {
     listSales
   } = useSelector(state => state.get("sales"));
 
+  const { authSucursal } = useSelector(state => state.get("users"));
+
+  //dispatch(rxGetSales(authSucursal))
+
   const dispatch = useDispatch();
+
+  const { sRol } = useAuth()
 
   const columns = [
     {
@@ -37,7 +44,10 @@ const Sales = () => {
   ]
   //FALTA IMPLEMENTAR FILTRO
   return (
-    <div>
+    <>
+      {
+        sRol === "administrador" ?
+        <div>
         <Collapse defaultActiveKey={['1']}>
           <Panel header="Filtro" key="1">
             <Form>
@@ -76,7 +86,14 @@ const Sales = () => {
                 scroll={customScroll()}
             />
         </Card>
-    </div>
+        </div>
+        : <Result
+            status="403"
+            title="403"
+            subTitle="Lo sentimos, no está autorizado para acceder a esta página."
+          />
+      }
+    </>
   )
 }
 
