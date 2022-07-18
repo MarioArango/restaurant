@@ -1,3 +1,9 @@
+/**
+ * ----------------------------
+ * LOCAL STORAGE AUTHENTICATION
+ * ----------------------------
+ */
+
 export const setAuth = (tokenUser) => {
     localStorage.setItem("auth", JSON.stringify(tokenUser));
 }

@@ -72,7 +72,7 @@ const FormUser = () => {
             sUsername: userSelected.sUsername,
             sPassword: userSelected.sPassword,
             sRol: userSelected.sRol,
-            sBranchOfficesAssigned: userSelected.sBranchOfficesAssigned
+            sBranchOffices: userSelected.sBranchOfficesAssigned?.map(bo => bo.nIdBranchOffice)
         })
     }
   }, [userSelected])

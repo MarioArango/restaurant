@@ -38,22 +38,21 @@ export const rxAddDishes = (dish, cb = null) => async dispatch => {
 export const rxUpdateDish = (nIdDish, dish, cb = null) => async dispatch => {
   dispatch({type: FETCH_UPDATE_DISH_START})
     try {
-      //collection por doc
-      await updateDoc(collection(db, 'dishes', nIdDish), dish);
+      await updateDoc(doc(db, 'dishes', nIdDish), dish);
       dispatch({type: FETCH_UPDATE_DISH_SUCCESS})
       message.success("Plato actualizado.")
       cb && cb()
     } catch (error) {
-    dispatch({type: FETCH_UPDATE_DISH_ERROR})
+      dispatch({type: FETCH_UPDATE_DISH_ERROR})
       message.error('Error del servidor.')
     }
 }
 
 
-export const rxGetDishes = (authSucursal) => async dispatch => {
+export const rxGetDishes = (nIdBranchOffice) => async dispatch => {
   dispatch({type: FETCH_GET_DISHES_START})
   try {
-    const q = query(collection(db, "dishes"), where("nIdBranchOffice", "==", authSucursal));
+    const q = query(collection(db, "dishes"), where("nIdBranchOffice", "==", nIdBranchOffice));
     const querySnapshot = await getDocs(q);
     const dishes = [];
     querySnapshot.forEach(doc => {

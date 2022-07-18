@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Layout, Menu, Select } from 'antd';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
-import { rxGetBranchOffices, rxSetUserAuthSucursal } from '../../appRedux/actions';
+import { rxSetUserAuthSucursal } from '../../appRedux/actions';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -23,6 +22,7 @@ const LayoutApp = ({children}) => {
   //TODO: CLEAR AUTH AND GOT TO LOGIN
   const handleLogout = () => {
     clearAuth();
+    localStorage.removeItem("authSucursal");
     navigate("/login")
   }
 
@@ -103,20 +103,22 @@ const LayoutApp = ({children}) => {
       >
         <div className='flex justify-between items-center'>
           <div>
-            <Select
-              value={authSucursal.nIdBranchOffice}
-              loading={loadingLoginUser}
-              style={{width: 200}}
-              onSelect={handleSelectBrachOffice}
-            >
-              {
-                auth.sBranchOfficesAssigned?.map((boa, index) => (
-                  <Option key={index} value={boa.nIdBranchOffice} data={boa}>
-                    {boa.sBranchOffice}
-                  </Option>
-                ))
-              }              
-            </Select>
+            {authSucursal && 
+              <Select
+                value={authSucursal.nIdBranchOffice}
+                loading={loadingLoginUser}
+                style={{width: 200}}
+                onSelect={handleSelectBrachOffice}
+              >
+                {
+                  auth.sBranchOfficesAssigned?.map((boa, index) => (
+                    <Option key={index} value={boa.nIdBranchOffice} data={boa}>
+                      {boa.sBranchOffice}
+                    </Option>
+                  ))
+                }              
+              </Select>
+            }
           </div>
           <div>
             <p className='font-medium'>Restaurante @Copyright</p>

@@ -133,17 +133,20 @@ const Orders = () => {
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
   useEffect(() => {
-      if(pathname === "/orders"){
-          let unsub;
-          dispatch(rxGetOrders(authSucursal, (us) => {
-              unsub = us
-          }))  
-          return () => {
-              console.log('unsub')
-              unsub()
-          }
-      }
-  }, [authSucursal])
+    if(authSucursal){
+        if(pathname === "/orders"){
+            let unsub;
+            dispatch(rxGetOrders(authSucursal.nIdBranchOffice, (us) => {
+                unsub = us
+            }))  
+            return () => {
+                console.log('unsub')
+                unsub()
+            }
+        }
+    }
+    // eslint-disable-next-line
+  }, [authSucursal?.nIdBranchOffice])
 
   return (
     <>

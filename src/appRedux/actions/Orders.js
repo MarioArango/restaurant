@@ -31,10 +31,11 @@ export const rxGenerateOrder = (order) => async dispatch => {
     }
   }
   
-  export const rxGetOrders = (authSucursal, cb = null) => async dispatch => {
+  export const rxGetOrders = (nIdBranchOffice, cb = null) => async dispatch => {
+    console.log(nIdBranchOffice, "rxGetOrders")
     dispatch({type: FETCH_GET_ORDERS_START})
     try {
-      const q = query(collection(db, 'orders'), where("nIdBranchOffice", "==", authSucursal), orderBy("dCreated", "desc"));
+      const q = query(collection(db, 'orders'), where("nIdBranchOffice", "==", nIdBranchOffice), orderBy("dCreated", "desc"));
       const unsub = onSnapshot(q, (querySnapshot) => {
         console.log("rxGetOrders")
         const orders = [];
@@ -46,6 +47,7 @@ export const rxGenerateOrder = (order) => async dispatch => {
       })
       cb && cb(unsub)
     } catch (error) {
+      console.log(error, "error")
       dispatch({type: FETCH_GET_ORDERS_ERROR})
       message.error('Error del servidor.')
     }
@@ -58,7 +60,6 @@ export const rxGenerateOrder = (order) => async dispatch => {
       message.success("Pedido actualizado.")
       dispatch({type: FETCH_UPDATE_ORDER_SUCCESS})
     } catch (error) {
-      console.log(error)
       dispatch({type: FETCH_UPDATE_ORDER_ERROR})
       message.error('Error del servidor.')
     }

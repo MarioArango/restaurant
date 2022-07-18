@@ -40,15 +40,12 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxUpdateUser = (nIdUser, user, cb = null) => async dispatch =>{
     dispatch({type: FETCH_UPDATE_USER_START})
     try {
-      console.log(nIdUser, "nIdUser")
-      console.log(user, "user")
       await updateDoc(doc(db, 'users', nIdUser), user);
       dispatch({type: FETCH_UPDATE_USER_SUCCESS})
       message.success("Actualizado.")
       cb && cb()
     } catch (error) {
     dispatch({type: FETCH_UPDATE_USER_ERROR})
-      console.log(error, "error")
       message.error('Error del servidor.')
     }
   } 
@@ -91,7 +88,8 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
           const user = doc.data();
           const sPasswordDecryp = atob(user.sPassword);
           if(user.sUsername === sUsername && sPasswordDecryp === sPassword){
-            dispatch({type: FETCH_LOGIN_USER_SUCCESS})
+            localStorage.setItem("authSucursal", JSON.stringify(user.sBranchOfficesAssigned[0]))
+            dispatch({type: FETCH_LOGIN_USER_SUCCESS, payload: user})
             message.success("Bienvenido")
             cb && cb(true, user)
           }else {

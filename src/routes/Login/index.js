@@ -4,7 +4,7 @@ import { Card, Form, Row, Col, Input, Button, message} from 'antd';
 import { cardProps, requiredField } from '../../util/config';
 import { IdcardOutlined } from '@ant-design/icons';
 import { setAuth } from '../../Hooks/auth';
-import { rxLoginUser, rxSetUserAuthSucursal } from '../../appRedux/actions';
+import { rxLoginUser } from '../../appRedux/actions';
 
 const { Item } = Form;
 
@@ -24,8 +24,6 @@ const Login = () => {
     validateFields().then((values) => {
         dispatch(rxLoginUser(values.sUsername, values.sPassword, (isValidate, user) => {
         if(isValidate){
-            //Sucursal principal por defecto
-            dispatch(rxSetUserAuthSucursal(user.sBranchOfficesAssigned[0]));
             setAuth(({
                 isValidate: true, 
                 sUsername: user.sUsername,

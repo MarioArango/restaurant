@@ -43,7 +43,7 @@ const OrderSummary = (props) => {
         const orderToSend = {
             dCreated: moment().format(dateFormatList[2]),
             sState: 'pending',
-            nIdBranchOffice: authSucursal,
+            nIdBranchOffice: authSucursal.nIdBranchOffice,
             dishes: orderFormat
         }
         dispatch(rxGenerateOrder(orderToSend))

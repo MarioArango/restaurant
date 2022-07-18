@@ -20,7 +20,9 @@ const Dishes = () => {
     loadingListDishes, 
     dishSelected,
     showFormDishes,
-    loadingDelete
+    loadingDeleteDish,
+    loadingAddDish, 
+    loadingUpdateDish
   } = useSelector(state => state.get("dishes"));
 
   const { authSucursal } = useSelector(state => state.get("users"));
@@ -96,10 +98,12 @@ const Dishes = () => {
         render: (_, dish) => (
             <div className='flex justify-around'>
                 <Tooltip title="Editar">
-                    <EditTwoTone onClick={() => handleEditDish(dish)} />
+                    <Spin spinning={loadingUpdateDish}>
+                        <EditTwoTone onClick={() => handleEditDish(dish)} />
+                    </Spin>
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDelete}>
+                    <Spin spinning={loadingDeleteDish}>
                         <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
                     </Spin>
                 </Tooltip>
@@ -110,8 +114,10 @@ const Dishes = () => {
 
   //TODO: GET ALL DISHES IN THE BUSINESS
   useEffect(() => {
-    dispatch(rxGetDishes(authSucursal));
-  }, [authSucursal])
+    if(authSucursal){
+        dispatch(rxGetDishes(authSucursal.nIdBranchOffice));
+    }
+  }, [authSucursal?.nIdBranchOffice, loadingDeleteDish, loadingAddDish, loadingUpdateDish])
 
   return (
     <>  

@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import {
     FETCH_REGISTER_USER_START,
     FETCH_REGISTER_USER_SUCCESS,
@@ -30,7 +29,7 @@ const initialState = {
     loadingCreateUser: false,
     loadingUpdateUser: false,
     loadingLoginUser: false,
-    authSucursal: null
+    authSucursal: JSON.parse(localStorage.getItem("authSucursal"))
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -151,7 +150,8 @@ const Users = (state = initialState, { type, payload }) => {
         case FETCH_LOGIN_USER_SUCCESS: {
             return {
                 ...state,
-                loadingLoginUser: false
+                loadingLoginUser: false,
+                authSucursal: payload.sBranchOfficesAssigned[0]
             }
         }
 

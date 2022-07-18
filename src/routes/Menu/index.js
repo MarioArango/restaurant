@@ -99,9 +99,11 @@ const Menu = () => {
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
-    dispatch(rxGetDishes(authSucursal));
+    if(authSucursal){
+        dispatch(rxGetDishes(authSucursal.nIdBranchOffice));
+    }
     // eslint-disable-next-line
-   }, [authSucursal])
+   }, [authSucursal?.nIdBranchOffice])
 
   return (
     <>

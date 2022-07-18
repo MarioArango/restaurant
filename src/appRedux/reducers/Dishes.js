@@ -22,7 +22,7 @@ const initialState = {
     listDishes: [],
     dishSelected: null,
     showFormDishes: null,
-    loadingDelete: false,
+    loadingDeleteDish: false,
     loadingAddDish: false,
     loadingUpdateDish: false,
 };
@@ -70,21 +70,21 @@ const Menu = (state = initialState, { type, payload }) => {
         case FETCH_DELETE_DISH_START: {
             return {
                 ...state,
-                loadingDelete: true
+                loadingDeleteDish: true
             }
         }
 
         case FETCH_DELETE_DISH_SUCCESS: {
             return {
                 ...state,
-                loadingDelete: false
+                loadingDeleteDish: false
             }
         }
 
         case FETCH_DELETE_DISH_ERROR: {
             return {
                 ...state,
-                loadingDelete: false
+                loadingDeleteDish: false
             }
         }
         //TODO: ADD DISH

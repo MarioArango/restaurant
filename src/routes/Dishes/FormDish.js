@@ -40,9 +40,8 @@ const FormDish = () => {
           sType: values.sType?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0,
-          nIdBranchOffice: authSucursal
+          nIdBranchOffice: authSucursal.nIdBranchOffice
         } 
-        console.log(dish, "dish")
         if(dishSelected){
           dispatch(rxUpdateDish(dishSelected.nIdDish, dish, () => {
             setFileList([])
@@ -57,7 +56,7 @@ const FormDish = () => {
       }else {
         message.warning("Ingrese una imagen del plato.")
       }
-    }).catch(_ => {
+    }).catch(error => {
       message.error("Error del servidor.")
     })
   }
@@ -152,6 +151,9 @@ const FormDish = () => {
                     form={form}
                     onFinish={handleSaveDish}
                     layout="vertical"
+                    initialValues={{
+                      sType: "comida"
+                    }}
                 >
                     <Row gutter={12}>
                         <Col span={24}>
@@ -190,12 +192,12 @@ const FormDish = () => {
                         <Col>
                         </Col>
                         <Col span={24}>
-                            <Item label="Nombre" name="sName">
-                                <Input rules={requiredField}/>
+                            <Item label="Nombre" name="sName" rules={requiredField}>
+                                <Input/>
                             </Item>
                         </Col>
                         <Col span={24}>
-                            <Item label="Tipo" name="sType">
+                            <Item label="Tipo" name="sType" rules={requiredField}>
                                 <Select>
                                     <Option value="comida">Comida</Option>
                                     <Option value="bebida">Bebida</Option>
@@ -203,12 +205,19 @@ const FormDish = () => {
                             </Item>
                         </Col>
                         <Col span={24}>
-                            <Item label="Precio" name="nPrice">
-                                <Input onKeyDown={currencyOnly} rules={requiredField}/>
+                            <Item label="Precio" name="nPrice" rules={requiredField}>
+                                <Input onKeyDown={currencyOnly}/>
                             </Item>
                         </Col>
                         <Col span={24}>
-                            <Button block className='bg-primary' htmlType='submit' type='primary'><SaveOutlined />Agregar</Button>
+                            <Button 
+                              block 
+                              className='bg-primary' 
+                              htmlType='submit' 
+                              type='primary'
+                            >
+                              <SaveOutlined />{dishSelected? "Guardar cambios" : "Agregar"}
+                            </Button>
                         </Col>
                     </Row>
                 </Form>
