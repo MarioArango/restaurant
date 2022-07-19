@@ -87,7 +87,16 @@ const FormUser = () => {
         {
             showFormUser && (
             <Modal
-                    title={userSelected? <div><UserOutlined/> Editar usuario</div> : <div><UserAddOutlined/> Registrar Usuario</div>}
+                    title={userSelected? 
+                        <div className='flex justify-start'>
+                            <UserOutlined className='mt-1 mr-2'/> 
+                            <p>Editar usuario</p>
+                        </div> : 
+                        <div className='flex justify-start'>
+                            <UserAddOutlined className='mt-1 mr-2'/>
+                            <p>Registrar Usuario</p>
+                        </div>
+                    }
                     visible={showFormUser}
                     bodyStyle={{ padding: 10 }}
                     width="350px"
@@ -149,11 +158,13 @@ const FormUser = () => {
                                     htmlType='submit'
                                     type='primary' 
                                     className='bg-primary' 
-                                    block 
-                                    icon={<SaveOutlined />}
+                                    block
                                     loading={loadingCreateUser}
                                 >
-                                    {userSelected? "Guardar cambios" : "Registrar"}
+                                    <div className='flex justify-center'>
+                                        <SaveOutlined className='mt-1 mr-2' />
+                                        <p>{userSelected? "Guardar cambios" : "Registrar"}</p>
+                                    </div> 
                                 </Button>
                             </Col>
                         </Row>

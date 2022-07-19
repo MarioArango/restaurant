@@ -13,13 +13,16 @@ import {
     SHOW_FORM_DISHES,
     FETCH_DELETE_DISH_START,
     FETCH_DELETE_DISH_SUCCESS,
-    FETCH_DELETE_DISH_ERROR
+    FETCH_DELETE_DISH_ERROR,
+    FILTER_DISHES
 } from "../types";
 
 
 const initialState = {
     loadingListDishes: false,
     listDishes: [],
+    listDishesComidas: [],
+    listDishesBebidas: [],
     dishSelected: null,
     showFormDishes: null,
     loadingDeleteDish: false,
@@ -47,6 +50,33 @@ const Menu = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingListDishes: false
+            }
+        }
+
+        //TODO: FILTER BY TYPE DISHES
+        case FILTER_DISHES: {
+            if(payload === "comida"){
+                const listDishesComidas = [...state.listDishes].filter(d => d.sType === "comida")
+                return {
+                    ...state,
+                    listDishesComidas,
+                    listDishesBebidas: []
+                }
+            }
+            if(payload === "bebida") {
+                const listDishesBebidas = [...state.listDishes].filter(d => d.sType === "bebida")
+                return {
+                    ...state,
+                    listDishesBebidas,
+                    listDishesComidas: []
+                }
+            }
+            if(payload === "todo") {
+                return {
+                    ...state,
+                    listDishesComidas: [],
+                    listDishesBebidas: []
+                }
             }
         }
 

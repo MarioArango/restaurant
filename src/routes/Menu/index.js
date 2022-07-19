@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Result } from 'antd';
 import { PlusOutlined, MinusOutlined, ShoppingOutlined } from '@ant-design/icons';
@@ -7,10 +7,16 @@ import { useAuth } from '../../Hooks/auth';
 import { currencyFE } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png';
-import { rxGetDishes, rxShowOrderSummary, rxOrderSummary } from '../../appRedux/actions';
+import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes } from '../../appRedux/actions';
 
 const Menu = () => {
-  const { listDishes, loadingListDishes } = useSelector(state => state.get("dishes"));
+  const [ typeDish, setTypeDish ] = useState("Todo")
+  const { 
+    listDishes, 
+    loadingListDishes,
+    listDishesComidas,
+    listDishesBebidas
+ } = useSelector(state => state.get("dishes"));
   
   const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
 
@@ -97,6 +103,62 @@ const Menu = () => {
     return orderMatch.length === 0 ? true : orderMatch[0].nQuantity === 0? true : false
   }
 
+  const handleTodo = () => {
+    setTypeDish("Todo")
+    dispatch(rxFilterDishes("todo"))
+  }
+
+  const handleComidas = () => {
+    setTypeDish("Comidas")
+    dispatch(rxFilterDishes("comida"))
+  }
+
+  const handleBebidas = () => {
+    setTypeDish("Bebidas")
+    dispatch(rxFilterDishes("bebida"))
+  }
+
+  const getCardDishes = () => {
+    const list = listDishesComidas?.length > 0 ? listDishesComidas
+                 : listDishesBebidas?.length > 0 ? listDishesBebidas
+                  : listDishes;
+                  
+    return list?.map((d, index)=> (
+        <Col xs={24} sm={12} md={12} lg={8} xl={6} key={index}>
+            <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-500 hover:px-[1px]">
+                <Badge count={quantityByDish(d)} color="blue" className='p-0'>
+                    <div className="card">
+                        <div className="card-header mx-4 mt-6 bg-cover">
+                            <img
+                                className="rounded-lg cursor-pointer border bg-cover w-full"
+                                src={d.sPhoto}
+                                alt="Imagen del plato."
+                            />
+                        </div>
+                        <div className="card-body mx-4 mt-2">
+                            <div className='flex justify-between'>
+                            <h4 className="font-semibold text-xl">{d.sName}</h4>
+                            <h4 className="font-semibold text-2xl">S/. {d.nPrice ? currency.format(d.nPrice, currencyFE) : '0.00'}</h4>
+                            </div>
+                            <p className="opcacity-60 mb-4">
+                                {d.sDescription}
+                            </p>
+                            <div className='flex justify-between'>
+                                <Button className='mr-1' block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
+                                    <MinusOutlined jey="del"/>
+                                </Button>
+                                <Button className='bg-primary ml-1' type='primary' block onClick={() => handleAddQtyDish(d)}>
+                                    <PlusOutlined key="add" />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </Badge>
+            </div>
+        </Col>
+    ))
+  }
+
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
     if(authSucursal){
@@ -110,60 +172,28 @@ const Menu = () => {
         {
             sRol === "mozo" || sRol === "administrador"?
             <Spin spinning={loadingListDishes} className="">
-            <div className='flex justify-end mt-2'>
-                <Affix offsetTop={20} className="mb-5">
+            <div className='flex justify-between mt-2'>
+            <p className='font-semibold text-xl'>{typeDish}</p>
+                <Affix offsetTop={20} className="mb-4">
                     <Button 
-                        type='primary' 
-                        icon={<ShoppingOutlined />}
+                        type='primary'
                         className='bg-primary' 
                         onClick={handleGenerateOrder}
                     >
-                        Generar Pedido
+                        <div className='flex justify-between'>
+                        <ShoppingOutlined className='mt-1 mr-2'/> <p>Generar Pedido</p>
+                        </div>
                     </Button>
                 </Affix>
             </div>
-            <div className='flex justify-around'>
-                <Button type='dashed'>Comidas</Button>
-                <Button type='dashed'>Bebidas</Button>
+            <div className='flex justify-around mb-2'>
+                <Button type='primary' className='bg-primary' onClick={handleTodo}>Todo</Button>
+                <Button type='primary' className='bg-primary' onClick={handleComidas}>Comidas</Button>
+                <Button type='primary' className='bg-primary' onClick={handleBebidas}>Bebidas</Button>
             </div>
             <Row gutter={12}>
                 {
-                    listDishes?.map((d, index)=> (
-                        <Col xs={24} sm={12} md={12} lg={8} xl={6} key={index}>
-                            <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-500 hover:px-[1px]">
-                                <Badge count={quantityByDish(d)} color="blue" className='p-0'>
-                                    <div className="card">
-                                        <div className="card-header mx-4 mt-6 bg-cover">
-                                            <img
-                                                className="rounded-lg cursor-pointer border bg-cover w-full"
-                                                src={d.sPhoto}
-                                                alt="Imagen del plato."
-                                            />
-                                        </div>
-                                        <div className="card-body mx-4 mt-2">
-                                            <div className='flex justify-between'>
-                                            <h4 className="font-semibold text-xl">{d.sName}</h4>
-                                            <h4 className="font-semibold text-2xl">S/. {d.nPrice ? currency.format(d.nPrice, currencyFE) : '0.00'}</h4>
-                                            </div>
-                                            <p className="opcacity-60 mb-4">
-                                            The time is now for it to be okay to be great. People in this
-                                            world shun people for being great. For being a bright color. For
-                                            standing out.
-                                            </p>
-                                            <div className='flex justify-between'>
-                                                <Button className='mr-1' block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
-                                                    <MinusOutlined jey="del"/>
-                                                </Button>
-                                                <Button className='bg-primary ml-1' type='primary' block onClick={() => handleAddQtyDish(d)}>
-                                                    <PlusOutlined key="add" />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Badge>
-                            </div>
-                        </Col>
-                    ))
+                    getCardDishes()
                 }
                 <BackTop duration={500} className='hover:p-[1px]' >
                     <Tooltip title="Subir">

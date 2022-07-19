@@ -92,7 +92,7 @@ const BranchOffices = () => {
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (
-    <>  
+    <div className='h-screen'>  
         {
             sRol === "administrador"?
                 <>
@@ -103,10 +103,12 @@ const BranchOffices = () => {
                             <Button
                                 type="primary"
                                 className='bg-primary'
-                                icon={<PlusOutlined/>}
                                 onClick={handleViewFormBranchOffice}
                             >
-                                Agregar sucursal
+                                <div className='flex justify-between'>
+                                    <PlusOutlined className='mt-1 mr-2'/>
+                                    <p>Agregar sucursal</p>
+                                </div>
                             </Button>
                         }
                     >
@@ -140,7 +142,7 @@ const BranchOffices = () => {
                 subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
         }
-    </>
+    </div>
   )
 }
 

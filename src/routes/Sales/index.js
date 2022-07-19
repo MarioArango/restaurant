@@ -44,7 +44,7 @@ const Sales = () => {
   ]
   //FALTA IMPLEMENTAR FILTRO
   return (
-    <>
+    <div className='h-screen'>
       {
         sRol === "administrador" ?
         <div>
@@ -93,7 +93,7 @@ const Sales = () => {
             subTitle="Lo sentimos, no está autorizado para acceder a esta página."
           />
       }
-    </>
+    </div>
   )
 }
 

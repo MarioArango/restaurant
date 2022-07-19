@@ -35,7 +35,8 @@ export const rxGenerateOrder = (order) => async dispatch => {
     console.log(nIdBranchOffice, "rxGetOrders")
     dispatch({type: FETCH_GET_ORDERS_START})
     try {
-      const q = query(collection(db, 'orders'), where("nIdBranchOffice", "==", nIdBranchOffice), orderBy("dCreated", "desc"));
+      //, orderBy("dCreated", "desc")
+      const q = query(collection(db, 'orders'), where("nIdBranchOffice", "==", nIdBranchOffice));
       const unsub = onSnapshot(q, (querySnapshot) => {
         console.log("rxGetOrders")
         const orders = [];

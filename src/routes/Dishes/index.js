@@ -120,7 +120,7 @@ const Dishes = () => {
   }, [authSucursal?.nIdBranchOffice, loadingDeleteDish, loadingAddDish, loadingUpdateDish])
 
   return (
-    <>  
+    <div className='h-screen'>  
         {
             sRol === "administrador"?
             <>
@@ -131,10 +131,12 @@ const Dishes = () => {
                     <Button
                         type="primary"
                         className='bg-primary'
-                        icon={<PlusOutlined/>}
                         onClick={handleViewFormDish}
                     >
-                        Agregar plato
+                        <div className='flex justify-between'>
+                            <PlusOutlined className='mt-1 mr-2'/>
+                            <p>Agregar plato</p>
+                        </div>
                     </Button>
                 }
             >
@@ -167,7 +169,7 @@ const Dishes = () => {
                 subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
         }
-    </>
+    </div>
   )
 }
 

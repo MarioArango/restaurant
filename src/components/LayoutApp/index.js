@@ -87,9 +87,10 @@ const LayoutApp = ({children}) => {
       <Content
         style={{
           padding: '0 15px',
+          overflow: "auto"
         }}
       >
-        <div className='h-screen'>
+        <div>
             { children }
         </div>
       </Content>

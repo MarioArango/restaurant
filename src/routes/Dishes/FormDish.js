@@ -37,6 +37,7 @@ const FormDish = () => {
         const dish = {
           sPhoto: fileB64?? '',
           sName: values.sName?? '',
+          sDescription: values.sDescription?? '',
           sType: values.sType?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0,
@@ -124,6 +125,7 @@ const FormDish = () => {
       setFileB64(dishSelected.sPhoto);
       setFieldsValue({
           sName: dishSelected.sName,
+          sDescription: dishSelected.sDescription,
           sType: dishSelected.sType,
           nPrice: dishSelected.nPrice
       });
@@ -197,6 +199,11 @@ const FormDish = () => {
                             </Item>
                         </Col>
                         <Col span={24}>
+                            <Item label="Descripción" name="sDescription" rules={requiredField}>
+                                <Input/>
+                            </Item>
+                        </Col>
+                        <Col span={24}>
                             <Item label="Tipo" name="sType" rules={requiredField}>
                                 <Select>
                                     <Option value="comida">Comida</Option>
@@ -216,7 +223,10 @@ const FormDish = () => {
                               htmlType='submit' 
                               type='primary'
                             >
-                              <SaveOutlined />{dishSelected? "Guardar cambios" : "Agregar"}
+                              <div className='flex justify-center'>
+                                <SaveOutlined className='mt-1 mr-2' />
+                                <p>{dishSelected? "Guardar cambios" : "Agregar"}</p>
+                              </div>
                             </Button>
                         </Col>
                     </Row>

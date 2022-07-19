@@ -100,7 +100,7 @@ const Users = () => {
   }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
   return (
-    <>
+    <div className='h-screen'>
         {sRol === "administrador" ?
             <>
                 <Card
@@ -110,10 +110,13 @@ const Users = () => {
                     <Button
                         type="primary"
                         className='bg-primary'
-                        icon={<PlusOutlined/>}
                         onClick={handleViewFormUser}
                     >
-                        Agregar usuario
+                        <div className='flex justify-between'>
+                            <PlusOutlined className='mt-1 mr-2'/>
+                            <p>Agregar usuario</p>
+                        </div>
+                        
                     </Button>
                 }
             >
@@ -147,7 +150,7 @@ const Users = () => {
                 subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
         }
-    </>
+    </div>
   )
 }
 

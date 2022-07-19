@@ -57,7 +57,16 @@ const FormBranchOffice = () => {
         {
             showFormBranchOffice && (
             <Modal
-                    title={branchOfficeSelected? <div><ShopOutlined /> Editar Sucursal</div> : <div><ShopOutlined /> Registrar Sucursal</div>}
+                    title={branchOfficeSelected? 
+                        <div className='flex justify-start'>
+                            <ShopOutlined className='mt-1 mr-2'/>
+                            <p>Editar Sucursal</p>
+                        </div> : 
+                        <div  className='flex justify-start'>
+                            <ShopOutlined className='mt-1 mr-2'/>
+                            <p>Registrar Sucursal</p>
+                        </div>
+                    }
                     visible={showFormBranchOffice}
                     bodyStyle={{ padding: 10 }}
                     width="350px"
@@ -85,11 +94,13 @@ const FormBranchOffice = () => {
                                     htmlType='submit'
                                     type='primary' 
                                     className='bg-primary' 
-                                    block 
-                                    icon={<SaveOutlined />}
+                                    block
                                     loading={loadingCreateBranchOff}
                                 >
-                                    {branchOfficeSelected? "Guardar cambios" : "Registrar"}
+                                    <div className='flex justify-center'>
+                                        <SaveOutlined className='mt-1 mr-2'/>
+                                        <p>{branchOfficeSelected? "Guardar cambios" : "Registrar"}</p>
+                                    </div>
                                 </Button>
                             </Col>
                         </Row>

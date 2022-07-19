@@ -133,23 +133,23 @@ const Orders = () => {
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
   useEffect(() => {
-    if(authSucursal){
         if(pathname === "/orders"){
-            let unsub;
-            dispatch(rxGetOrders(authSucursal.nIdBranchOffice, (us) => {
-                unsub = us
-            }))  
-            return () => {
-                console.log('unsub')
-                unsub()
-            }
+            if(authSucursal){
+                let unsub;
+                dispatch(rxGetOrders(authSucursal.nIdBranchOffice, (us) => {
+                    unsub = us
+                }))  
+                return () => {
+                    console.log('unsub')
+                    unsub()
+                }
+            } 
         }
-    }
     // eslint-disable-next-line
   }, [authSucursal?.nIdBranchOffice])
 
   return (
-    <>
+    <div className='h-screen'>
         {
             sRol === "chef" || sRol === "administrador"?
             <Card
@@ -203,7 +203,7 @@ const Orders = () => {
                 subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
         }
-    </>
+    </div>
   )
 }
 
