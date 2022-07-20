@@ -77,7 +77,6 @@ const Orders = () => {
         width: 50,
         align: "center",
         render: (_, order) => (
-            <Spin spinning={loadingUpdateStateOrders}>
                 <Button 
                     disabled={order.sState === "finished"}
                     type='primary'
@@ -87,7 +86,6 @@ const Orders = () => {
                 >
                     Atender
                 </Button>
-            </Spin>
         )
     }
   ]
@@ -162,7 +160,7 @@ const Orders = () => {
                     {...tableProps}
                     bordered
                     columns={columns}
-                    loading={loadingGetOrders}
+                    loading={loadingGetOrders || loadingUpdateStateOrders}
                     dataSource={listOrders}
                     rowKey={(order) => order.nIdOrder}
                     rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}

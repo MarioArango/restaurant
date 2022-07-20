@@ -42,6 +42,9 @@ const OrderSummary = (props) => {
 
         const orderToSend = {
             dCreated: moment().format(dateFormatList[2]),
+            day: moment().format("DD"),
+            month: moment().format("MM"),
+            year: moment().format("YYYY"),
             sState: 'pending',
             nIdBranchOffice: authSucursal.nIdBranchOffice,
             dishes: orderFormat
@@ -71,7 +74,7 @@ const OrderSummary = (props) => {
         priceTotal += Number(o.nPrice)*Number(o.nQuantity)
     })
     return priceTotal
-   } 
+   }
 
    return (
     <Drawer

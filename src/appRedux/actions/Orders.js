@@ -1,6 +1,7 @@
 import { db } from '../../firebase/firebaseConfig';
 import { doc, addDoc, updateDoc, onSnapshot, collection, where, query, orderBy } from "firebase/firestore";
 import { message } from 'antd';
+import moment from 'moment';
 import {
   FETCH_GENERATE_ORDER_START,
   FETCH_GENERATE_ORDER_SUCCESS,
@@ -16,6 +17,7 @@ import {
   SHOW_ORDER_SUMMARY,
   ORDER_SUMMARY
 } from '../types'
+import { dateFormatList } from '../../util/config';
 
 export const rxGenerateOrder = (order) => async dispatch => {
   dispatch({type: FETCH_GENERATE_ORDER_START})
@@ -35,16 +37,20 @@ export const rxGenerateOrder = (order) => async dispatch => {
     console.log(nIdBranchOffice, "rxGetOrders")
     dispatch({type: FETCH_GET_ORDERS_START})
     try {
-      //, orderBy("dCreated", "desc")
-      const q = query(collection(db, 'orders'), where("nIdBranchOffice", "==", nIdBranchOffice));
+      const q = query(collection(db, 'orders'), 
+        where("nIdBranchOffice", "==", nIdBranchOffice), 
+        where("day", "==", moment().format("DD")),
+        where("month", "==", moment().format("MM")),
+        where("year", "==", moment().format("YYYY")),
+        // orderBy("sState", "desc")
+      );
       const unsub = onSnapshot(q, (querySnapshot) => {
         console.log("rxGetOrders")
         const orders = [];
         querySnapshot.forEach(doc => {
             orders.push({...doc.data(), nIdOrder: doc.id}) 
         })
-        const result = orders.filter(o => o.sState !== "finished")
-        dispatch({type: FETCH_GET_ORDERS_SUCCESS, payload: result })
+        dispatch({type: FETCH_GET_ORDERS_SUCCESS, payload: orders })
       })
       cb && cb(unsub)
     } catch (error) {
