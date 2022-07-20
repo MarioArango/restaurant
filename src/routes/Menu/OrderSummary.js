@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment'
 import currency from 'currency-formatter'
-import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider} from 'antd'
+import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider, Modal} from 'antd'
 import { PlusOutlined, MinusOutlined, DeleteTwoTone} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
@@ -30,26 +30,37 @@ const OrderSummary = (props) => {
   const dispatch = useDispatch()
 
    const handleSendOrder = () => {
-        const orderFormat = orderSummary.map(o => ({
-            nPriceTotal: calculatePriceTotalByDish(o), 
-            nQuantityTotal: o.nQuantity,
-            nIdDish: o.nIdDish,
-            sName: o.sName,
-            nPrice: o.nPrice,
-            sPhoto: o.sPhoto,
-            sType: o.sType
-        }))
-
-        const orderToSend = {
-            dCreated: moment().format(dateFormatList[2]),
-            day: moment().format("DD"),
-            month: moment().format("MM"),
-            year: moment().format("YYYY"),
-            sState: 'pending',
-            nIdBranchOffice: authSucursal.nIdBranchOffice,
-            dishes: orderFormat
-        }
-        dispatch(rxGenerateOrder(orderToSend))
+        Modal.confirm({
+            centered: true,
+            title: "Mensaje de Confirmación",
+            content: <p>¿Desea generar el pedido?</p>,
+            okText: "Sí",
+            cancelText: "Cancelar",
+            cancelButtonProps: { type: "text" },
+            onOk: () => {
+                const orderFormat = orderSummary.map(o => ({
+                    nPriceTotal: calculatePriceTotalByDish(o), 
+                    nQuantityTotal: o.nQuantity,
+                    nIdDish: o.nIdDish,
+                    sName: o.sName,
+                    nPrice: o.nPrice,
+                    sPhoto: o.sPhoto,
+                    sType: o.sType
+                }))
+        
+                const orderToSend = {
+                    dCreated: moment().format(dateFormatList[2]),
+                    day: moment().format("DD"),
+                    month: moment().format("MM"),
+                    year: moment().format("YYYY"),
+                    sState: 'pending',
+                    nIdBranchOffice: authSucursal.nIdBranchOffice,
+                    dishes: orderFormat
+                }
+                dispatch(rxGenerateOrder(orderToSend))
+            },
+            onCancel: () => { }
+        })
    }
 
    const handleDelTotalQtyDish = (dish) => {
@@ -91,17 +102,16 @@ const OrderSummary = (props) => {
                     <div className='font-bold text-xl'>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</div>
                 </div>
                 <Col span={24}>
-                    <Popconfirm placement="top" title='¿Desea generar el pedido?' onConfirm={handleSendOrder} okText="Sí" cancelText="No">
-                        <Button
-                            type="primary" 
-                            icon={<SendOutlined />}
-                            loading={loadingGenerateOrder}
-                            className="bg-primary"
-                            block
-                        >
-                            Enviar
-                        </Button>
-                    </Popconfirm>
+                    <Button
+                        type="primary" 
+                        icon={<SendOutlined />}
+                        loading={loadingGenerateOrder}
+                        className="bg-primary"
+                        block
+                        onClick={handleSendOrder}
+                    >
+                        Enviar
+                    </Button>
                 </Col>
             </div>
         }

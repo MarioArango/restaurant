@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, EditTwoTone, HomeOutlined, PlusOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import FormBranchOffice from './formBranchOffice';
 import { useAuth } from '../../Hooks/auth';
@@ -23,6 +23,7 @@ const BranchOffices = () => {
   const { sRol } = useAuth()
 
   const handleViewFormBranchOffice = () => {
+    dispatch(rxBranchOffSelected(null))
     dispatch(rxShowFormBranchOff(true))
   }
 
@@ -98,7 +99,12 @@ const BranchOffices = () => {
                 <>
                     <Card
                         {...cardProps}
-                        title="Lista de Sucursales"
+                        title={
+                            <div className='flex justify-start'>
+                                <HomeOutlined className='mt-1 mr-2'/> 
+                                <p>Lista de Sucursales</p>
+                            </div>
+                        }
                         extra={
                             <Button
                                 type="primary"
@@ -126,7 +132,7 @@ const BranchOffices = () => {
                                     dispatch(rxBranchOffSelected(branchOffice))
                                 },
                                 onDoubleClick: () => {
-                                    handleViewFormBranchOffice()
+                                    handleEditBranchOffice(branchOffice)
                                 }
                             })}
                         />

@@ -2,8 +2,8 @@ import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import currency from 'currency-formatter'
-import { ScheduleOutlined} from '@ant-design/icons';
-import { Table, Card, Tag, Tooltip, Spin, Button, Result } from 'antd';
+import { CheckOutlined, ScheduleOutlined} from '@ant-design/icons';
+import { Table, Card, Tag, Tooltip, Spin, Button, Result, Progress } from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
 import { 
@@ -81,10 +81,13 @@ const Orders = () => {
                     disabled={order.sState === "finished"}
                     type='primary'
                     className='bg-primary'
-                    block
+                    
                     onClick={() => handleChangeStateOrder(order)}
                 >
-                    Atender
+                    <div className='flex justify-center'>
+                        <CheckOutlined className='mt-1 mr-2'/> 
+                        <p>Atender</p>
+                    </div>
                 </Button>
         )
     }
@@ -152,7 +155,11 @@ const Orders = () => {
             sRol === "chef" || sRol === "administrador"?
             <Card
             {...cardProps}
-            title={<div><ScheduleOutlined/> Lista de Platos</div>}
+            title={
+                <div className='flex justify-start'>
+                    <ScheduleOutlined className='mt-1 mr-2'/> 
+                    <p>Lista de Pedidos</p>
+                </div>}
         >
             {
                 listOrders && listOrders.length && 

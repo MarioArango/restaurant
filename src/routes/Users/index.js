@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { cardProps, customScroll, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
 import FormUser from './FormUser';
@@ -23,6 +23,7 @@ const Users = () => {
   const { sRol } = useAuth()
 
   const handleViewFormUser = () => {
+    dispatch(rxUserSelected(null))
     dispatch(rxShowFormUser(true))
   }
 
@@ -75,7 +76,7 @@ const Users = () => {
         key: "",
         dataIndex: "",
         title: "",
-        width: 20,
+        width: 10,
         align: "center",
         render: (_, user) => (
             <div className='flex justify-around'>
@@ -105,7 +106,12 @@ const Users = () => {
             <>
                 <Card
                 {...cardProps}
-                title="Lista de usuarios"
+                title={
+                    <div className='flex justify-start'>
+                        <UserOutlined className='mt-1 mr-2'/> 
+                        <p>Usuarios Registrados</p>
+                    </div>
+                }
                 extra={
                     <Button
                         type="primary"
@@ -134,14 +140,14 @@ const Users = () => {
                             dispatch(rxUserSelected(user))
                         },
                         onDoubleClick: () => {
-                            handleViewFormUser()
+                            handleEditUser(user)
                         }
                     })}
                 />
                 </Card>
                 { 
-                showFormUser && 
-                <FormUser />
+                    showFormUser && 
+                    <FormUser />
                 }
             </>
             : <Result

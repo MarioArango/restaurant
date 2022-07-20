@@ -1,7 +1,7 @@
 import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Result } from 'antd';
-import { PlusOutlined, MinusOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { useAuth } from '../../Hooks/auth';
 import { currencyFE } from '../../util/config';
@@ -124,32 +124,28 @@ const Menu = () => {
                   : listDishes;
                   
     return list?.map((d, index)=> (
-        <Col xs={24} sm={12} md={12} lg={8} xl={6} key={index}>
-            <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-500 hover:px-[1px]">
+        <Col xs={24} sm={12} md={6} lg={6} xl={6} key={index}>
+            <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-600 hover:px-[1px]">
                 <Badge count={quantityByDish(d)} color="blue" className='p-0'>
                     <div className="card">
-                        <div className="card-header mx-4 mt-6 bg-cover">
+                        <div className="card-header bg-cover">
                             <img
-                                className="rounded-lg cursor-pointer border bg-cover w-full"
+                                className="rounded-xl p-1 cursor-pointer border bg-cover w-full"
                                 src={d.sPhoto}
                                 alt="Imagen del plato."
                             />
                         </div>
-                        <div className="card-body mx-4 mt-2">
-                            <div className='flex justify-between'>
-                            <h4 className="font-semibold text-xl">{d.sName}</h4>
-                            <h4 className="font-semibold text-2xl">S/. {d.nPrice ? currency.format(d.nPrice, currencyFE) : '0.00'}</h4>
+                        <div className="card-body mx-4 mt-1">
+                            <div className='flex justify-between items-center mb-1'>
+                                <h4 className="font-semibold text-sm">{d.sName}</h4>
+                                <h4 className="font-semibold text-base">S/. {d.nPrice ? currency.format(d.nPrice, currencyFE) : '0.00'}</h4>
                             </div>
-                            <p className="opcacity-60 mb-4">
+                            <p className="opcacity-60 mb-2 h-auto">
                                 {d.sDescription}
                             </p>
                             <div className='flex justify-between'>
-                                <Button className='mr-1' block onClick={() => handleDelQtyDish(d)} disabled={disabledDelete(d)}>
-                                    <MinusOutlined jey="del"/>
-                                </Button>
-                                <Button className='bg-primary ml-1' type='primary' block onClick={() => handleAddQtyDish(d)}>
-                                    <PlusOutlined key="add" />
-                                </Button>
+                                <Button shape='round' onClick={() => handleDelQtyDish(d)} icon={<MinusOutlined jey="del"/>} disabled={disabledDelete(d)}/>
+                                <Button shape='round' className='bg-primary' type='primary' icon={<PlusOutlined key="add" />} onClick={() => handleAddQtyDish(d)}/>
                             </div>
                         </div>
                     </div>
@@ -187,9 +183,24 @@ const Menu = () => {
                 </Affix>
             </div>
             <div className='flex justify-around mb-2'>
-                <Button type='primary' className='bg-primary' onClick={handleTodo}>Todo</Button>
-                <Button type='primary' className='bg-primary' onClick={handleComidas}>Comidas</Button>
-                <Button type='primary' className='bg-primary' onClick={handleBebidas}>Bebidas</Button>
+                <Button type='dashed' onClick={handleTodo}>
+                    <div className='flex justify-center'>
+                        <FilterOutlined className='mt-1 mr-2'/>
+                        Todo
+                    </div>
+                </Button>
+                <Button type='dashed'  onClick={handleComidas}>
+                    <div className='flex justify-center'>
+                        <FilterOutlined className='mt-1 mr-2'/>
+                        Comidas
+                    </div>
+                </Button>
+                <Button type="dashed" onClick={handleBebidas}>
+                    <div className='flex justify-center'>
+                        <FilterOutlined className='mt-1 mr-2'/>
+                        Bebidas
+                    </div>
+                </Button>
             </div>
             <Row gutter={12}>
                 {

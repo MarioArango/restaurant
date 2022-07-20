@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, EditTwoTone, PlusOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Button, Table, Card, Modal, Tooltip, Spin, Result} from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
@@ -33,6 +33,7 @@ const Dishes = () => {
 
   //TODO: SHOW FORM DISH
   const handleViewFormDish = () => {
+    dispatch(rxDishSelected(null))
     dispatch(rxShowFormDishes(true))
   }
 
@@ -126,7 +127,12 @@ const Dishes = () => {
             <>
                 <Card
                 {...cardProps}
-                title="Lista de Platos."
+                title={
+                    <div className='flex justify-start'>
+                        <ScheduleOutlined className='mt-1 mr-2'/> 
+                        <p>Lista de Platos</p>
+                    </div>
+                }
                 extra={
                     <Button
                         type="primary"
@@ -154,7 +160,7 @@ const Dishes = () => {
                             dispatch(rxDishSelected(dish))
                         },
                         onDoubleClick: () => {
-                            handleViewFormDish()
+                            handleEditDish(dish)
                         }
                     })}
                 />
