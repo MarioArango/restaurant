@@ -16,7 +16,9 @@ import {
     FETCH_LOGIN_USER_ERROR,
     SHOW_FORM_USER,
     USER_SELECTED,
-    USER_AUTH_SUCURSAL
+    USER_AUTH_SUCURSAL,
+    USER_SET_TYPE_SERVICE,
+    USER_SHOW_TYPE_SERVICE
 } from "../types";
 
 
@@ -29,7 +31,9 @@ const initialState = {
     loadingCreateUser: false,
     loadingUpdateUser: false,
     loadingLoginUser: false,
-    authSucursal: JSON.parse(localStorage.getItem("authSucursal"))
+    authSucursal: JSON.parse(localStorage.getItem("authSucursal")),
+    typeService: null,
+    showTypesService: false
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -167,6 +171,22 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 authSucursal: payload
+            }
+        }
+
+        //TODO: USER TYPE SERVICE
+        case USER_SET_TYPE_SERVICE: {
+            return {
+                ...state,
+                typeService: payload
+            }
+        }
+
+        //TODO: USER SHOW TYPE SERVICE
+        case USER_SHOW_TYPE_SERVICE: {
+            return {
+                ...state,
+                showTypesService: payload
             }
         }
 

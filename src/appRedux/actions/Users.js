@@ -19,7 +19,9 @@ import {
   FETCH_LOGIN_USER_ERROR,
   SHOW_FORM_USER,
   USER_SELECTED,
-  USER_AUTH_SUCURSAL
+  USER_AUTH_SUCURSAL,
+  USER_SET_TYPE_SERVICE,
+  USER_SHOW_TYPE_SERVICE
 } from '../types'
 
 export const rxRegisterUser = (user, cb = null) => async dispatch => {
@@ -112,3 +114,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxUserSelected = (payload) => ({type: USER_SELECTED, payload});
 
   export const rxSetUserAuthSucursal = (payload) => ({type: USER_AUTH_SUCURSAL, payload});
+
+  export const rxSetTypeService = (payload) => ({type: USER_SET_TYPE_SERVICE, payload});
+
+  export const rxShowTypeService = (payload) => ({type: USER_SHOW_TYPE_SERVICE, payload});

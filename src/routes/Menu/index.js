@@ -8,6 +8,7 @@ import { currencyFE } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png';
 import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes } from '../../appRedux/actions';
+import TypeService from './TypeService';
 
 const Menu = () => {
   const [ typeDish, setTypeDish ] = useState("Todo")
@@ -20,11 +21,11 @@ const Menu = () => {
   
   const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
 
-  const { authSucursal } = useSelector(state => state.get("users"));
+  const { authSucursal, showTypesService, typeService} = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const { sRol } = useAuth();
 
   //TODO: SHOW ORDER SUMMARY
   const handleGenerateOrder = () => {
@@ -155,6 +156,8 @@ const Menu = () => {
     ))
   }
 
+
+
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
     if(authSucursal){
@@ -167,60 +170,64 @@ const Menu = () => {
     <>
         {
             sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
-            <Spin spinning={loadingListDishes} className="">
-            <div className='flex justify-between mt-2'>
-            <p className='font-semibold text-xl'>{typeDish}</p>
-                <Affix offsetTop={20} className="mb-4">
-                    <Button 
-                        type='primary'
-                        className='bg-primary' 
-                        onClick={handleGenerateOrder}
-                    >
-                        <div className='flex justify-between'>
-                        <ShoppingOutlined className='mt-1 mr-2'/> <p>Generar Pedido</p>
-                        </div>
-                    </Button>
-                </Affix>
-            </div>
-            <div className='flex justify-around mb-2'>
-                <Button type='dashed' onClick={handleTodo}>
-                    <div className='flex justify-center'>
-                        <FilterOutlined className='mt-1 mr-2'/>
-                        Todo
+            <>
+                    <Spin spinning={loadingListDishes} className="">
+                    <div className='flex justify-between mt-2'>
+                    <p className='font-semibold text-xl'>{typeDish}</p>
+                        <Affix offsetTop={20} className="mb-4">
+                            <Button 
+                                type='primary'
+                                className='bg-primary' 
+                                onClick={handleGenerateOrder}
+                            >
+                                <div className='flex justify-between'>
+                                <ShoppingOutlined className='mt-1 mr-2'/> <p>Generar Pedido</p>
+                                </div>
+                            </Button>
+                        </Affix>
                     </div>
-                </Button>
-                <Button type='dashed'  onClick={handleComidas}>
-                    <div className='flex justify-center'>
-                        <FilterOutlined className='mt-1 mr-2'/>
-                        Comidas
+                    <div className='flex justify-around mb-2'>
+                        <Button type='dashed' onClick={handleTodo}>
+                            <div className='flex justify-center'>
+                                <FilterOutlined className='mt-1 mr-2'/>
+                                Todo
+                            </div>
+                        </Button>
+                        <Button type='dashed'  onClick={handleComidas}>
+                            <div className='flex justify-center'>
+                                <FilterOutlined className='mt-1 mr-2'/>
+                                Comidas
+                            </div>
+                        </Button>
+                        <Button type="dashed" onClick={handleBebidas}>
+                            <div className='flex justify-center'>
+                                <FilterOutlined className='mt-1 mr-2'/>
+                                Bebidas
+                            </div>
+                        </Button>
                     </div>
-                </Button>
-                <Button type="dashed" onClick={handleBebidas}>
-                    <div className='flex justify-center'>
-                        <FilterOutlined className='mt-1 mr-2'/>
-                        Bebidas
-                    </div>
-                </Button>
-            </div>
-            <Row gutter={12}>
-                {
-                    getCardDishes()
-                }
-                <BackTop duration={500} className='hover:p-[1px]' >
-                    <Tooltip title="Subir">
-                        <img src={rowTop} width="40px" alt="subir"/>
-                    </Tooltip>
-                </BackTop>
-            </Row>
-            {
-                showOrderSummary && orderSummary?.length &&
-                <OrderSummary 
-                    quantityByDish={quantityByDish}
-                    handleAddQtyDish={handleAddQtyDish}
-                    handleDelQtyDish={handleDelQtyDish}
-                />
-            }
-            </Spin>
+                    <Row gutter={12}>
+                        {
+                            getCardDishes()
+                        }
+                        <BackTop duration={500} className='hover:p-[1px]' >
+                            <Tooltip title="Subir">
+                                <img src={rowTop} width="40px" alt="subir"/>
+                            </Tooltip>
+                        </BackTop>
+                    </Row>
+                    {
+                        showOrderSummary && orderSummary?.length &&
+                        <OrderSummary 
+                            quantityByDish={quantityByDish}
+                            handleAddQtyDish={handleAddQtyDish}
+                            handleDelQtyDish={handleDelQtyDish}
+                        />
+                    }
+                    </Spin>
+                    { showTypesService && <TypeService/>}
+            </>
+            
             : <Result
                 status="403"
                 title="403"
