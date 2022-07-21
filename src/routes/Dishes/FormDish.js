@@ -39,6 +39,7 @@ const FormDish = () => {
           sName: values.sName?? '',
           sDescription: values.sDescription?? '',
           sType: values.sType?? '',
+          sTypeService: values.sTypeService?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0,
           bActive: true,
@@ -128,6 +129,7 @@ const FormDish = () => {
           sName: dishSelected.sName,
           sDescription: dishSelected.sDescription,
           sType: dishSelected.sType,
+          sTypeService: dishSelected.sTypeService,
           nPrice: dishSelected.nPrice
       });
     }
@@ -155,7 +157,8 @@ const FormDish = () => {
                     onFinish={handleSaveDish}
                     layout="vertical"
                     initialValues={{
-                      sType: "comida"
+                      sType: "comida",
+                      sTypeService: "mesa"
                     }}
                 >
                     <Row gutter={12}>
@@ -209,6 +212,14 @@ const FormDish = () => {
                                 <Select>
                                     <Option value="comida">Comida</Option>
                                     <Option value="bebida">Bebida</Option>
+                                </Select>
+                            </Item>
+                        </Col>
+                        <Col span={24}>
+                            <Item label="Tipo de Servicio" name="sTypeService" rules={requiredField}>
+                                <Select>
+                                    <Option value="mesa">Mesa</Option>
+                                    <Option value="barra">Barra</Option>
                                 </Select>
                             </Item>
                         </Col>

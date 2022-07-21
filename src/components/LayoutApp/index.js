@@ -2,14 +2,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Input, Layout, Menu, Select } from 'antd';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
-import { rxSetUserAuthSucursal } from '../../appRedux/actions';
+import { rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 
 const LayoutApp = ({children}) => {
   //TODO: REDUX STATE
-  const { authSucursal, loadingLoginUser } = useSelector(state => state.get("users"));
+  const { authSucursal, loadingLoginUser, showTypesService, typeService, numberTable} = useSelector(state => state.get("users"));
+
 
   const dispatch = useDispatch();
 
@@ -30,10 +31,6 @@ const LayoutApp = ({children}) => {
     dispatch(rxSetUserAuthSucursal(option.data));
   }
 
-  const handleSelectTypeServicio = () => {
-
-  }
-  
   return (
     <Layout className="layout flex-col">
       <Header>
@@ -52,9 +49,13 @@ const LayoutApp = ({children}) => {
                           }}
                           size="large"
                           gap={1}
+                          
                         >
-                          <span className='text-black font-medium'>{auth.sUsername.substring(0, 1)?.toUpperCase()}</span>
-                        </Avatar>
+                          <span className='text-black font-medium'>
+                            {typeof(typeService) === "string" ? typeService[0].toUpperCase():""}{typeof(typeService) === "string" && typeService === "mesa"? numberTable: ""}
+                          </span>
+                        </Avatar>,
+              onClick: () => { dispatch(rxShowTypeService(true)) }
             },
             {
               key: "1",

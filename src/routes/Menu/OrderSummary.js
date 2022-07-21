@@ -25,7 +25,7 @@ const OrderSummary = (props) => {
     loadingGenerateOrder
   } = useSelector(state => state.get("orders"))
 
-  const { authSucursal } = useSelector(state => state.get("users"));
+  const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch()
 
@@ -48,14 +48,21 @@ const OrderSummary = (props) => {
                     sType: o.sType
                 }))
         
-                const orderToSend = {
+                let orderToSend = {
                     dCreated: moment().format(dateFormatList[2]),
                     day: moment().format("DD"),
                     month: moment().format("MM"),
                     year: moment().format("YYYY"),
                     sState: 'pending',
+                    sTypeService: typeService,
                     nIdBranchOffice: authSucursal.nIdBranchOffice,
                     dishes: orderFormat
+                }
+                if(typeService === "mesa"){
+                    orderToSend = {
+                        ...orderToSend,
+                        nNumberTable: parseInt(numberTable)
+                    }
                 }
                 dispatch(rxGenerateOrder(orderToSend))
             },

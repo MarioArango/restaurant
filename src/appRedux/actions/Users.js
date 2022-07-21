@@ -21,6 +21,7 @@ import {
   USER_SELECTED,
   USER_AUTH_SUCURSAL,
   USER_SET_TYPE_SERVICE,
+  USER_SET_NUMBER_TABLE,
   USER_SHOW_TYPE_SERVICE
 } from '../types'
 
@@ -116,5 +117,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxSetUserAuthSucursal = (payload) => ({type: USER_AUTH_SUCURSAL, payload});
 
   export const rxSetTypeService = (payload) => ({type: USER_SET_TYPE_SERVICE, payload});
+
+  export const rxSetNumberTable = (payload) => ({type: USER_SET_NUMBER_TABLE, payload});
 
   export const rxShowTypeService = (payload) => ({type: USER_SHOW_TYPE_SERVICE, payload});

@@ -18,6 +18,7 @@ import {
     USER_SELECTED,
     USER_AUTH_SUCURSAL,
     USER_SET_TYPE_SERVICE,
+    USER_SET_NUMBER_TABLE,
     USER_SHOW_TYPE_SERVICE
 } from "../types";
 
@@ -32,8 +33,9 @@ const initialState = {
     loadingUpdateUser: false,
     loadingLoginUser: false,
     authSucursal: JSON.parse(localStorage.getItem("authSucursal")),
-    typeService: null,
-    showTypesService: false
+    typeService: localStorage.getItem("typeService"),
+    numberTable: localStorage.getItem("numberTable"),
+    showTypesService: true
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -179,6 +181,14 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 typeService: payload
+            }
+        }
+
+        //TODO: USER TYPE SERVICE
+        case USER_SET_NUMBER_TABLE: {
+            return {
+                ...state,
+                numberTable: payload
             }
         }
 

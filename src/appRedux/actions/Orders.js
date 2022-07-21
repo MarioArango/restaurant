@@ -33,12 +33,13 @@ export const rxGenerateOrder = (order) => async dispatch => {
     }
   }
   
-  export const rxGetOrders = (nIdBranchOffice, cb = null) => async dispatch => {
+  export const rxGetOrders = (nIdBranchOffice, typeService, cb = null) => async dispatch => {
     console.log(nIdBranchOffice, "rxGetOrders")
     dispatch({type: FETCH_GET_ORDERS_START})
     try {
       const q = query(collection(db, 'orders'), 
         where("nIdBranchOffice", "==", nIdBranchOffice), 
+        where("sTypeService", "==", typeService), 
         where("day", "==", moment().format("DD")),
         where("month", "==", moment().format("MM")),
         where("year", "==", moment().format("YYYY")),

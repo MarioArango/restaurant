@@ -7,21 +7,18 @@ import { useAuth } from '../../Hooks/auth';
 import { currencyFE } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png';
-import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes } from '../../appRedux/actions';
+import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes, rxGetDishesMenu } from '../../appRedux/actions';
 import TypeService from './TypeService';
 
 const Menu = () => {
   const [ typeDish, setTypeDish ] = useState("Todo")
-  const { 
-    listDishes, 
-    loadingListDishes,
-    listDishesComidas,
-    listDishesBebidas
- } = useSelector(state => state.get("dishes"));
+  const { listDishesComidas, listDishesBebidas } = useSelector(state => state.get("dishes"));
   
   const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
 
-  const { authSucursal, showTypesService, typeService} = useSelector(state => state.get("users"));
+  const { loadingListDishesMenu, listDishesMenu } = useSelector(state => state.get("menu"));
+
+  const { authSucursal, typeService} = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
@@ -122,7 +119,7 @@ const Menu = () => {
   const getCardDishes = () => {
     const list = listDishesComidas?.length > 0 ? listDishesComidas
                  : listDishesBebidas?.length > 0 ? listDishesBebidas
-                  : listDishes;
+                  : listDishesMenu;
                   
     return list?.map((d, index)=> (
         <Col xs={24} sm={12} md={6} lg={6} xl={6} key={index}>
@@ -156,22 +153,20 @@ const Menu = () => {
     ))
   }
 
-
-
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
-    if(authSucursal){
-        dispatch(rxGetDishes(authSucursal.nIdBranchOffice));
+    if(authSucursal && typeService){
+        dispatch(rxGetDishesMenu(authSucursal.nIdBranchOffice, typeService));
     }
     // eslint-disable-next-line
-   }, [authSucursal?.nIdBranchOffice])
+   }, [authSucursal?.nIdBranchOffice, typeService])
 
   return (
     <>
         {
             sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
             <>
-                    <Spin spinning={loadingListDishes} className="">
+                    <Spin spinning={loadingListDishesMenu} className="">
                     <div className='flex justify-between mt-2'>
                     <p className='font-semibold text-xl'>{typeDish}</p>
                         <Affix offsetTop={20} className="mb-4">
@@ -179,6 +174,7 @@ const Menu = () => {
                                 type='primary'
                                 className='bg-primary' 
                                 onClick={handleGenerateOrder}
+                                disabled={!typeService}
                             >
                                 <div className='flex justify-between'>
                                 <ShoppingOutlined className='mt-1 mr-2'/> <p>Generar Pedido</p>
@@ -225,7 +221,7 @@ const Menu = () => {
                         />
                     }
                     </Spin>
-                    { showTypesService && <TypeService/>}
+                    <TypeService/>
             </>
             
             : <Result

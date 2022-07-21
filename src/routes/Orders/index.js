@@ -22,7 +22,7 @@ const Orders = () => {
       loadingUpdateStateOrders
   } = useSelector(state => state.get("orders"))
 
-  const { authSucursal } = useSelector(state => state.get("users"));
+  const { authSucursal, typeService } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch()
 
@@ -46,6 +46,27 @@ const Orders = () => {
 
   //TODO: COLUMNS TABLE
   const columns = [
+    {
+        key: "index",
+        title: "#",
+        width: 20,
+        align: "center",
+        render: (_, __, index) => index + 1,
+    },
+    {
+        key: "sTypeService",
+        dataIndex: "sTypeService",
+        title: "Tipo de servicio",
+        width: 20,
+        align: "center"
+    },
+    {
+        key: "nNumberTable",
+        dataIndex: "nNumberTable",
+        title: "Número de mesa",
+        width: 20,
+        align: "center"
+    },
     {
         key: "index",
         title: "#",
@@ -134,9 +155,9 @@ const Orders = () => {
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
   useEffect(() => {
         if(pathname === "/orders"){
-            if(authSucursal){
+            if(authSucursal && typeService){
                 let unsub;
-                dispatch(rxGetOrders(authSucursal.nIdBranchOffice, (us) => {
+                dispatch(rxGetOrders(authSucursal.nIdBranchOffice, typeService, (us) => {
                     unsub = us
                 }))  
                 return () => {
@@ -146,7 +167,7 @@ const Orders = () => {
             } 
         }
     // eslint-disable-next-line
-  }, [authSucursal?.nIdBranchOffice])
+  }, [authSucursal?.nIdBranchOffice, typeService])
 
   return (
     <div className='h-screen'>
