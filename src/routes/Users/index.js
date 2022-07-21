@@ -134,7 +134,8 @@ const Users = () => {
                     dataSource={listUsers}
                     rowKey={(user) => user.nIdUser}
                     rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                    scroll={customScroll()}
+                    // scroll={customScroll()}
+                    scroll={{x: "80vw", y: "65vh"}}
                     onRow={(user) => ({
                         onClick: () => {
                             dispatch(rxUserSelected(user))

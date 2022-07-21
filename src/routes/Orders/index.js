@@ -81,7 +81,6 @@ const Orders = () => {
                     disabled={order.sState === "finished"}
                     type='primary'
                     className='bg-primary'
-                    
                     onClick={() => handleChangeStateOrder(order)}
                 >
                     <div className='flex justify-center'>
@@ -152,7 +151,7 @@ const Orders = () => {
   return (
     <div className='h-screen'>
         {
-            sRol === "chef" || sRol === "administrador"?
+            sRol === "chef" || sRol === "administrador" || sRol === "mozo"?
             <Card
             {...cardProps}
             title={
@@ -171,7 +170,7 @@ const Orders = () => {
                     dataSource={listOrders}
                     rowKey={(order) => order.nIdOrder}
                     rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                    scroll={{x: "80vw", y: "100vh"}}
+                    scroll={{x: "80vw", y: "65vh"}}
                     onRow={(order) => ({
                         onClick: () => {
                             dispatch(rxOrderSelected(order))

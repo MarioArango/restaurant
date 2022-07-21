@@ -112,9 +112,6 @@ const FormUser = () => {
                         className='gx-form-row0'
                         onFinish={handleSubmit}
                         layout="vertical"
-                        initialValues={{
-                            sRol: "mozo"
-                        }}
                     >
                         <Row gutter={12}>
                             <Col span={24}>
@@ -130,6 +127,7 @@ const FormUser = () => {
                             <Col span={24}>
                                 <Item label="Rol" name="sRol" rules={requiredField}>
                                     <Select>
+                                        <Option value="cliente">Cliente</Option>
                                         <Option value="mozo">Mozo</Option>
                                         <Option value="chef">Chef</Option>
                                         <Option value="administrador">Administrador</Option>

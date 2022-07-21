@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Layout, Menu, Select } from 'antd';
+import { Avatar, Input, Layout, Menu, Select } from 'antd';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
 import { rxSetUserAuthSucursal } from '../../appRedux/actions';
@@ -28,6 +28,10 @@ const LayoutApp = ({children}) => {
 
   const handleSelectBrachOffice = (_, option) => {
     dispatch(rxSetUserAuthSucursal(option.data));
+  }
+
+  const handleSelectTypeServicio = () => {
+
   }
   
   return (

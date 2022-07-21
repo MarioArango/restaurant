@@ -41,6 +41,7 @@ const FormDish = () => {
           sType: values.sType?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0,
+          bActive: true,
           nIdBranchOffice: authSucursal.nIdBranchOffice
         } 
         if(dishSelected){

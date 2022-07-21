@@ -126,7 +126,8 @@ const BranchOffices = () => {
                             dataSource={listBranchOffices}
                             rowKey={(branchOffice) => branchOffice.nIdBranchOffice}
                             rowClassName={(branchOffice) => branchOffice?.nIdBranchOffice === branchOfficeSelected?.nIdBranchOffice ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                            scroll={customScroll()}
+                            // scroll={customScroll()}
+                            scroll={{x: "80vw", y: "65vh"}}
                             onRow={(branchOffice) => ({
                                 onClick: () => {
                                     dispatch(rxBranchOffSelected(branchOffice))

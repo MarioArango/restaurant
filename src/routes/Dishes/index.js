@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { Button, Table, Card, Modal, Tooltip, Spin, Result} from 'antd';
+import { Button, Table, Card, Modal, Tooltip, Spin, Result, Switch, Checkbox} from 'antd';
 import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
 import FormDish from './FormDish';
@@ -10,7 +10,8 @@ import {
     rxGetDishes, 
     rxDeleteDish, 
     rxDishSelected, 
-    rxShowFormDishes 
+    rxShowFormDishes, 
+    rxUpdateDish
 } from '../../appRedux/actions';
 
 const Dishes = () => {
@@ -59,6 +60,17 @@ const Dishes = () => {
       })
   }
 
+  //TODO: UPDATE STATE ACTIVE DISH
+  const handleChangeActive = (e, dish) => {
+    if(dish){
+        const dishUp = {
+            ...dish,
+            bActive: e.target.checked
+        }
+        dispatch(rxUpdateDish(dishUp.nIdDish, dishUp))
+    }
+  }
+
   //TODO: COLUMNS TABLE
   const columns = [
     {
@@ -91,6 +103,14 @@ const Dishes = () => {
         render: value => value ? currency.format(Number(value), currencyFE) : '0.00'
     },
     {
+        key: "bActive",
+        dataIndex: "bActive",
+        title: "Activo",
+        width: 80,
+        align: "center",
+        render: (value, dish) => <Checkbox checked={value} onChange={(e) => handleChangeActive(e, dish)}/>
+    },
+    {
         key: "",
         dataIndex: "",
         title: "",
@@ -99,14 +119,10 @@ const Dishes = () => {
         render: (_, dish) => (
             <div className='flex justify-around'>
                 <Tooltip title="Editar">
-                    <Spin spinning={loadingUpdateDish}>
-                        <EditTwoTone onClick={() => handleEditDish(dish)} />
-                    </Spin>
+                 <EditTwoTone onClick={() => handleEditDish(dish)} />
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDeleteDish}>
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
-                    </Spin>
+                    <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
                 </Tooltip>
             </div>
         )
@@ -150,7 +166,7 @@ const Dishes = () => {
                     {...tableProps}
                     bordered
                     columns={columns}
-                    loading={loadingListDishes}
+                    loading={loadingListDishes || loadingUpdateDish || loadingDeleteDish}
                     dataSource={listDishes}
                     rowKey={(dish) => dish.nIdDish}
                     rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}

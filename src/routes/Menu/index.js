@@ -166,7 +166,7 @@ const Menu = () => {
   return (
     <>
         {
-            sRol === "mozo" || sRol === "administrador"?
+            sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
             <Spin spinning={loadingListDishes} className="">
             <div className='flex justify-between mt-2'>
             <p className='font-semibold text-xl'>{typeDish}</p>
