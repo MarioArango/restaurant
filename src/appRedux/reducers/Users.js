@@ -19,7 +19,13 @@ import {
     USER_AUTH_SUCURSAL,
     USER_SET_TYPE_SERVICE,
     USER_SET_NUMBER_TABLE,
-    USER_SHOW_TYPE_SERVICE
+    USER_SHOW_TYPE_SERVICE,
+    FETCH_REQUEST_WAITER_START,
+    FETCH_REQUEST_WAITER_SUCCESS,
+    FETCH_REQUEST_WAITER_ERROR,
+    FETCH_GET_REQUEST_WAITERS_START,
+    FETCH_GET_REQUEST_WAITERS_SUCCESS,
+    FETCH_GET_REQUEST_WAITERS_ERROR
 } from "../types";
 
 
@@ -35,7 +41,10 @@ const initialState = {
     authSucursal: JSON.parse(localStorage.getItem("authSucursal")),
     typeService: localStorage.getItem("typeService"),
     numberTable: localStorage.getItem("numberTable"),
-    showTypesService: true
+    showTypesService: true,
+    loadingRequestWaiter: false,
+    loadingListRequestWaiter: false,
+    listRequestWaiter: []
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -197,6 +206,51 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 showTypesService: payload
+            }
+        }
+
+        //TODO: ADD REQUEST WAITER
+        case FETCH_REQUEST_WAITER_START: {
+            return {
+                ...state,
+                loadingRequestWaiter: true
+            }
+        }
+
+        case FETCH_REQUEST_WAITER_SUCCESS: {
+            return {
+                ...state,
+                loadingRequestWaiter: false
+            }
+        }
+
+        case FETCH_REQUEST_WAITER_ERROR: {
+            return {
+                ...state,
+                loadingRequestWaiter: false
+            }
+        }
+        
+        //TODO: GET REQUEST WAITER
+        case FETCH_GET_REQUEST_WAITERS_START: {
+            return {
+                ...state,
+                loadingListRequestWaiter: true
+            }
+        }
+
+        case FETCH_GET_REQUEST_WAITERS_SUCCESS: {
+            return {
+                ...state,
+                loadingListRequestWaiter: false,
+                listRequestWaiter: payload
+            }
+        }
+
+        case FETCH_GET_REQUEST_WAITERS_ERROR: {
+            return {
+                ...state,
+                loadingListRequestWaiter: false
             }
         }
 

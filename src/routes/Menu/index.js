@@ -1,24 +1,23 @@
 import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Result } from 'antd';
-import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { useAuth } from '../../Hooks/auth';
 import { currencyFE } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import rowTop from '../../assets/flecha-hacia-arriba.png';
-import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes, rxGetDishesMenu } from '../../appRedux/actions';
+import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes, rxGetDishesMenu, rxAddRequestWaiter, rxShowTypeService } from '../../appRedux/actions';
 import TypeService from './TypeService';
 
 const Menu = () => {
-  const [ typeDish, setTypeDish ] = useState("Todo")
   const { listDishesComidas, listDishesBebidas } = useSelector(state => state.get("dishes"));
   
   const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
 
   const { loadingListDishesMenu, listDishesMenu } = useSelector(state => state.get("menu"));
 
-  const { authSucursal, typeService} = useSelector(state => state.get("users"));
+  const { authSucursal, typeService, numberTable, loadingRequestWaiter} = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
@@ -102,17 +101,14 @@ const Menu = () => {
   }
 
   const handleTodo = () => {
-    setTypeDish("Todo")
     dispatch(rxFilterDishes("todo"))
   }
 
   const handleComidas = () => {
-    setTypeDish("Comidas")
     dispatch(rxFilterDishes("comida"))
   }
 
   const handleBebidas = () => {
-    setTypeDish("Bebidas")
     dispatch(rxFilterDishes("bebida"))
   }
 
@@ -153,6 +149,19 @@ const Menu = () => {
     ))
   }
 
+  const handleRequestWaiter = () => {
+    if(typeService && numberTable && authSucursal){
+        const requestWaiter = {
+            nIdBranchOffice: authSucursal.nIdBranchOffice,
+            sNumberTable: numberTable
+        }
+        dispatch(rxAddRequestWaiter(requestWaiter))
+    }else {
+        message.info("Debe agregar el número de mesa.")
+        dispatch(rxShowTypeService(true))
+    }
+  }
+
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
     if(authSucursal && typeService){
@@ -168,7 +177,17 @@ const Menu = () => {
             <>
                     <Spin spinning={loadingListDishesMenu} className="">
                     <div className='flex justify-between mt-2'>
-                    <p className='font-semibold text-xl'>{typeDish}</p>
+                        <>
+                            {
+                                (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
+                                <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
+                                    <div className='flex justify-center'>
+                                        <UserOutlined className='mt-1 mr-2' />
+                                        <p>Solicitar Mozo</p>
+                                    </div>
+                                </Button>
+                            }
+                        </>
                         <Affix offsetTop={20} className="mb-4">
                             <Button 
                                 type='primary'

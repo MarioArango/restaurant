@@ -1,21 +1,31 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Input, Layout, Menu, Select } from 'antd';
+import { Avatar, Badge, Button, Dropdown, Layout, Menu, Select } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
-import { rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
+import { rxGetRequestWaiters, rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 
 const LayoutApp = ({children}) => {
   //TODO: REDUX STATE
-  const { authSucursal, loadingLoginUser, showTypesService, typeService, numberTable} = useSelector(state => state.get("users"));
+  const { 
+    authSucursal, 
+    loadingLoginUser, 
+    showTypesService, 
+    typeService, 
+    numberTable, 
+    loadingListRequestWaiter, 
+    listRequestWaiter
+  } = useSelector(state => state.get("users"));
 
 
   const dispatch = useDispatch();
 
   //TODO: GET AUTH LOCAL STORAGE
-  const auth = useAuth();
+  const { sBranchOfficesAssigned, sRol } = useAuth();
   
   //TODO: REDIRECT
   const navigate = useNavigate();
@@ -31,10 +41,26 @@ const LayoutApp = ({children}) => {
     dispatch(rxSetUserAuthSucursal(option.data));
   }
 
+  //TODO: INIT - GET ALL REQUEST WAITERS
+  useEffect(() => {
+    if((sRol === "mozo" || sRol === "administrador") && typeService === "mesa"){
+        if(authSucursal && typeService){
+            let unsub;
+            dispatch(rxGetRequestWaiters(authSucursal.nIdBranchOffice, (us) => {
+                unsub = us
+            }))  
+            return () => {
+                console.log('unsub waiter')
+                unsub()
+            }
+        } 
+    }
+  // eslint-disable-next-line
+  }, [authSucursal?.nIdBranchOffice, typeService])
+  console.log(listRequestWaiter, "listRequestWaiter")
   return (
     <Layout className="layout flex-col">
       <Header>
-        <div className="logo" />
         <Menu
           theme="dark"
           mode="horizontal"
@@ -84,7 +110,37 @@ const LayoutApp = ({children}) => {
             {
               key: "7",
               label: "Cerrar sesión",
-              onClick: () => { handleLogout() }
+              onClick: {handleLogout}
+            },
+            {
+              key: "8",
+              label: <div className='flex-col justify-center items-center'>
+                        {
+                          sRol === "mozo" || sRol === "administrador" && 
+                          <Badge size="small" count={listRequestWaiter?.length}>
+                            <Dropdown 
+                              overlay={
+                                <Menu
+                                  items={
+                                    listRequestWaiter.length > 0 
+                                    ? listRequestWaiter?.map((rw, index) => ({key: index, label: "Mesa " + rw.sNumberTable})) 
+                                    : [{key:"1", label: "No hay solicitudes"}]}
+                                />
+                              } 
+                              placement="bottom" 
+                              className='bg-primary'
+                            >
+                              <Button 
+                                className='bg-fondo' 
+                                type='ghost' 
+                                shape='circle' 
+                                icon={<BellOutlined className='text-primary'/>}
+                                loading={loadingListRequestWaiter}
+                              />
+                            </Dropdown>
+                          </Badge>
+                        }
+                    </div>
             }
           ]}
         />
@@ -117,7 +173,7 @@ const LayoutApp = ({children}) => {
                 onSelect={handleSelectBrachOffice}
               >
                 {
-                  auth.sBranchOfficesAssigned?.map((boa, index) => (
+                  sBranchOfficesAssigned?.map((boa, index) => (
                     <Option key={index} value={boa.nIdBranchOffice} data={boa}>
                       {boa.sBranchOffice}
                     </Option>

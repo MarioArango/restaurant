@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs } from "firebase/firestore";
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_REGISTER_USER_START,
@@ -22,7 +22,13 @@ import {
   USER_AUTH_SUCURSAL,
   USER_SET_TYPE_SERVICE,
   USER_SET_NUMBER_TABLE,
-  USER_SHOW_TYPE_SERVICE
+  USER_SHOW_TYPE_SERVICE,
+  FETCH_REQUEST_WAITER_START,
+  FETCH_REQUEST_WAITER_SUCCESS,
+  FETCH_REQUEST_WAITER_ERROR,
+  FETCH_GET_REQUEST_WAITERS_START,
+  FETCH_GET_REQUEST_WAITERS_SUCCESS,
+  FETCH_GET_REQUEST_WAITERS_ERROR
 } from '../types'
 
 export const rxRegisterUser = (user, cb = null) => async dispatch => {
@@ -121,3 +127,45 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxSetNumberTable = (payload) => ({type: USER_SET_NUMBER_TABLE, payload});
 
   export const rxShowTypeService = (payload) => ({type: USER_SHOW_TYPE_SERVICE, payload});
+
+  /**
+   * ---------------
+   * REQUEST WAITERS
+   * ---------------
+   */
+
+  export const rxAddRequestWaiter = (requestWaiter) => async dispatch => {
+    dispatch({type: FETCH_REQUEST_WAITER_START})
+    try {
+      const docRef = await addDoc(collection(db, 'requestWaiter'), requestWaiter);
+      if(docRef){
+        dispatch({type: FETCH_REQUEST_WAITER_SUCCESS})
+        message.success("Enviado")
+      }
+    } catch (error) {
+    dispatch({type: FETCH_REQUEST_WAITER_ERROR})
+      message.error('Error del servidor.')
+    }
+  } 
+
+  export const rxGetRequestWaiters = (nIdBranchOffice, cb = null) => async dispatch => {
+    dispatch({type: FETCH_GET_REQUEST_WAITERS_START})
+    try {
+      const q = query(collection(db, "requestWaiter"), 
+        where("nIdBranchOffice", "==", nIdBranchOffice), 
+        limit(10)
+      );
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        console.log("rxGetRequestWaiters")
+        const requestWaiters = [];
+        querySnapshot.forEach(doc => {
+          requestWaiters.push({...doc.data(), nIdRequestWaiter: doc.id}) 
+        })
+        dispatch({type: FETCH_GET_REQUEST_WAITERS_SUCCESS, payload: requestWaiters })
+      })
+      cb && cb(unsub)
+    } catch (error) {
+    dispatch({type: FETCH_GET_REQUEST_WAITERS_ERROR})
+      message.error('Error del servidor.')
+    }
+  }
