@@ -4,9 +4,10 @@ import Menu from './routes/Menu';
 import Orders from './routes/Orders';
 import Dishes from './routes/Dishes';
 import Login from './routes/Login';
-import Users from './routes/Users';
-import BranchOffices from './routes/BranchOffiices';
-import Sales from './routes/Sales';
+import Users from './routes/configurations/Users';
+import BranchOffices from './routes/configurations/BranchOffiices';
+import Sales from './routes/reports/Sales';
+import TypesProducts from './routes/configurations/TypesProducts';
 import NotFound from './routes/NotFound';
 import LayoutApp from './components/LayoutApp';
 
@@ -20,6 +21,7 @@ function App() {
       <Route exact path="/branch-offices" element={<RestrictedComponent><LayoutApp><BranchOffices/></LayoutApp></RestrictedComponent>} />
       <Route exact path="/dishes" element={<RestrictedComponent><LayoutApp><Dishes/></LayoutApp></RestrictedComponent>} />
       <Route exact path="/sales" element={<RestrictedComponent><LayoutApp><Sales/></LayoutApp></RestrictedComponent>} />
+      <Route exact path="/types-products" element={<RestrictedComponent><LayoutApp><TypesProducts/></LayoutApp></RestrictedComponent>} />
       <Route path='*' element={<RestrictedComponent><LayoutApp><NotFound/></LayoutApp></RestrictedComponent>}/>
     </Routes>
   );

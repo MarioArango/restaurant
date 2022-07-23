@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
-import { cardProps, customScroll, tableProps } from '../../util/config';
-import { useAuth } from '../../Hooks/auth';
+import { cardProps, customScroll, tableProps } from '../../../util/config';
+import { useAuth } from '../../../Hooks/auth';
 import FormUser from './FormUser';
-import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../appRedux/actions';
+import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../../appRedux/actions';
 
 const Users = () => {
   const { 

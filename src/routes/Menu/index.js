@@ -6,9 +6,17 @@ import currency from 'currency-formatter';
 import { useAuth } from '../../Hooks/auth';
 import { currencyFE } from '../../util/config';
 import OrderSummary from './OrderSummary';
-import rowTop from '../../assets/flecha-hacia-arriba.png';
-import { rxGetDishes, rxShowOrderSummary, rxOrderSummary, rxFilterDishes, rxGetDishesMenu, rxAddRequestWaiter, rxShowTypeService } from '../../appRedux/actions';
 import TypeService from './TypeService';
+import rowTop from '../../assets/flecha-hacia-arriba.png';
+import { 
+    rxGetTypesProducts, 
+    rxShowOrderSummary, 
+    rxOrderSummary, 
+    rxFilterDishes, 
+    rxGetDishesMenu, 
+    rxAddRequestWaiter, 
+    rxShowTypeService 
+} from '../../appRedux/actions';
 
 const Menu = () => {
   const { listDishesComidas, listDishesBebidas } = useSelector(state => state.get("dishes"));
@@ -17,7 +25,21 @@ const Menu = () => {
 
   const { loadingListDishesMenu, listDishesMenu } = useSelector(state => state.get("menu"));
 
-  const { authSucursal, typeService, numberTable, loadingRequestWaiter} = useSelector(state => state.get("users"));
+  const { 
+    authSucursal, 
+    typeService, 
+    numberTable, 
+    loadingRequestWaiter, 
+    showTypesService
+} = useSelector(state => state.get("users"));
+
+const { 
+    loadingListTypesProducts,
+    listTypesProducts,
+    loadingDeleteTypeProduct,
+    loadingCreateTypeProduct,
+    loadingUpdateTypeProduct
+  } = useSelector(state => state.get("typesProducts"));
 
   const dispatch = useDispatch();
 
@@ -100,16 +122,8 @@ const Menu = () => {
     return orderMatch.length === 0 ? true : orderMatch[0].nQuantity === 0? true : false
   }
 
-  const handleTodo = () => {
-    dispatch(rxFilterDishes("todo"))
-  }
-
-  const handleComidas = () => {
-    dispatch(rxFilterDishes("comida"))
-  }
-
-  const handleBebidas = () => {
-    dispatch(rxFilterDishes("bebida"))
+  const handleFilterByTypeProduct = (nIdTypeProduct) => {
+    dispatch(rxFilterDishes(nIdTypeProduct))
   }
 
   const getCardDishes = () => {
@@ -166,9 +180,13 @@ const Menu = () => {
    useEffect(() => {
     if(authSucursal && typeService){
         dispatch(rxGetDishesMenu(authSucursal.nIdBranchOffice, typeService));
+        dispatch(rxGetTypesProducts(authSucursal.nIdBranchOffice));
+    }
+    if (!typeService){
+        dispatch(rxShowTypeService(true));
     }
     // eslint-disable-next-line
-   }, [authSucursal?.nIdBranchOffice, typeService])
+   }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
     <>
@@ -202,24 +220,16 @@ const Menu = () => {
                         </Affix>
                     </div>
                     <div className='flex justify-around mb-2'>
-                        <Button type='dashed' onClick={handleTodo}>
-                            <div className='flex justify-center'>
-                                <FilterOutlined className='mt-1 mr-2'/>
-                                Todo
-                            </div>
-                        </Button>
-                        <Button type='dashed'  onClick={handleComidas}>
-                            <div className='flex justify-center'>
-                                <FilterOutlined className='mt-1 mr-2'/>
-                                Comidas
-                            </div>
-                        </Button>
-                        <Button type="dashed" onClick={handleBebidas}>
-                            <div className='flex justify-center'>
-                                <FilterOutlined className='mt-1 mr-2'/>
-                                Bebidas
-                            </div>
-                        </Button>
+                        {
+                            listTypesProducts.map(tp => (
+                                <Button type='dashed' onClick={() => handleFilterByTypeProduct(tp.nIdTypeProduct)} loading={loadingListTypesProducts}>
+                                    <div className='flex justify-center'>
+                                        <FilterOutlined className='mt-1 mr-2'/>
+                                        {tp.sTypeProduct}
+                                    </div>
+                                </Button>
+                            ))
+                        }
                     </div>
                     <Row gutter={12}>
                         {
@@ -240,7 +250,7 @@ const Menu = () => {
                         />
                     }
                     </Spin>
-                    <TypeService/>
+                    { showTypesService && <TypeService/> }
             </>
             
             : <Result

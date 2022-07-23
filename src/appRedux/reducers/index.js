@@ -5,6 +5,7 @@ import Menu from './Menu';
 import Orders from './Orders';
 import Users from './Users';
 import Sales from './Sales';
+import TypesProducts from './TypesProducts';
 
 const rootReducer = combineReducers({
     branchOffices: BranchOffices,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     orders: Orders,
     users: Users,
     sales: Sales,
+    typesProducts: TypesProducts,
 })
 
 export default rootReducer;

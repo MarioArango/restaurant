@@ -41,7 +41,7 @@ const initialState = {
     authSucursal: JSON.parse(localStorage.getItem("authSucursal")),
     typeService: localStorage.getItem("typeService"),
     numberTable: localStorage.getItem("numberTable"),
-    showTypesService: true,
+    showTypesService: false,
     loadingRequestWaiter: false,
     loadingListRequestWaiter: false,
     listRequestWaiter: []

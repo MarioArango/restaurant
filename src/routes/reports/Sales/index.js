@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Table, Card, Collapse, Select, Form, DatePicker, Result, Row, Col, message} from 'antd';
-import { cardProps, customScroll, tableProps } from '../../util/config';
-import { useAuth } from '../../Hooks/auth';
-import { rxGetSales } from '../../appRedux/actions';
+import { cardProps, customScroll, tableProps } from '../../../util/config';
+import { useAuth } from '../../../Hooks/auth';
+import { rxGetSales } from '../../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;

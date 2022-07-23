@@ -4,7 +4,7 @@ import { DeleteTwoTone, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import convert from 'client-side-image-resize';
 import { Upload, Modal, Form, Row, Col, Input, Button, message, Tooltip, Select } from 'antd';
 import { requiredField, currencyOnly } from '../../util/config';
-import { rxAddDishes, rxUpdateDish, rxDishSelected, rxShowFormDishes } from '../../appRedux/actions';
+import { rxAddDishes, rxUpdateDish, rxDishSelected, rxShowFormDishes, rxGetTypesProducts } from '../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -19,6 +19,11 @@ const FormDish = () => {
   } = useSelector(state => state.get("dishes"));
 
   const { authSucursal } = useSelector(state => state.get("users"));
+
+  const { 
+    loadingListTypesProducts,
+    listTypesProducts
+  } = useSelector(state => state.get("typesProducts"));
 
   const dispatch = useDispatch();
 
@@ -38,7 +43,7 @@ const FormDish = () => {
           sPhoto: fileB64?? '',
           sName: values.sName?? '',
           sDescription: values.sDescription?? '',
-          sType: values.sType?? '',
+          nIdTypeProduct: values.nIdTypeProduct?? '',
           sTypeService: values.sTypeService?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0,
@@ -128,13 +133,19 @@ const FormDish = () => {
       setFieldsValue({
           sName: dishSelected.sName,
           sDescription: dishSelected.sDescription,
-          sType: dishSelected.sType,
+          nIdTypeProduct: dishSelected.nIdTypeProduct,
           sTypeService: dishSelected.sTypeService,
           nPrice: dishSelected.nPrice
       });
     }
     // eslint-disable-next-line
    }, [dishSelected])
+
+   useEffect(() => {
+    if(authSucursal){
+      dispatch(rxGetTypesProducts(authSucursal.nIdBranchOffice));
+    }
+   }, [authSucursal?.nIdBranchOffice])
 
   return (
     <>
@@ -157,7 +168,6 @@ const FormDish = () => {
                     onFinish={handleSaveDish}
                     layout="vertical"
                     initialValues={{
-                      sType: "comida",
                       sTypeService: "mesa"
                     }}
                 >
@@ -208,10 +218,13 @@ const FormDish = () => {
                             </Item>
                         </Col>
                         <Col span={24}>
-                            <Item label="Tipo" name="sType" rules={requiredField}>
-                                <Select>
-                                    <Option value="comida">Comida</Option>
-                                    <Option value="bebida">Bebida</Option>
+                            <Item label="Tipo de Producto" name="nIdTypeProduct" rules={requiredField}>
+                                <Select loading={loadingListTypesProducts}>
+                                  {
+                                    listTypesProducts.map(tp => (
+                                    <Option value={tp.nIdTypeProduct}>{tp.sTypeProduct}</Option>
+                                    ))
+                                  }
                                 </Select>
                             </Item>
                         </Col>

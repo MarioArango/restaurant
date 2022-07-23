@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Badge, Button, Dropdown, Layout, Menu, Select } from 'antd';
-import { BellOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Button, Dropdown, Layout, Menu, Modal, Select } from 'antd';
+import { BarChartOutlined, BellOutlined, BorderOutlined, DollarCircleOutlined, LockOutlined, PoweroffOutlined, ProfileOutlined, SettingOutlined, ShopOutlined, TagsOutlined, ToolOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
-import { rxGetRequestWaiters, rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
+import { rxGetRequestWaiters, rxSetNumberTable, rxSetTypeService, rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -32,9 +32,20 @@ const LayoutApp = ({children}) => {
 
   //TODO: CLEAR AUTH AND GOT TO LOGIN
   const handleLogout = () => {
-    clearAuth();
-    localStorage.removeItem("authSucursal");
-    navigate("/login")
+    Modal.confirm({
+      centered: true,
+      title: "Mensaje de Confirmación",
+      content: <p>¿Esta seguro de cerrar sesión?</p>,
+      okText: "Sí",
+      cancelText: "Cancelar",
+      cancelButtonProps: { type: "text" },
+      onOk: () => {
+        clearAuth();
+        localStorage.removeItem("authSucursal");
+        navigate("/login")
+      },
+      onCancel: () => { }
+    })
   }
 
   const handleSelectBrachOffice = (_, option) => {
@@ -61,89 +72,127 @@ const LayoutApp = ({children}) => {
   return (
     <Layout className="layout flex-col">
       <Header>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: "0",
-              label:  <Avatar
-                          style={{
-                            backgroundColor: "white",
-                            verticalAlign: 'middle',
-                          }}
-                          size="large"
-                          gap={1}
-                          
-                        >
-                          <span className='text-black font-medium'>
-                            {typeof(typeService) === "string" ? typeService[0].toUpperCase():""}{typeof(typeService) === "string" && typeService === "mesa"? numberTable: ""}
-                          </span>
-                        </Avatar>,
-              onClick: () => { dispatch(rxShowTypeService(true)) }
-            },
-            {
-              key: "1",
-              label: <Link to="/">Menu</Link>,
-            },
-            {
-              key: "2",
-              label: <Link to="/orders">Pedidos</Link>
-            },
-            {
-              key: "3",
-              label: <Link to="/dishes">Platos</Link>
-            },
-            {
-              key: "4",
-              label: <Link to="/sales">Ventas</Link>
-            },
-            {
-              key: "5",
-              label: <Link to="/users">Usuarios</Link>
-            },
-            {
-              key: "6",
-              label: <Link to="/branch-offices">Sucursales</Link>
-            },
-            {
-              key: "7",
-              label: "Cerrar sesión",
-              onClick: {handleLogout}
-            },
-            {
-              key: "8",
-              label: <div className='flex-col justify-center items-center'>
-                        {
-                          sRol === "mozo" || sRol === "administrador" && 
-                          <Badge size="small" count={listRequestWaiter?.length}>
-                            <Dropdown 
-                              overlay={
-                                <Menu
-                                  items={
-                                    listRequestWaiter.length > 0 
-                                    ? listRequestWaiter?.map((rw, index) => ({key: index, label: "Mesa " + rw.sNumberTable})) 
-                                    : [{key:"1", label: "No hay solicitudes"}]}
-                                />
-                              } 
-                              placement="bottom" 
-                              className='bg-primary'
-                            >
-                              <Button 
-                                className='bg-fondo' 
-                                type='ghost' 
-                                shape='circle' 
-                                icon={<BellOutlined className='text-primary'/>}
-                                loading={loadingListRequestWaiter}
-                              />
-                            </Dropdown>
-                          </Badge>
-                        }
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+          <Menu.Item key="1" onClick={() => { dispatch(rxShowTypeService(true)) }} >
+            <Avatar
+                style={{
+                  backgroundColor: "white",
+                  verticalAlign: 'middle',
+                }}
+                size="large"
+                gap={1}
+                
+              >
+                <span className='text-black font-medium'>
+                  {typeof(typeService) === "string" ? typeService[0].toUpperCase():""}{typeof(typeService) === "string" && typeService === "mesa"? numberTable: ""}
+                </span>
+              </Avatar>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/">Menu</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+          <Link to="/orders">
+            <div className='flex justify-start items-center'>
+              <ProfileOutlined className='mr-2' />
+              <p>Pedidos</p>
+            </div>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/dishes">
+              <div className='flex justify-start items-center'>
+                <BorderOutlined className='mr-2' />
+                <p>Platos</p>
+              </div>
+            </Link>
+          </Menu.Item>
+          <Menu.SubMenu 
+            key="5" 
+            title={
+              <div className='flex justify-start items-center'>
+                <BarChartOutlined className='mr-2'/>
+                <p>Reporte</p>
+              </div>
+            }>
+                <Menu.Item>
+                    <Link to="/sales">
+                      <div className='flex justify-start items-center'>
+                        <DollarCircleOutlined className='mr-2'/>
+                        <p>Ventas</p>
+                      </div>
+                    </Link>
+                </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.SubMenu
+            key="6" 
+            title={
+              <div className='flex justify-start items-center'>
+                <SettingOutlined className='mr-2'/>
+                <p>Configuración</p>
+              </div>
+            }>
+                <Menu.Item key="6.1" >
+                  <Link to="/types-products">
+                    <div className='flex justify-start items-center'>
+                      <TagsOutlined className='mr-2'/>
+                      <p>Tipos de producto</p>
                     </div>
-            }
-          ]}
-        />
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="6.2" >
+                  <Link to="/users">
+                    <div className='flex justify-start items-center'>
+                      <UserOutlined className='mr-2'/>
+                      <p>Usuarios</p>
+                    </div>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="6.3">
+                  <Link to="/branch-offices">
+                    <div className='flex justify-start items-center'>
+                      <ShopOutlined className='mr-2'/>
+                      <p>Sucursales</p>
+                    </div>
+                  </Link>
+                </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.Item key="7">
+            <div className='flex-col justify-center items-center'>
+              {
+                sRol === "mozo" || sRol === "administrador" && 
+                <Badge size="small" count={listRequestWaiter?.length}>
+                  <Dropdown 
+                    overlay={
+                      <Menu
+                        items={
+                          listRequestWaiter.length > 0 
+                          ? listRequestWaiter?.map((rw, index) => ({key: index, label: "Mesa " + rw.sNumberTable})) 
+                          : [{key:"1", label: "No hay solicitudes"}]}
+                      />
+                    } 
+                    placement="bottom" 
+                    className='bg-primary'
+                  >
+                    <Button 
+                      className='bg-fondo' 
+                      type='ghost' 
+                      shape='circle' 
+                      icon={<BellOutlined className='text-primary'/>}
+                      loading={loadingListRequestWaiter}
+                    />
+                  </Dropdown>
+                </Badge>
+              }
+            </div>
+          </Menu.Item>
+          <Menu.Item onClick={handleLogout}>
+            <div className='flex justify-center items-center'>
+              <PoweroffOutlined className='mr-2'/>
+              <p>Cerrar Sesión</p>
+            </div>
+          </Menu.Item>
+        </Menu>
       </Header>
       <Content
         style={{

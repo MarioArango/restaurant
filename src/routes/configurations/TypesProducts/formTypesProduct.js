@@ -1,21 +1,23 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SaveOutlined, ShopOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import { SaveOutlined, ShopOutlined, TagOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button } from 'antd';
-import { requiredField } from '../../util/config';
-import { rxRegisterBranchOffice, rxUpdateBranchOffice, rxShowFormBranchOff } from '../../appRedux/actions';
+import { requiredField } from '../../../util/config';
+import { rxRegisterTypeProduct, rxUpdateTypeProduct, rxShowFormTypeProduct } from '../../../appRedux/actions';
 
 const { Item } = Form;
 
-const FormBranchOffice = () => {
+const FormTypesProduct = () => {
     const {
-        showFormBranchOffice,
-        branchOfficeSelected,
-        loadingCreateBranchOff,
-        loadingUpdateBranchOff
-    } = useSelector(state => state.get("branchOffices"));
+        showFormTypeProduct,
+        typeProductSelected,
+        loadingCreateTypeProduct,
+        loadingUpdateTypeProduct
+    } = useSelector(state => state.get("typesProducts"));
 
-    const dispatch = useDispatch();
+  const { authSucursal } = useSelector(state => state.get("users"));
+
+  const dispatch = useDispatch();
 
   //TODO: METHODS INHERED FROM ANTD
   const [form] = Form.useForm();
@@ -24,57 +26,58 @@ const FormBranchOffice = () => {
   //TODO: REGISTER BRANCH OFFICE
   const handleSubmit = () => {
       validateFields().then((values) => {
-          const branchOffice = {
-            sBranchOffice: values.sBranchOffice
+          const typeProduct = {
+            sTypeProduct: values.sTypeProduct,
+            nIdBranchOffice: authSucursal.nIdBranchOffice
           }
-          if(branchOfficeSelected){
-            dispatch(rxUpdateBranchOffice(branchOfficeSelected.nIdBranchOffice, branchOffice, () => {
+          if(typeProductSelected){
+            dispatch(rxUpdateTypeProduct(typeProductSelected.nIdTypeProduct, typeProduct, () => {
                 resetFields()
             }))
           }else {
-            dispatch(rxRegisterBranchOffice(branchOffice, () => {
+            dispatch(rxRegisterTypeProduct(typeProduct, () => {
                 resetFields()
             }))
           }
       })
   }
-  //TODO: CLOSE FORM BRANCHOFFICE
+  //TODO: CLOSE FORM TYPE PRODUCT
   const handleCancel = () => {
-    dispatch(rxShowFormBranchOff(false))
+    dispatch(rxShowFormTypeProduct(false))
   }
 
   //TODO: ONLY EDIT
   useEffect(() => {
-    if(branchOfficeSelected && showFormBranchOffice){
+    if(typeProductSelected && showFormTypeProduct){
         setFieldsValue({
-            sBranchOffice: branchOfficeSelected.sBranchOffice
+            sTypeProduct: typeProductSelected.sTypeProduct
         })
     }
-  }, [branchOfficeSelected])
+  }, [typeProductSelected])
 
   return (
     <>
         {
-            showFormBranchOffice && (
+            showFormTypeProduct && (
             <Modal
-                    title={branchOfficeSelected? 
+                    title={typeProductSelected? 
                         <div className='flex justify-start'>
-                            <ShopOutlined className='mt-1 mr-2'/>
-                            <p>Editar Sucursal</p>
+                            <TagOutlined className='mt-1 mr-2'/>
+                            <p>Editar</p>
                         </div> : 
                         <div  className='flex justify-start'>
-                            <ShopOutlined className='mt-1 mr-2'/>
-                            <p>Registrar Sucursal</p>
+                            <TagOutlined className='mt-1 mr-2'/>
+                            <p>Registrar</p>
                         </div>
                     }
-                    visible={showFormBranchOffice}
+                    visible={showFormTypeProduct}
                     bodyStyle={{ padding: 10 }}
                     width="350px"
                     onCancel={handleCancel}
                     footer={null}
                     maskClosable={false}
                     destroyOnClose
-                    loading={loadingCreateBranchOff || loadingUpdateBranchOff}
+                    loading={loadingCreateTypeProduct || loadingUpdateTypeProduct}
                 >
                     <Form
                         name='form-branch-office'
@@ -85,7 +88,7 @@ const FormBranchOffice = () => {
                     >
                         <Row gutter={12}>
                             <Col span={24}>
-                                <Item label="Nombre" name="sBranchOffice" rules={requiredField}>
+                                <Item label="Tipo de producto" name="sTypeProduct" rules={requiredField}>
                                     <Input/>
                                 </Item>
                             </Col>
@@ -95,11 +98,11 @@ const FormBranchOffice = () => {
                                     type='primary' 
                                     className='bg-primary' 
                                     block
-                                    loading={loadingCreateBranchOff}
+                                    loading={loadingCreateTypeProduct}
                                 >
                                     <div className='flex justify-center'>
                                         <SaveOutlined className='mt-1 mr-2'/>
-                                        <p>{branchOfficeSelected? "Guardar cambios" : "Registrar"}</p>
+                                        <p>{typeProductSelected? "Guardar cambios" : "Registrar"}</p>
                                     </div>
                                 </Button>
                             </Col>
@@ -112,4 +115,4 @@ const FormBranchOffice = () => {
   )
 }
 
-export default FormBranchOffice;
+export default FormTypesProduct;

@@ -2,47 +2,49 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
 import { DeleteTwoTone, EditTwoTone, HomeOutlined, PlusOutlined } from '@ant-design/icons';
-import { cardProps, customScroll, tableProps } from '../../util/config';
-import FormBranchOffice from './formBranchOffice';
-import { useAuth } from '../../Hooks/auth';
-import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../appRedux/actions';
+import { cardProps, tableProps } from '../../../util/config';
+import FormTypesProduct from './formTypesProduct';
+import { useAuth } from '../../../Hooks/auth';
+import { rxDeleteTypeProduct, rxGetTypesProducts, rxShowFormTypeProduct, rxTypeProductSelected } from '../../../appRedux/actions';
 
-const BranchOffices = () => {
+const TypesProducts = () => {
   const { 
-    loadingListBranchOff,
-    listBranchOffices,
-    showFormBranchOffice,
-    branchOfficeSelected,
-    loadingDeleteBranchOff,
-    loadingCreateBranchOff,
-    loadingUpdateBranchOff
-  } = useSelector(state => state.get("branchOffices"));
+    loadingListTypesProducts,
+    listTypesProducts,
+    showFormTypeProduct,
+    typeProductSelected,
+    loadingDeleteTypeProduct,
+    loadingCreateTypeProduct,
+    loadingUpdateTypeProduct
+  } = useSelector(state => state.get("typesProducts"));
+
+  const { authSucursal } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
   const { sRol } = useAuth()
 
-  const handleViewFormBranchOffice = () => {
-    dispatch(rxBranchOffSelected(null))
-    dispatch(rxShowFormBranchOff(true))
+  const handleViewFormTypeProduct = () => {
+    dispatch(rxTypeProductSelected(null))
+    dispatch(rxShowFormTypeProduct(true))
   }
 
-  //TODO: EDIT BRANCHOFFICE
-  const handleEditBranchOffice = (branchOffice) => {
-    dispatch(rxBranchOffSelected(branchOffice))
-    dispatch(rxShowFormBranchOff(true))
+  //TODO: EDIT TYPE PRODUCT
+  const handleEditTypeProduct = (typeProduct) => {
+    dispatch(rxTypeProductSelected(typeProduct))
+    dispatch(rxShowFormTypeProduct(true))
   }
-  //TODO: DELETE BRANCHOFFICE
-  const handleDeleteBranchOffice = (branchOffice) => {
+  //TODO: DELETE TYPE PRODUCT
+  const handleDeleteTypeProduct = (typeProduct) => {
     Modal.confirm({
         centered: true,
         title: "Mensaje de Confirmación",
-        content: <p>¿Desea realmente eliminar la sucursal <strong>{branchOffice.sBranchOffice}</strong>?</p>,
+        content: <p>¿Desea realmente eliminar el tipo de producto <strong>{typeProduct.sTypeProduct}</strong>?</p>,
         okText: "Sí, eliminar",
         cancelText: "Cancelar",
         cancelButtonProps: { type: "text" },
         onOk: () => {
-            dispatch(rxDeleteBranchOffice(branchOffice.nIdBranchOffice))
+            dispatch(rxDeleteTypeProduct(typeProduct.nIdTypeProduct))
         },
         onCancel: () => { }
       })
@@ -57,12 +59,11 @@ const BranchOffices = () => {
         render: (_, __, index) => index + 1,
     },
     {
-        key: "sBranchOffice",
-        dataIndex: "sBranchOffice",
-        title: "Sucursal",
+        key: "sTypeProduct",
+        dataIndex: "sTypeProduct",
+        title: "Tipo de Producto",
         width: 200,
         align: "center",
-        render: (value) => value ? value : "-"
     },
     {
         key: "",
@@ -70,16 +71,16 @@ const BranchOffices = () => {
         title: "",
         width: 30,
         align: "center",
-        render: (_, branchOffice) => (
+        render: (_, typeProduct) => (
             <div className='flex justify-around'>
                 <Tooltip title="Editar">
-                    <Spin spinning={loadingUpdateBranchOff}>
-                        <EditTwoTone onClick={() => handleEditBranchOffice(branchOffice)} />
+                    <Spin spinning={loadingUpdateTypeProduct}>
+                        <EditTwoTone onClick={() => handleEditTypeProduct(typeProduct)} />
                     </Spin>
                 </Tooltip>
                 <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDeleteBranchOff}>
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteBranchOffice(branchOffice)} />
+                    <Spin spinning={loadingDeleteTypeProduct}>
+                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteTypeProduct(typeProduct)} />
                     </Spin>
                 </Tooltip>
             </div>
@@ -87,10 +88,12 @@ const BranchOffices = () => {
     }
   ]
   
-  //TODO: INIT - GET ALL BRANCHOFFICES
+  //TODO: INIT - GET ALL TYPES PRODUCTS
   useEffect(() => {
-    dispatch(rxGetBranchOffices());
-  }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
+    if(authSucursal){
+        dispatch(rxGetTypesProducts(authSucursal.nIdBranchOffice));
+    }
+  }, [authSucursal?.nIdBranchOffice, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
     <div className='h-screen'>  
@@ -102,18 +105,18 @@ const BranchOffices = () => {
                         title={
                             <div className='flex justify-start'>
                                 <HomeOutlined className='mt-1 mr-2'/> 
-                                <p>Lista de Sucursales</p>
+                                <p>Tipos de productos</p>
                             </div>
                         }
                         extra={
                             <Button
                                 type="primary"
                                 className='bg-primary'
-                                onClick={handleViewFormBranchOffice}
+                                onClick={handleViewFormTypeProduct}
                             >
                                 <div className='flex justify-between'>
                                     <PlusOutlined className='mt-1 mr-2'/>
-                                    <p>Agregar sucursal</p>
+                                    <p>Agregar</p>
                                 </div>
                             </Button>
                         }
@@ -122,25 +125,24 @@ const BranchOffices = () => {
                             {...tableProps}
                             bordered
                             columns={columns}
-                            loading={loadingListBranchOff}
-                            dataSource={listBranchOffices}
-                            rowKey={(branchOffice) => branchOffice.nIdBranchOffice}
-                            rowClassName={(branchOffice) => branchOffice?.nIdBranchOffice === branchOfficeSelected?.nIdBranchOffice ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                            // scroll={customScroll()}
+                            loading={loadingListTypesProducts}
+                            dataSource={listTypesProducts}
+                            rowKey={(typeProduct) => typeProduct.nIdTypeProduct}
+                            rowClassName={(typeProduct) => typeProduct?.nIdTypeProduct === typeProductSelected?.nIdTypeProduct ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                             scroll={{x: "80vw", y: "65vh"}}
-                            onRow={(branchOffice) => ({
+                            onRow={(typeProduct) => ({
                                 onClick: () => {
-                                    dispatch(rxBranchOffSelected(branchOffice))
+                                    dispatch(rxTypeProductSelected(typeProduct))
                                 },
                                 onDoubleClick: () => {
-                                    handleEditBranchOffice(branchOffice)
+                                    handleEditTypeProduct(typeProduct)
                                 }
                             })}
                         />
                     </Card>
                     { 
-                        showFormBranchOffice && 
-                        <FormBranchOffice />
+                        showFormTypeProduct && 
+                        <FormTypesProduct />
                     }
                 </>
             : <Result
@@ -153,4 +155,4 @@ const BranchOffices = () => {
   )
 }
 
-export default BranchOffices;
+export default TypesProducts;

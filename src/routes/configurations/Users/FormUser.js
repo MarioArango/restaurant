@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button, Select} from 'antd';
-import { requiredField } from '../../util/config';
-import { rxRegisterUser, rxUpdateUser, rxShowFormUser, rxGetBranchOffices } from '../../appRedux/actions';
+import { requiredField } from '../../../util/config';
+import { rxRegisterUser, rxUpdateUser, rxShowFormUser, rxGetBranchOffices } from '../../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;
