@@ -25,7 +25,11 @@ import {
     FETCH_REQUEST_WAITER_ERROR,
     FETCH_GET_REQUEST_WAITERS_START,
     FETCH_GET_REQUEST_WAITERS_SUCCESS,
-    FETCH_GET_REQUEST_WAITERS_ERROR
+    FETCH_GET_REQUEST_WAITERS_ERROR,
+    USER_SHOW_RATE,
+    FETCH_SEND_RATE_START,
+    FETCH_SEND_RATE_SUCCESS,
+    FETCH_SEND_RATE_ERROR
 } from "../types";
 
 
@@ -44,7 +48,9 @@ const initialState = {
     showTypesService: false,
     loadingRequestWaiter: false,
     loadingListRequestWaiter: false,
-    listRequestWaiter: []
+    listRequestWaiter: [],
+    showRate: false,
+    loadingSendRate: false
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -251,6 +257,36 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingListRequestWaiter: false
+            }
+        }
+
+        //TODO: SHOW RATE
+        case USER_SHOW_RATE: {
+            return {
+                ...state,
+                showRate: payload
+            }
+        }
+
+        //SEND RATE
+        case FETCH_SEND_RATE_START: {
+            return {
+                ...state,
+                loadingSendRate: true
+            }
+        }
+
+        case FETCH_SEND_RATE_SUCCESS: {
+            return {
+                ...state,
+                loadingSendRate: false
+            }
+        }
+
+        case FETCH_SEND_RATE_ERROR: {
+            return {
+                ...state,
+                loadingSendRate: false
             }
         }
 

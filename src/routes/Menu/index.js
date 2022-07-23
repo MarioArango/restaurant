@@ -1,12 +1,14 @@
 import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Result } from 'antd';
-import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined, UserOutlined, FileDoneOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { useAuth } from '../../Hooks/auth';
-import { currencyFE } from '../../util/config';
+import { currencyFE, dateFormatList } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import TypeService from './TypeService';
+import FormRate from './FormRate';
 import rowTop from '../../assets/flecha-hacia-arriba.png';
 import { 
     rxGetTypesProducts, 
@@ -15,7 +17,9 @@ import {
     rxFilterDishes, 
     rxGetDishesMenu, 
     rxAddRequestWaiter, 
-    rxShowTypeService 
+    rxShowTypeService,
+    rxShowRate,
+    rxUpdateOrder
 } from '../../appRedux/actions';
 
 const Menu = () => {
@@ -23,7 +27,7 @@ const Menu = () => {
   
   const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
 
-  const { loadingListDishesMenu, listDishesMenu } = useSelector(state => state.get("menu"));
+  const { loadingListDishesMenu, listDishesMenu, showRate } = useSelector(state => state.get("menu"));
 
   const { 
     authSucursal, 
@@ -132,7 +136,7 @@ const {
                   : listDishesMenu;
                   
     return list?.map((d, index)=> (
-        <Col xs={24} sm={12} md={6} lg={6} xl={6} key={index}>
+        <Col xs={24} sm={12} md={6} lg={6} xl={4} key={index}>
             <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-600 hover:px-[1px]">
                 <Badge count={quantityByDish(d)} color="blue" className='p-0'>
                     <div className="card">
@@ -163,6 +167,7 @@ const {
     ))
   }
 
+  //TODO: REQUEST WAITER
   const handleRequestWaiter = () => {
     if(typeService && numberTable && authSucursal){
         const requestWaiter = {
@@ -170,6 +175,21 @@ const {
             sNumberTable: numberTable
         }
         dispatch(rxAddRequestWaiter(requestWaiter))
+    }else {
+        message.info("Debe agregar el número de mesa.")
+        dispatch(rxShowTypeService(true))
+    }
+  }
+
+  //TODO: REQUEST PAYMENT
+  const handleRequestPayment = () => {
+    if(typeService && numberTable && authSucursal){
+        const updOrder = {
+            dRequestPayment: moment().format(dateFormatList[2]),
+            sState: "requestPayment"
+        }
+        dispatch(rxUpdateOrder(updOrder))
+        dispatch(rxShowRate(true))
     }else {
         message.info("Debe agregar el número de mesa.")
         dispatch(rxShowTypeService(true))
@@ -195,6 +215,17 @@ const {
             <>
                     <Spin spinning={loadingListDishesMenu} className="">
                     <div className='flex justify-between mt-2'>
+                        <>
+                            {
+                                (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
+                                <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
+                                    <div className='flex justify-center'>
+                                        <FileDoneOutlined className='mt-1 mr-2' />
+                                        <p>Pedir Cuenta</p>
+                                    </div>
+                                </Button>
+                            }
+                        </>
                         <>
                             {
                                 (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
@@ -251,6 +282,7 @@ const {
                     }
                     </Spin>
                     { showTypesService && <TypeService/> }
+                    { showRate && <FormRate/> }
             </>
             
             : <Result

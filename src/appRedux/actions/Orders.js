@@ -39,10 +39,7 @@ export const rxGenerateOrder = (order) => async dispatch => {
     try {
       const q = query(collection(db, 'orders'), 
         where("nIdBranchOffice", "==", nIdBranchOffice), 
-        where("sTypeService", "==", typeService), 
-        where("day", "==", moment().format("DD")),
-        where("month", "==", moment().format("MM")),
-        where("year", "==", moment().format("YYYY")),
+        where("sTypeService", "==", typeService)
         // orderBy("sState", "desc")
       );
       const unsub = onSnapshot(q, (querySnapshot) => {

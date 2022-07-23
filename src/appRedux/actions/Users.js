@@ -28,7 +28,11 @@ import {
   FETCH_REQUEST_WAITER_ERROR,
   FETCH_GET_REQUEST_WAITERS_START,
   FETCH_GET_REQUEST_WAITERS_SUCCESS,
-  FETCH_GET_REQUEST_WAITERS_ERROR
+  FETCH_GET_REQUEST_WAITERS_ERROR,
+  USER_SHOW_RATE,
+  FETCH_SEND_RATE_START,
+  FETCH_SEND_RATE_SUCCESS,
+  FETCH_SEND_RATE_ERROR
 } from '../types'
 
 export const rxRegisterUser = (user, cb = null) => async dispatch => {
@@ -128,6 +132,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
 
   export const rxShowTypeService = (payload) => ({type: USER_SHOW_TYPE_SERVICE, payload});
 
+
   /**
    * ---------------
    * REQUEST WAITERS
@@ -169,3 +174,26 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       message.error('Error del servidor.')
     }
   }
+
+  /**
+   * ----------
+   * SHOW RATE
+   * ----------
+   */
+
+   export const rxShowRate = (payload) => ({type: USER_SHOW_RATE, payload});
+   
+   export const rxSendRate = (rate, cb = null) => async dispatch => {
+    dispatch({type: FETCH_SEND_RATE_START})
+    try {
+      const docRef = await addDoc(collection(db, 'rates'), rate);
+      if(docRef){
+        dispatch({type: FETCH_SEND_RATE_SUCCESS})
+        message.success("Enviado")
+        cb && cb()
+      }
+    } catch (error) {
+    dispatch({type: FETCH_SEND_RATE_ERROR})
+      message.error('Error del servidor.')
+    }
+  } 

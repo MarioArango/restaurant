@@ -50,9 +50,6 @@ const OrderSummary = (props) => {
         
                 let orderToSend = {
                     dCreated: moment().format(dateFormatList[2]),
-                    day: moment().format("DD"),
-                    month: moment().format("MM"),
-                    year: moment().format("YYYY"),
                     sState: 'pending',
                     sTypeService: typeService,
                     nIdBranchOffice: authSucursal.nIdBranchOffice,

@@ -1,10 +1,11 @@
 import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import moment from 'moment';
 import currency from 'currency-formatter'
 import { CheckOutlined, ScheduleOutlined} from '@ant-design/icons';
-import { Table, Card, Tag, Tooltip, Spin, Button, Result, Progress } from 'antd';
-import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
+import { Table, Card, Tag, Button, Result, Steps, Collapse } from 'antd';
+import { cardProps, currencyFE, customScroll, dateFormatList, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
 import { 
     rxGetOrders, 
@@ -12,6 +13,9 @@ import {
     rxOrderSelected,
     rxOrderDishSelected
 } from '../../appRedux/actions';
+
+const { Panel } = Collapse;
+const { Step } = Steps;
 
 const Orders = () => {
   const { 
@@ -32,13 +36,8 @@ const Orders = () => {
   const handleChangeStateOrder = (order) => {
     if(order.sState === "pending"){
         const updOrder = {
-            sState: "process"
-        }
-        dispatch(rxUpdateOrder(order.nIdOrder, updOrder))
-    }
-    if(order.sState === "process"){
-        const updOrder = {
-            sState: "finished"
+            dDelivered: moment().format(dateFormatList[2]),
+            sState: "delivered"
         }
         dispatch(rxUpdateOrder(order.nIdOrder, updOrder))
     }
@@ -81,8 +80,9 @@ const Orders = () => {
         width: 60,
         align: "center",
         render: value => value === "pending"? <Tag color="gold">Pendiente</Tag> 
-                            :value === "process"? <Tag color="blue">En preparación</Tag> 
-                            :value === "finished"? <Tag color="success">Entregado</Tag> : ""
+                            :value === "delivered"? <Tag color="blue">Entregado</Tag> 
+                            :value === "requestPayment"? <Tag color="red">Cuenta solicitada</Tag> 
+                            :value === "finished"? <Tag color="success">Finalizado</Tag> : ""
     },
     {
         key: "dCreated",
@@ -173,55 +173,68 @@ const Orders = () => {
     <div className='h-screen'>
         {
             sRol === "chef" || sRol === "administrador" || sRol === "mozo"?
-            <Card
-            {...cardProps}
-            title={
-                <div className='flex justify-start'>
-                    <ScheduleOutlined className='mt-1 mr-2'/> 
-                    <p>Lista de Pedidos</p>
-                </div>}
-        >
-            {
-                listOrders && listOrders.length && 
-                <Table
-                    {...tableProps}
-                    bordered
-                    columns={columns}
-                    loading={loadingGetOrders || loadingUpdateStateOrders}
-                    dataSource={listOrders}
-                    rowKey={(order) => order.nIdOrder}
-                    rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                    scroll={{x: "80vw", y: "65vh"}}
-                    onRow={(order) => ({
-                        onClick: () => {
-                            dispatch(rxOrderSelected(order))
-                        }
-                    })}
-                    expandable={{
-                        columnWidth: 10,
-                        defaultExpandAllRows: true,
-                        expandRowByClick: true,
-                        expandedRowRender: (order) => (
-                            <Table
-                                {...tableProps}
-                                bordered
-                                columns={columnsDishes}
-                                dataSource={order.dishes}
-                                rowKey={(dish) => dish.nIdDish}
-                                rowClassName={(dish) => dish?.nIdDish === orderDishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                                // scroll={customScroll()}
-                                onRow={(dish) => ({
-                                    onClick: () => {
-                                        dispatch(rxOrderDishSelected(dish))
-                                    }
-                                })}
-                                footer={null}
-                            />
-                        )
-                    }}
-                />
-            }
-            </Card>
+            <>
+                <Collapse defaultActiveKey={['1']} className="my-3">
+                    <Panel key="1" header="Proceso del pedido">
+                        <Steps size='small' current={3}>
+                            <Step title={<strong>PENDIENTE</strong>} description="El cliente solicitó un pedido" icon={<Tag color="gold">1</Tag>}/>
+                            <Step title={<strong>ENTREGADO</strong>} description="Se entrego el pedido al cliente" icon={<Tag color="blue">2</Tag>}/>
+                            <Step title={<strong>CUENTA SOLICITADA</strong>} description="El cliente pidio la cuenta a pagar" icon={<Tag color="red">3</Tag>}/>
+                            <Step title={<strong>FINALIZADO</strong>} description="El cliente pago" icon={<Tag color="success">4</Tag>}/>
+                        </Steps>
+                    </Panel>
+                </Collapse>
+                <Card
+                    {...cardProps}
+                    title={
+                        <div className='flex justify-start'>
+                            <ScheduleOutlined className='mt-1 mr-2'/> 
+                            <p>Lista de Pedidos</p>
+                        </div>
+                    }
+                >
+                {
+                    listOrders && listOrders.length && 
+                    <Table
+                        {...tableProps}
+                        bordered
+                        columns={columns}
+                        loading={loadingGetOrders || loadingUpdateStateOrders}
+                        dataSource={listOrders}
+                        rowKey={(order) => order.nIdOrder}
+                        rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                        scroll={{x: "80vw", y: "65vh"}}
+                        onRow={(order) => ({
+                            onClick: () => {
+                                dispatch(rxOrderSelected(order))
+                            }
+                        })}
+                        expandable={{
+                            columnWidth: 10,
+                            defaultExpandAllRows: true,
+                            expandRowByClick: true,
+                            expandedRowRender: (order) => (
+                                <Table
+                                    {...tableProps}
+                                    bordered
+                                    columns={columnsDishes}
+                                    dataSource={order.dishes}
+                                    rowKey={(dish) => dish.nIdDish}
+                                    rowClassName={(dish) => dish?.nIdDish === orderDishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
+                                    // scroll={customScroll()}
+                                    onRow={(dish) => ({
+                                        onClick: () => {
+                                            dispatch(rxOrderDishSelected(dish))
+                                        }
+                                    })}
+                                    footer={null}
+                                />
+                            )
+                        }}
+                    />
+                }
+                </Card>
+            </>
             : <Result
                 status="403"
                 title="403"
