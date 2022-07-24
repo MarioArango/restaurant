@@ -193,7 +193,8 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         cb && cb()
       }
     } catch (error) {
-    dispatch({type: FETCH_SEND_RATE_ERROR})
+      console.log(error, "error")
+      dispatch({type: FETCH_SEND_RATE_ERROR})
       message.error('Error del servidor.')
     }
   } 

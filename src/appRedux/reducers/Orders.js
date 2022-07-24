@@ -12,7 +12,8 @@ import {
     ORDER_DISH_SELECTED,
     SHOW_ORDER_SUMMARY,
     ORDER_SUMMARY,
-    ORDER_SUMMARY_TOTAL
+    ORDER_SUMMARY_TOTAL,
+    CLEAR_ALL_ORDER_SUMMARY
 } from "../types";
 
 const initialState = {
@@ -140,6 +141,16 @@ const Orders = (state = initialState, { type, payload }) => {
                     ...state.orderSummaryTotal,
                     payload
                 ]
+            }
+        }
+
+        //TODO: CLEAR ALL ORDER SUMMARY
+        case CLEAR_ALL_ORDER_SUMMARY: {
+            localStorage.removeItem('orderSummaryTotal');
+            return {
+                ...state,
+                orderSummary: [],
+                orderSummaryTotal: []
             }
         }
 

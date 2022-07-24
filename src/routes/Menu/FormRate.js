@@ -13,10 +13,9 @@ const FormRate = () => {
       authSucursal, 
       typeService, 
       numberTable,
-      loadingSendRate
+      loadingSendRate,
+      showRate
   } = useSelector(state => state.get("users"));
-
-  const { showRate } = useSelector(state => state.get("menu"));
 
   const dispatch = useDispatch();
 
@@ -25,17 +24,23 @@ const FormRate = () => {
 
   const handleSaveRate = () => {
     validateFields().then((values) => {
-        console.log(values, "values")
-        const rate = {
+        let rate = {
             authSucursal, 
             typeService, 
-            numberTable,
             sCommentRate: values.sCommentRate,
-            nRate: values.nRate
+            nRate: values.nRate?? 3
         }
-        // dispatch(rxSendRate(rate, () => {
-        //     resetFields()
-        // }))
+        if(numberTable){
+            rate = {
+                ...rate,
+                numberTable
+            }
+        }
+        console.log(rate, "rate")
+        dispatch(rxSendRate(rate, () => {
+            resetFields();
+            dispatch(rxShowRate(false));
+        }))
     })
   }
 
@@ -64,23 +69,21 @@ const FormRate = () => {
             <Row gutter={12}>
                 <Col span={24}>
                     <Item name="sCommentRate">
-                        <TextArea rows={4} maxLength={100}/>
+                        <TextArea rows={2} maxLength={100}/>
                     </Item>
                 </Col>
                 <Col span={24}>
                     <Item name="nRate">
-                        <Rate allowHalf/>
+                        <Rate allowHalf defaultValue={3}/>
                     </Item>
                 </Col>
                 <Col span={24}>
-                    <Item name="nRate">
-                        <Button htmlType='submit' type='primary' className='bg-primary' block>
-                            <div className='flex justify-center'>
-                                <SendOutlined className='mt-1 mr-2'/>
-                                <p>Enviar</p>
-                            </div>
-                        </Button>
-                    </Item>
+                    <Button htmlType='submit' type='primary' className='bg-primary' block>
+                        <div className='flex justify-center'>
+                            <SendOutlined className='mt-1 mr-2'/>
+                            <p>Enviar</p>
+                        </div>
+                    </Button>
                 </Col>
             </Row>
         </Form>

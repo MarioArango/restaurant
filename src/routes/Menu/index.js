@@ -20,7 +20,8 @@ import {
     rxShowTypeService,
     rxShowRate,
     rxUpdateOrder,
-    rxOrderSummaryTotal
+    rxOrderSummaryTotal,
+    rxClearAllOrderSummary
 } from '../../appRedux/actions';
 
 const Menu = () => {
@@ -194,15 +195,16 @@ const {
             }
             dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
         })
-        localStorage.removeItem('orderSummaryTotal')
-        dispatch(rxOrderSummary([]));
-        dispatch(rxOrderSummaryTotal([]));
+        dispatch(rxClearAllOrderSummary());
         dispatch(rxShowRate(true));
     }else {
         message.info("Debe agregar el número de mesa.")
         dispatch(rxShowTypeService(true))
     }
   }
+  console.log(orderSummary, "orderSummary")
+  console.log(orderSummaryTotal, "orderSummaryTotal")
+  console.log(showRate, "showRate")
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
@@ -225,7 +227,9 @@ const {
                     <div className='flex justify-between mt-2'>
                         <>
                             {
-                                (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
+                                (sRol === "cliente" || sRol === "administrador") 
+                                    && (typeService === "mesa") 
+                                    && orderSummaryTotal?.length > 0 &&
                                 <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
                                     <div className='flex justify-center'>
                                         <FileDoneOutlined className='mt-1 mr-2' />
@@ -253,7 +257,16 @@ const {
                                 disabled={!typeService}
                             >
                                 <div className='flex justify-between'>
-                                <ShoppingOutlined className='mt-1 mr-2'/> <p>Generar Pedido</p>
+                                    <ShoppingOutlined className='mt-1 mr-2'/> 
+                                    <p>
+                                        {
+                                            (orderSummary?.length === 0 && orderSummaryTotal?.length > 0)
+                                            ? "Ver resumen de pedido"
+                                            : orderSummary?.length > 0 
+                                                ?"Generar Pedido" 
+                                                : "Generar Pedido"
+                                        }
+                                    </p>
                                 </div>
                             </Button>
                         </Affix>
@@ -289,8 +302,12 @@ const {
                         />
                     }
                     </Spin>
-                    { showTypesService && <TypeService/> }
-                    { showRate && <FormRate/> }
+                    <>
+                        { showTypesService && <TypeService/> }
+                    </>
+                    <>
+                        <FormRate/>
+                    </>
             </>
             
             : <Result

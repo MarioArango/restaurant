@@ -26,7 +26,8 @@ const Orders = () => {
       loadingUpdateStateOrders
   } = useSelector(state => state.get("orders"))
 
-  const { authSucursal, typeService } = useSelector(state => state.get("users"));
+  const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
+
 
   const dispatch = useDispatch()
 
@@ -43,8 +44,21 @@ const Orders = () => {
     }
   }
 
-  const handleFinishedOrder = () => {
-
+  const handleFinishedOrder = (orderS) => {
+    if(typeService && numberTable && authSucursal){
+        const orderToUpd = []
+        listOrders.forEach(o => {
+            if( o.nNumberTable === orderS.nNumberTable){
+                orderToUpd.push(o)
+            }
+        })
+        orderToUpd.forEach(os => {
+            const updOrder = {
+                sState: "finished"
+            }
+            dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
+        })
+    }
   }
 
   //TODO: COLUMNS TABLE
@@ -61,7 +75,7 @@ const Orders = () => {
         dataIndex: "sTypeService",
         title: "Tipo de servicio",
         width: 20,
-        align: "center"
+        align: "center",
     },
     {
         key: "nNumberTable",
@@ -69,13 +83,6 @@ const Orders = () => {
         title: "Número de mesa",
         width: 20,
         align: "center"
-    },
-    {
-        key: "index",
-        title: "#",
-        width: 20,
-        align: "center",
-        render: (_, __, index) => index + 1,
     },
     {
         key: "sState",
@@ -106,7 +113,7 @@ const Orders = () => {
                 {
                     (sRol === "administrador" || sRol === "mozo") &&
                     <Button 
-                        disabled={order.sState === "finished"}
+                        disabled={order.sState !== "pending"}
                         type='primary'
                         className='bg-primary'
                         onClick={() => handleChangeStateOrder(order)}
@@ -179,6 +186,8 @@ const Orders = () => {
     // eslint-disable-next-line
   }, [authSucursal?.nIdBranchOffice, typeService])
 
+  console.log(listOrders, "listOrders")
+
   return (
     <div className='h-screen'>
         {
@@ -205,12 +214,17 @@ const Orders = () => {
                     //Finalizar selcciona todas las mesas iguales y que todas esten con el estado pedir cuenta
                     //click y todas las ordenes de esa mesa las actualiza a finalizado
                     extra={
-                        <Button type='primary' className='bg-primary' onClick={handleFinishedOrder}>
-                            <div className='flex justify-center'>
-                                <FileDoneOutlined className='mt-1 mr-2' />
-                                <p>Finalizar</p>
-                            </div>
-                        </Button>
+                        <>
+                            {
+                                orderSelected?.sState === "requestPayment" &&
+                                <Button type='primary' className='bg-primary' onClick={() => handleFinishedOrder(orderSelected)}>
+                                    <div className='flex justify-center'>
+                                        <FileDoneOutlined className='mt-1 mr-2' />
+                                        <p>Finalizar { orderSelected?.sTypeService} {orderSelected?.nNumberTable}</p>
+                                    </div>
+                                </Button>
+                            }
+                        </>
                     }
                 >
                 {

@@ -16,7 +16,8 @@ import {
   ORDER_DISH_SELECTED,
   SHOW_ORDER_SUMMARY,
   ORDER_SUMMARY,
-  ORDER_SUMMARY_TOTAL
+  ORDER_SUMMARY_TOTAL,
+  CLEAR_ALL_ORDER_SUMMARY
 } from '../types'
 
 export const rxGenerateOrder = (order, cb = null) => async dispatch => {
@@ -40,7 +41,8 @@ export const rxGenerateOrder = (order, cb = null) => async dispatch => {
     try {
       const q = query(collection(db, 'orders'), 
         where("nIdBranchOffice", "==", nIdBranchOffice), 
-        where("sTypeService", "==", typeService)
+        where("sTypeService", "==", typeService),
+        where("sState", "in", ["pending", "delivered", "requestPayment"]),
         // orderBy("sState", "desc")
       );
       const unsub = onSnapshot(q, (querySnapshot) => {
@@ -80,3 +82,5 @@ export const rxGenerateOrder = (order, cb = null) => async dispatch => {
   export const rxOrderSummary = (payload) =>({type: ORDER_SUMMARY, payload})
 
   export const rxOrderSummaryTotal = (payload) =>({type: ORDER_SUMMARY_TOTAL, payload})
+
+  export const rxClearAllOrderSummary = () =>({type: CLEAR_ALL_ORDER_SUMMARY})

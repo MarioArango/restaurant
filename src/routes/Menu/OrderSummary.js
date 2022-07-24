@@ -144,36 +144,41 @@ const OrderSummary = (props) => {
       >
         <Row gutter={12}>
             <Col span={24}>
-                <p className='font-bold text-base'>Consumido</p>
-               {
-                    orderSummaryTotal.map((os, index) => {
-                        return <List
-                                    key={index}   
-                                    loading={false}
-                                    itemLayout="horizontal"
-                                    dataSource={os.dishes}
-                                    renderItem={(dish, index) => (
-                                        <List.Item key={index} className="bg-blue-100">
-                                            <Skeleton avatar title={false} loading={false} active>
-                                                <List.Item.Meta
-                                                    avatar={<Avatar src={dish.sPhoto} size="large" />}
-                                                    title={<strong>{dish.sName}</strong>}
-                                                    description={dish.nQuantityTotal + "und."}
-                                                />
-                                                <div className='pr-1'>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDishTotal(dish), currencyFE) : '0.00'}</div>
-                                            </Skeleton>
-                                        </List.Item>
-                                    )}
-                                />
-                    })
-               }
-               {
-                <div className='flex justify-end px-2 mb-3'>
-                    <div className='font-bold text-base'>S/. {calculatePriceTotalOrderTotal() ? currency.format(Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}</div>
-                </div>
-               }
-               <Divider/>
-               <p className='font-bold text-base'>Nuevo pedido</p>
+                {
+                    orderSummaryTotal?.length > 0 &&
+                    <>
+                        <p className='font-bold text-base'>Consumido</p>
+                        {
+                            orderSummaryTotal.map((os, index) => {
+                            return <List
+                                        key={index}   
+                                        loading={false}
+                                        itemLayout="horizontal"
+                                        dataSource={os.dishes}
+                                        renderItem={(dish, index) => (
+                                            <List.Item key={index} className="bg-blue-100">
+                                                <Skeleton avatar title={false} loading={false} active>
+                                                    <List.Item.Meta
+                                                        avatar={<Avatar src={dish.sPhoto} size="large" />}
+                                                        title={<strong>{dish.sName}</strong>}
+                                                        description={dish.nQuantityTotal + "und."}
+                                                    />
+                                                    <div className='pr-1'>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDishTotal(dish), currencyFE) : '0.00'}</div>
+                                                </Skeleton>
+                                            </List.Item>
+                                        )}
+                                    />
+                            })
+                        }
+                        {
+                        <div className='flex justify-end px-2 mb-3'>
+                            <div className='font-bold text-base'>S/. {calculatePriceTotalOrderTotal() ? currency.format(Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}</div>
+                        </div>
+                        }
+                        <Divider/>
+                        <p className='font-bold text-base'>Nuevo pedido</p>
+                    </>
+                }
                 <List
                     loading={false}
                     itemLayout="horizontal"
