@@ -9,7 +9,8 @@ import { currencyFE, dateFormatList } from '../../util/config'
 import { 
     rxGenerateOrder,
     rxShowOrderSummary,
-    rxOrderSummary
+    rxOrderSummary,
+    rxOrderSummaryTotal
  } from '../../appRedux/actions';
 
 const OrderSummary = (props) => {
@@ -22,7 +23,8 @@ const OrderSummary = (props) => {
   const {
     showOrderSummary,
     orderSummary,
-    loadingGenerateOrder
+    loadingGenerateOrder,
+    orderSummaryTotal
   } = useSelector(state => state.get("orders"))
 
   const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
@@ -61,7 +63,15 @@ const OrderSummary = (props) => {
                         nNumberTable: parseInt(numberTable)
                     }
                 }
-                dispatch(rxGenerateOrder(orderToSend))
+                dispatch(rxGenerateOrder(orderToSend, (nIdOrder) => {
+                    const orderAddDb = {
+                        nIdOrder,
+                        ...orderToSend,
+                    }
+                    const orderSummaryTotal = JSON.parse(localStorage.getItem('orderSummaryTotal'))?? [];
+                    localStorage.setItem('orderSummaryTotal', JSON.stringify([...orderSummaryTotal, orderAddDb]));
+                    dispatch(rxOrderSummaryTotal(orderAddDb))
+                }))
             },
             onCancel: () => { }
         })
@@ -122,51 +132,74 @@ const OrderSummary = (props) => {
       >
         <Row gutter={12}>
             <Col span={24}>
+                {
+                    orderSummaryTotal.map(ost => (
+                        ost.map(os => (
+                            <List
+                                loading={false}
+                                itemLayout="horizontal"
+                                dataSource={os}
+                                renderItem={(dish, index) => (
+                                    <List.Item key={index} className="bg-slate-400">
+                                        <Skeleton avatar title={false} loading={false} active>
+                                            <List.Item.Meta
+                                                avatar={<Avatar src={dish.sPhoto} size="large" />}
+                                                title={<strong>{dish.sName}</strong>}
+                                                description={quantityByDish(dish) + "und."}
+                                            />
+                                            <div>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDish(dish), currencyFE) : '0.00'}</div>
+                                        </Skeleton>
+                                    </List.Item>
+                                )}
+                            />
+                        ))
+                    ))
+                }
                 <List
                     loading={false}
                     itemLayout="horizontal"
                     dataSource={orderSummary}
                     renderItem={(dish, index) => (
-                        <List.Item key={index}>
-                            <Skeleton avatar title={false} loading={false} active>
-                                <List.Item.Meta
-                                    avatar={<Avatar src={dish.sPhoto} size="large" />}
-                                    title={<strong>{dish.sName}</strong>}
-                                    description={quantityByDish(dish) + "und."}
+                    <List.Item key={index}>
+                        <Skeleton avatar title={false} loading={false} active>
+                            <List.Item.Meta
+                                avatar={<Avatar src={dish.sPhoto} size="large" />}
+                                title={<strong>{dish.sName}</strong>}
+                                description={quantityByDish(dish) + "und."}
+                            />
+                            <div>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDish(dish), currencyFE) : '0.00'}</div>
+                            <div className='flex justify-between'>
+                                <Button 
+                                    className='mx-2'
+                                    shape="circle" 
+                                    icon={<MinusOutlined/>} 
+                                    onClick={() => handleDelQtyDish(dish)} 
+                                    key="del"
                                 />
-                                <div>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDish(dish), currencyFE) : '0.00'}</div>
-                                <div className='flex justify-between'>
+                                <Button 
+                                    type="primary"
+                                    className='bg-primary mr-2'
+                                    shape="circle" 
+                                    icon={<PlusOutlined/>} 
+                                    onClick={() => handleAddQtyDish(dish)} 
+                                    key="add"
+                                />
+                                <Popconfirm 
+                                    placement="left" 
+                                    title='¿Eliminar plato?' 
+                                    onConfirm={() => handleDelTotalQtyDish(dish)} 
+                                    okText="Sí"
+                                    cancelText="No"
+                                >
                                     <Button 
-                                        className='mx-2'
                                         shape="circle" 
-                                        icon={<MinusOutlined/>} 
-                                        onClick={() => handleDelQtyDish(dish)} 
-                                        key="del"
+                                        icon={ <DeleteTwoTone twoToneColor="#ed4956"/>}
+                                        key="del-total"
                                     />
-                                    <Button 
-                                        type="primary"
-                                        className='bg-primary mr-2'
-                                        shape="circle" 
-                                        icon={<PlusOutlined/>} 
-                                        onClick={() => handleAddQtyDish(dish)} 
-                                        key="add"
-                                    />
-                                    <Popconfirm 
-                                        placement="left" 
-                                        title='¿Eliminar plato?' 
-                                        onConfirm={() => handleDelTotalQtyDish(dish)} 
-                                        okText="Sí"
-                                        cancelText="No"
-                                    >
-                                        <Button 
-                                            shape="circle" 
-                                            icon={ <DeleteTwoTone twoToneColor="#ed4956"/>}
-                                            key="del-total"
-                                        />
-                                    </Popconfirm>
-                                </div>
-                            </Skeleton>
-                        </List.Item>
+                                </Popconfirm>
+                            </div>
+                        </Skeleton>
+                    </List.Item>
                     )}
                 />
             </Col>

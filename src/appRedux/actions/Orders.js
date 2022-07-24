@@ -15,17 +15,18 @@ import {
   ORDER_SELECTED,
   ORDER_DISH_SELECTED,
   SHOW_ORDER_SUMMARY,
-  ORDER_SUMMARY
+  ORDER_SUMMARY,
+  ORDER_SUMMARY_TOTAL
 } from '../types'
-import { dateFormatList } from '../../util/config';
 
-export const rxGenerateOrder = (order) => async dispatch => {
+export const rxGenerateOrder = (order, cb = null) => async dispatch => {
   dispatch({type: FETCH_GENERATE_ORDER_START})
   try {
       const docRef = await addDoc(collection(db, 'orders'), order)
       if(docRef){
         message.success("Orden generada.")
         dispatch({type: FETCH_GENERATE_ORDER_SUCCESS})
+        cb && cb(docRef.id)
       }
     } catch (error) {
       dispatch({type: FETCH_GENERATE_ORDER_ERROR})
@@ -77,3 +78,5 @@ export const rxGenerateOrder = (order) => async dispatch => {
   export const rxShowOrderSummary = (payload) => ({type: SHOW_ORDER_SUMMARY, payload})
 
   export const rxOrderSummary = (payload) =>({type: ORDER_SUMMARY, payload})
+
+  export const rxOrderSummaryTotal = (payload) =>({type: ORDER_SUMMARY_TOTAL, payload})

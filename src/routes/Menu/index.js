@@ -25,7 +25,7 @@ import {
 const Menu = () => {
   const { listDishesComidas, listDishesBebidas } = useSelector(state => state.get("dishes"));
   
-  const { showOrderSummary, orderSummary } = useSelector(state => state.get("orders"));
+  const { showOrderSummary, orderSummary, orderSummaryTotal } = useSelector(state => state.get("orders"));
 
   const { loadingListDishesMenu, listDishesMenu, showRate } = useSelector(state => state.get("menu"));
 
@@ -184,12 +184,14 @@ const {
   //TODO: REQUEST PAYMENT
   const handleRequestPayment = () => {
     if(typeService && numberTable && authSucursal){
-        const updOrder = {
-            dRequestPayment: moment().format(dateFormatList[2]),
-            sState: "requestPayment"
-        }
-        dispatch(rxUpdateOrder(updOrder))
-        dispatch(rxShowRate(true))
+        orderSummaryTotal.forEach(os => {
+            const updOrder = {
+                dRequestPayment: moment().format(dateFormatList[2]),
+                sState: "requestPayment"
+            }
+            dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
+        })
+        dispatch(rxShowRate(true));
     }else {
         message.info("Debe agregar el número de mesa.")
         dispatch(rxShowTypeService(true))

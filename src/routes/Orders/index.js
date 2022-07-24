@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import currency from 'currency-formatter'
-import { CheckOutlined, ScheduleOutlined} from '@ant-design/icons';
+import { CheckOutlined, FileDoneOutlined, ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Button, Result, Steps, Collapse } from 'antd';
 import { cardProps, currencyFE, customScroll, dateFormatList, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
@@ -41,6 +41,10 @@ const Orders = () => {
         }
         dispatch(rxUpdateOrder(order.nIdOrder, updOrder))
     }
+  }
+
+  const handleFinishedOrder = () => {
+
   }
 
   //TODO: COLUMNS TABLE
@@ -98,17 +102,23 @@ const Orders = () => {
         width: 50,
         align: "center",
         render: (_, order) => (
-                <Button 
-                    disabled={order.sState === "finished"}
-                    type='primary'
-                    className='bg-primary'
-                    onClick={() => handleChangeStateOrder(order)}
-                >
-                    <div className='flex justify-center'>
-                        <CheckOutlined className='mt-1 mr-2'/> 
-                        <p>Atender</p>
-                    </div>
-                </Button>
+            <>
+                {
+                    (sRol === "administrador" || sRol === "mozo") &&
+                    <Button 
+                        disabled={order.sState === "finished"}
+                        type='primary'
+                        className='bg-primary'
+                        onClick={() => handleChangeStateOrder(order)}
+                    >
+                        <div className='flex justify-center'>
+                            <CheckOutlined className='mt-1 mr-2'/> 
+                            <p>Atender</p>
+                        </div>
+                    </Button>
+                }
+            </>
+                
         )
     }
   ]
@@ -191,6 +201,16 @@ const Orders = () => {
                             <ScheduleOutlined className='mt-1 mr-2'/> 
                             <p>Lista de Pedidos</p>
                         </div>
+                    }
+                    //Finalizar selcciona todas las mesas iguales y que todas esten con el estado pedir cuenta
+                    //click y todas las ordenes de esa mesa las actualiza a finalizado
+                    extra={
+                        <Button type='primary' className='bg-primary' onClick={handleFinishedOrder}>
+                            <div className='flex justify-center'>
+                                <FileDoneOutlined className='mt-1 mr-2' />
+                                <p>Finalizar</p>
+                            </div>
+                        </Button>
                     }
                 >
                 {

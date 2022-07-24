@@ -11,7 +11,8 @@ import {
     ORDER_SELECTED,
     ORDER_DISH_SELECTED,
     SHOW_ORDER_SUMMARY,
-    ORDER_SUMMARY
+    ORDER_SUMMARY,
+    ORDER_SUMMARY_TOTAL
 } from "../types";
 
 const initialState = {
@@ -22,7 +23,8 @@ const initialState = {
     orderDishSelected: null,
     loadingUpdateStateOrders: false,
     showOrderSummary: false,
-    orderSummary: []
+    orderSummary: [],
+    orderSummaryTotal: JSON.parse(localStorage.getItem('orderSummaryTotal')??'[]')
 };
 
 const Orders = (state = initialState, { type, payload }) => {
@@ -127,6 +129,17 @@ const Orders = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 orderSummary: payload
+            }
+        }
+
+        //TODO: ORDER SUMMARY TOTAL
+        case ORDER_SUMMARY_TOTAL: {
+            return {
+                ...state,
+                orderSummaryTotal: [
+                    ...state.orderSummaryTotal,
+                    payload
+                ]
             }
         }
 
