@@ -93,10 +93,24 @@ const OrderSummary = (props) => {
     return Number(dish.nPrice)*Number(dish.nQuantity)
    } 
 
+   const calculatePriceTotalByDishTotal = (dish) => {
+    return Number(dish.nPrice)*Number(dish.nQuantityTotal)
+   } 
+
    const calculatePriceTotalOrder = () => {
     let priceTotal = 0;
     orderSummary.forEach(o => {
         priceTotal += Number(o.nPrice)*Number(o.nQuantity)
+    })
+    return priceTotal
+   }
+
+   const calculatePriceTotalOrderTotal = () => {
+    let priceTotal = 0;
+    orderSummaryTotal.forEach(os => {
+        os.dishes?.forEach(d => {
+            priceTotal += Number(d.nPriceTotal)
+        })
     })
     return priceTotal
    }
@@ -113,18 +127,16 @@ const OrderSummary = (props) => {
             <div>
                 <div className='flex justify-between px-2 mb-3'>
                     <div className='font-bold text-xl'>TOTAL:</div>
-                    <div className='font-bold text-xl'>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</div>
+                    <div className='font-bold text-xl'>
+                        S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()) + Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}
+                    </div>
                 </div>
                 <Col span={24}>
-                    <Button
-                        type="primary" 
-                        icon={<SendOutlined />}
-                        loading={loadingGenerateOrder}
-                        className="bg-primary"
-                        block
-                        onClick={handleSendOrder}
-                    >
-                        Enviar
+                    <Button type="primary" loading={loadingGenerateOrder} className="bg-primary" block onClick={handleSendOrder}>
+                        <div className='flex justify-center'>
+                            <SendOutlined className='mt-1 mr-2'/>
+                            <p>Enviar</p>
+                        </div>
                     </Button>
                 </Col>
             </div>
@@ -132,29 +144,36 @@ const OrderSummary = (props) => {
       >
         <Row gutter={12}>
             <Col span={24}>
-                {
-                    orderSummaryTotal.map(ost => (
-                        ost.map(os => (
-                            <List
-                                loading={false}
-                                itemLayout="horizontal"
-                                dataSource={os}
-                                renderItem={(dish, index) => (
-                                    <List.Item key={index} className="bg-slate-400">
-                                        <Skeleton avatar title={false} loading={false} active>
-                                            <List.Item.Meta
-                                                avatar={<Avatar src={dish.sPhoto} size="large" />}
-                                                title={<strong>{dish.sName}</strong>}
-                                                description={quantityByDish(dish) + "und."}
-                                            />
-                                            <div>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDish(dish), currencyFE) : '0.00'}</div>
-                                        </Skeleton>
-                                    </List.Item>
-                                )}
-                            />
-                        ))
-                    ))
-                }
+                <p className='font-bold text-base'>Consumido</p>
+               {
+                    orderSummaryTotal.map((os, index) => {
+                        return <List
+                                    key={index}   
+                                    loading={false}
+                                    itemLayout="horizontal"
+                                    dataSource={os.dishes}
+                                    renderItem={(dish, index) => (
+                                        <List.Item key={index} className="bg-blue-100">
+                                            <Skeleton avatar title={false} loading={false} active>
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={dish.sPhoto} size="large" />}
+                                                    title={<strong>{dish.sName}</strong>}
+                                                    description={dish.nQuantityTotal + "und."}
+                                                />
+                                                <div className='pr-1'>S/. {dish.nPrice ? currency.format(calculatePriceTotalByDishTotal(dish), currencyFE) : '0.00'}</div>
+                                            </Skeleton>
+                                        </List.Item>
+                                    )}
+                                />
+                    })
+               }
+               {
+                <div className='flex justify-end px-2 mb-3'>
+                    <div className='font-bold text-base'>S/. {calculatePriceTotalOrderTotal() ? currency.format(Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}</div>
+                </div>
+               }
+               <Divider/>
+               <p className='font-bold text-base'>Nuevo pedido</p>
                 <List
                     loading={false}
                     itemLayout="horizontal"
@@ -202,6 +221,9 @@ const OrderSummary = (props) => {
                     </List.Item>
                     )}
                 />
+                <div className='flex justify-end px-2 mb-3'>
+                    <div className='font-bold text-base'>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</div>
+                </div>
             </Col>
             <Divider/>
         </Row>

@@ -19,15 +19,18 @@ import {
     rxAddRequestWaiter, 
     rxShowTypeService,
     rxShowRate,
-    rxUpdateOrder
+    rxUpdateOrder,
+    rxOrderSummaryTotal
 } from '../../appRedux/actions';
 
 const Menu = () => {
   const { listDishesComidas, listDishesBebidas } = useSelector(state => state.get("dishes"));
+
+  const { showRate } = useSelector(state => state.get("users"));
   
   const { showOrderSummary, orderSummary, orderSummaryTotal } = useSelector(state => state.get("orders"));
 
-  const { loadingListDishesMenu, listDishesMenu, showRate } = useSelector(state => state.get("menu"));
+  const { loadingListDishesMenu, listDishesMenu } = useSelector(state => state.get("menu"));
 
   const { 
     authSucursal, 
@@ -191,6 +194,9 @@ const {
             }
             dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
         })
+        localStorage.removeItem('orderSummaryTotal')
+        dispatch(rxOrderSummary([]));
+        dispatch(rxOrderSummaryTotal([]));
         dispatch(rxShowRate(true));
     }else {
         message.info("Debe agregar el número de mesa.")
@@ -254,8 +260,8 @@ const {
                     </div>
                     <div className='flex justify-around mb-2'>
                         {
-                            listTypesProducts.map(tp => (
-                                <Button type='dashed' onClick={() => handleFilterByTypeProduct(tp.nIdTypeProduct)} loading={loadingListTypesProducts}>
+                            listTypesProducts.map((tp, index) => (
+                                <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct(tp.nIdTypeProduct)} loading={loadingListTypesProducts}>
                                     <div className='flex justify-center'>
                                         <FilterOutlined className='mt-1 mr-2'/>
                                         {tp.sTypeProduct}
