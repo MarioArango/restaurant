@@ -186,8 +186,6 @@ const Orders = () => {
     // eslint-disable-next-line
   }, [authSucursal?.nIdBranchOffice, typeService])
 
-  console.log(listOrders, "listOrders")
-
   return (
     <div className='h-screen'>
         {
@@ -211,11 +209,10 @@ const Orders = () => {
                             <p>Lista de Pedidos</p>
                         </div>
                     }
-                    //Finalizar selcciona todas las mesas iguales y que todas esten con el estado pedir cuenta
-                    //click y todas las ordenes de esa mesa las actualiza a finalizado
                     extra={
                         <>
                             {
+                                typeService === "mesa" &&
                                 orderSelected?.sState === "requestPayment" &&
                                 <Button type='primary' className='bg-primary' onClick={() => handleFinishedOrder(orderSelected)}>
                                     <div className='flex justify-center'>

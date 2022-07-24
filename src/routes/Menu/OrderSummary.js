@@ -115,6 +115,13 @@ const OrderSummary = (props) => {
     return priceTotal
    }
 
+   const calculateTotalWidthNewOrder = () => {
+    const totalNewOrder = calculatePriceTotalOrder()?? 0;
+    const totalOrderConsumida = calculatePriceTotalOrderTotal()?? 0
+
+    return "S/." + (currency.format(Number(totalNewOrder) + Number(totalOrderConsumida), currencyFE)?? "0.00")
+   }
+
    return (
     <Drawer
         title="Resumen de Pedido"
@@ -128,7 +135,7 @@ const OrderSummary = (props) => {
                 <div className='flex justify-between px-2 mb-3'>
                     <div className='font-bold text-xl'>TOTAL:</div>
                     <div className='font-bold text-xl'>
-                        S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()) + Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}
+                        {calculateTotalWidthNewOrder()}
                     </div>
                 </div>
                 <Col span={24}>
@@ -175,12 +182,16 @@ const OrderSummary = (props) => {
                             <div className='font-bold text-base'>S/. {calculatePriceTotalOrderTotal() ? currency.format(Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}</div>
                         </div>
                         }
-                        <Divider/>
-                        <p className='font-bold text-base'>Nuevo pedido</p>
+                       
                     </>
                 }
-                <List
-                    loading={false}
+                {
+                    orderSummary?.length > 0 &&
+                    <>
+                        <Divider/>
+                        <p className='font-bold text-base'>Nuevo pedido</p>
+                        <List
+                            loading={false}
                     itemLayout="horizontal"
                     dataSource={orderSummary}
                     renderItem={(dish, index) => (
@@ -224,11 +235,14 @@ const OrderSummary = (props) => {
                             </div>
                         </Skeleton>
                     </List.Item>
-                    )}
-                />
-                <div className='flex justify-end px-2 mb-3'>
-                    <div className='font-bold text-base'>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</div>
-                </div>
+                            )}
+                        />
+                        <div className='flex justify-end px-2 mb-3'>
+                            <div className='font-bold text-base'>S/. {calculatePriceTotalOrder() ? currency.format(Number(calculatePriceTotalOrder()), currencyFE) : '0.00'}</div>
+                        </div>
+                    </>
+                }
+                
             </Col>
             <Divider/>
         </Row>

@@ -55,14 +55,14 @@ const {
 
   //TODO: SHOW ORDER SUMMARY
   const handleGenerateOrder = () => {
-    if(orderSummary.length){
+    if(orderSummary?.length >0 || orderSummaryTotal?.length > 0){
         dispatch(rxShowOrderSummary(true))
     }else {
         dispatch(rxShowOrderSummary(false))
         message.info("No tiene platos elegidos.")
     }
   }
-  
+
   //TODO: ADD DISH TO ORDER
   const handleAddQtyDish = (dish) => {
     if(orderSummary.length === 0){
@@ -202,9 +202,6 @@ const {
         dispatch(rxShowTypeService(true))
     }
   }
-  console.log(orderSummary, "orderSummary")
-  console.log(orderSummaryTotal, "orderSummaryTotal")
-  console.log(showRate, "showRate")
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
@@ -225,7 +222,7 @@ const {
             <>
                     <Spin spinning={loadingListDishesMenu} className="">
                     <div className='flex justify-between mt-2'>
-                        <>
+                        <div>
                             {
                                 (sRol === "cliente" || sRol === "administrador") 
                                     && (typeService === "mesa") 
@@ -237,8 +234,8 @@ const {
                                     </div>
                                 </Button>
                             }
-                        </>
-                        <>
+                        </div>
+                        <div>
                             {
                                 (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
                                 <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
@@ -248,7 +245,7 @@ const {
                                     </div>
                                 </Button>
                             }
-                        </>
+                        </div>
                         <Affix offsetTop={20} className="mb-4">
                             <Button 
                                 type='primary'
@@ -294,7 +291,7 @@ const {
                         </BackTop>
                     </Row>
                     {
-                        showOrderSummary && orderSummary?.length &&
+                        showOrderSummary &&
                         <OrderSummary 
                             quantityByDish={quantityByDish}
                             handleAddQtyDish={handleAddQtyDish}
