@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Form, Input, Button, Radio, Space, Col, Row} from "antd";
-import {rxSetNumberTable, rxSetTypeService, rxShowTypeService} from '../../appRedux/actions';
+import {rxClearAllOrderSummary, rxSetNumberTable, rxSetTypeService, rxShowTypeService} from '../../appRedux/actions';
 import { AuditOutlined, SaveOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
 import { currencyOnly } from '../../util/config';
 
@@ -19,6 +19,7 @@ const TypeService = () => {
     localStorage.setItem("typeService", valueService);
     localStorage.setItem("numberTable", numberTable);
 
+    dispatch(rxClearAllOrderSummary());
     dispatch(rxSetTypeService(valueService));
     dispatch(rxSetNumberTable(numberTable));
     dispatch(rxShowTypeService(false));

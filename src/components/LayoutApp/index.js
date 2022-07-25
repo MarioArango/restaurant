@@ -68,7 +68,7 @@ const LayoutApp = ({children}) => {
     }
   // eslint-disable-next-line
   }, [authSucursal?.nIdBranchOffice, typeService])
-  console.log(listRequestWaiter, "listRequestWaiter")
+  
   return (
     <Layout className="layout flex-col">
       <Header>

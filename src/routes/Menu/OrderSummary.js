@@ -182,14 +182,13 @@ const OrderSummary = (props) => {
                             <div className='font-bold text-base'>S/. {calculatePriceTotalOrderTotal() ? currency.format(Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}</div>
                         </div>
                         }
-                       
+                        <Divider/>
+                        <p className='font-bold text-base'>Nuevo pedido</p>
                     </>
                 }
                 {
                     orderSummary?.length > 0 &&
                     <>
-                        <Divider/>
-                        <p className='font-bold text-base'>Nuevo pedido</p>
                         <List
                             loading={false}
                     itemLayout="horizontal"

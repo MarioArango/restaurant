@@ -176,7 +176,10 @@ const {
     if(typeService && numberTable && authSucursal){
         const requestWaiter = {
             nIdBranchOffice: authSucursal.nIdBranchOffice,
-            sNumberTable: numberTable
+            sNumberTable: numberTable,
+            dCreatedHour: moment().format("HH"),
+            dCreatedMin: moment().format("mm"),
+            dCreatedSec: moment().format("ss")
         }
         dispatch(rxAddRequestWaiter(requestWaiter))
     }else {

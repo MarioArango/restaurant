@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit } from "firebase/firestore";
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit, orderBy } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_REGISTER_USER_START,
@@ -142,13 +142,14 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxAddRequestWaiter = (requestWaiter) => async dispatch => {
     dispatch({type: FETCH_REQUEST_WAITER_START})
     try {
+      console.log(requestWaiter, "requestWaiter")
       const docRef = await addDoc(collection(db, 'requestWaiter'), requestWaiter);
       if(docRef){
         dispatch({type: FETCH_REQUEST_WAITER_SUCCESS})
         message.success("Enviado")
       }
     } catch (error) {
-    dispatch({type: FETCH_REQUEST_WAITER_ERROR})
+      dispatch({type: FETCH_REQUEST_WAITER_ERROR})
       message.error('Error del servidor.')
     }
   } 
@@ -158,6 +159,9 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
     try {
       const q = query(collection(db, "requestWaiter"), 
         where("nIdBranchOffice", "==", nIdBranchOffice), 
+        orderBy("dCreatedHour", ">", "asc"), 
+        orderBy("dCreatedMin", ">", "asc"), 
+        orderBy("dCreatedSec", ">", "asc"),
         limit(10)
       );
       const unsub = onSnapshot(q, (querySnapshot) => {
@@ -166,11 +170,13 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         querySnapshot.forEach(doc => {
           requestWaiters.push({...doc.data(), nIdRequestWaiter: doc.id}) 
         })
+        console.log(requestWaiters, "requestWaiters")
         dispatch({type: FETCH_GET_REQUEST_WAITERS_SUCCESS, payload: requestWaiters })
       })
       cb && cb(unsub)
     } catch (error) {
-    dispatch({type: FETCH_GET_REQUEST_WAITERS_ERROR})
+      console.log(error, "error")
+      dispatch({type: FETCH_GET_REQUEST_WAITERS_ERROR})
       message.error('Error del servidor.')
     }
   }
