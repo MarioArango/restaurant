@@ -1,7 +1,7 @@
 import {
-    FETCH_GET_SALES_START,
-    FETCH_GET_SALES_SUCCESS,
-    FETCH_GET_SALES_ERROR,
+    FETCH_REP_SALES_START,
+    FETCH_REP_SALES_SUCCESS,
+    FETCH_REP_SALES_ERROR,
 } from "../types";
 
 
@@ -13,20 +13,20 @@ const initialState = {
 const Sales = (state = initialState, { type, payload }) => {
     switch (type) {
         //TODO: GET SALES
-        case FETCH_GET_SALES_START: {
+        case FETCH_REP_SALES_START: {
             return {
                 ...state,
                 loadingListSales: true
             }
         }
-        case FETCH_GET_SALES_SUCCESS: {
+        case FETCH_REP_SALES_SUCCESS: {
             return {
                 ...state,
                 loadingListSales: false,
                 listSales: payload
             }
         }
-        case FETCH_GET_SALES_ERROR: {
+        case FETCH_REP_SALES_ERROR: {
             return {
                 ...state,
                 loadingListSales: false
