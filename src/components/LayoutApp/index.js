@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Badge, Button, Dropdown, Layout, Menu, Modal, Select } from 'antd';
-import { BarChartOutlined, BellOutlined, BorderOutlined, DollarCircleOutlined, LockOutlined, PoweroffOutlined, ProfileOutlined, SettingOutlined, ShopOutlined, TagsOutlined, ToolOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Button, Dropdown, Layout, Menu, Modal, Select, Tag } from 'antd';
+import { BarChartOutlined, BellOutlined, BorderOutlined, DollarCircleOutlined, PoweroffOutlined, ProfileOutlined, SettingOutlined, ShopOutlined, TagsOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
-import { rxGetRequestWaiters, rxSetNumberTable, rxSetTypeService, rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
+import { rxGetRequestWaiters, rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
@@ -167,7 +167,7 @@ const LayoutApp = ({children}) => {
                       <Menu
                         items={
                           listRequestWaiter.length > 0 
-                          ? listRequestWaiter?.map((rw, index) => ({key: index, label: "Mesa " + rw.sNumberTable})) 
+                          ? listRequestWaiter?.map((rw, index) => ({key: index, label:<div><Tag color="green" >Mesa {rw.sNumberTable}</Tag><Tag color="blue">{rw.dCreatedHour + ":" + rw.dCreatedMin + " h"}</Tag></div> })) 
                           : [{key:"1", label: "No hay solicitudes"}]}
                       />
                     } 

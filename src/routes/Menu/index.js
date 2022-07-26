@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Result } from 'antd';
@@ -177,9 +177,9 @@ const {
         const requestWaiter = {
             nIdBranchOffice: authSucursal.nIdBranchOffice,
             sNumberTable: numberTable,
-            dCreatedHour: moment().format("HH"),
-            dCreatedMin: moment().format("mm"),
-            dCreatedSec: moment().format("ss")
+            dCreated: moment().format("DD/MM/YYYY"),
+            dCreatedHour: Number(moment().format("HH")),
+            dCreatedMin: Number(moment().format("mm")),
         }
         dispatch(rxAddRequestWaiter(requestWaiter))
     }else {

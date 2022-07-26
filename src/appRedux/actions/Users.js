@@ -34,6 +34,7 @@ import {
   FETCH_SEND_RATE_SUCCESS,
   FETCH_SEND_RATE_ERROR
 } from '../types'
+import moment from 'moment';
 
 export const rxRegisterUser = (user, cb = null) => async dispatch => {
     dispatch({type: FETCH_REGISTER_USER_START})
@@ -142,7 +143,6 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
   export const rxAddRequestWaiter = (requestWaiter) => async dispatch => {
     dispatch({type: FETCH_REQUEST_WAITER_START})
     try {
-      console.log(requestWaiter, "requestWaiter")
       const docRef = await addDoc(collection(db, 'requestWaiter'), requestWaiter);
       if(docRef){
         dispatch({type: FETCH_REQUEST_WAITER_SUCCESS})
@@ -158,10 +158,8 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
     dispatch({type: FETCH_GET_REQUEST_WAITERS_START})
     try {
       const q = query(collection(db, "requestWaiter"), 
-        where("nIdBranchOffice", "==", nIdBranchOffice), 
-        orderBy("dCreatedHour", ">", "asc"), 
-        orderBy("dCreatedMin", ">", "asc"), 
-        orderBy("dCreatedSec", ">", "asc"),
+        where("nIdBranchOffice", "==", nIdBranchOffice),
+        where("dCreated", "==", moment().format("DD/MM/YYYY")),
         limit(10)
       );
       const unsub = onSnapshot(q, (querySnapshot) => {
@@ -170,12 +168,28 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         querySnapshot.forEach(doc => {
           requestWaiters.push({...doc.data(), nIdRequestWaiter: doc.id}) 
         })
-        console.log(requestWaiters, "requestWaiters")
-        dispatch({type: FETCH_GET_REQUEST_WAITERS_SUCCESS, payload: requestWaiters })
+        const resultH = requestWaiters.sort((a,b) => {
+          if(a.dCreatedHour < b.dCreatedHour){
+            return 1
+          }
+          if(a.dCreatedHour > b.dCreatedHour){
+            return -1
+          }
+          return 0
+        })
+        const resultM = resultH.sort((a,b) => {
+          if(a.dCreatedMin < b.dCreatedMin){
+            return 1
+          }
+          if(a.dCreatedMin > b.dCreatedMin){
+            return -1
+          }
+          return 0
+        })
+        dispatch({type: FETCH_GET_REQUEST_WAITERS_SUCCESS, payload: resultM })
       })
       cb && cb(unsub)
     } catch (error) {
-      console.log(error, "error")
       dispatch({type: FETCH_GET_REQUEST_WAITERS_ERROR})
       message.error('Error del servidor.')
     }
@@ -199,7 +213,6 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         cb && cb()
       }
     } catch (error) {
-      console.log(error, "error")
       dispatch({type: FETCH_SEND_RATE_ERROR})
       message.error('Error del servidor.')
     }
