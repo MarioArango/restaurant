@@ -7,6 +7,7 @@ import { useAuth } from '../../../Hooks/auth';
 import { rxReportSales } from '../../../appRedux/actions';
 import { FilterOutlined } from '@ant-design/icons';
 import moment from 'moment';
+// import Excel from '../../../components/Excel';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -54,7 +55,7 @@ const Sales = () => {
           setRangeDate(moment().format("YYYY"))
           break;
         case "lastYear":
-          setRangeDate("")
+          setRangeDate(moment().subtract(1, "month")) //ASIGNAR UNA MESA POR PERSONA EN LA BARRA
           break;
         case "currentMonth":
           setRangeDate(moment().format("MM"))
@@ -129,7 +130,7 @@ const Sales = () => {
       dispatch(rxReportSales(authSucursal.nIdBranchOffice))
     }
   }, [authSucursal?.nIdBranchOffice])
-
+console.log(listSales, "listSales")
   return (
     <div className='h-screen'>
       {
@@ -180,6 +181,9 @@ const Sales = () => {
           <Card
               {...cardProps}
               title="Lista de ventas"
+              // extra={
+              //   <Excel dataSource={listSales} columns={columns} fileName="Reporte_ventas"/>
+              // }
           >
               <Table
                   {...tableProps}

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import RestrictedComponent from './components/RestrictedComponent';
 import Menu from './routes/Menu';

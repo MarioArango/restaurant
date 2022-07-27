@@ -140,7 +140,7 @@ const {
                   : listDishesMenu;
                   
     return list?.map((d, index)=> (
-        <Col xs={24} sm={12} md={6} lg={6} xl={4} key={index}>
+        <Col xs={24} sm={8} md={6} lg={6} xl={4} key={index}>
             <div className="relative max-w-md mx-auto xl:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-2 pb-2 hover:shadow-gray-600 hover:px-[1px]">
                 <Badge count={quantityByDish(d)} color="blue" className='p-0'>
                     <div className="card">

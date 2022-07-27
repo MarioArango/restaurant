@@ -208,7 +208,11 @@ const LayoutApp = ({children}) => {
         style={{
           textAlign: 'center',
           paddingBlock: "10px",
-          paddingInline: "20px"
+          paddingInline: "20px",
+          // position: "fixed",
+          // left: 0,
+          // bottom: 0,
+          // width: "100%"
         }}
         className="bg-gray-300"
       >
