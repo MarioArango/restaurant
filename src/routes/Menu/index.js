@@ -14,24 +14,21 @@ import {
     rxGetTypesProducts, 
     rxShowOrderSummary, 
     rxOrderSummary, 
-    rxFilterDishes, 
+    rxFilterDishesMenu, 
     rxGetDishesMenu, 
     rxAddRequestWaiter, 
     rxShowTypeService,
     rxShowRate,
     rxUpdateOrder,
     rxOrderSummaryTotal,
-    rxClearAllOrderSummary
+    rxClearAllOrderSummary,
 } from '../../appRedux/actions';
 
 const Menu = () => {
-  const { listDishesComidas, listDishesBebidas } = useSelector(state => state.get("dishes"));
-
-  const { showRate } = useSelector(state => state.get("users"));
-  
+    
   const { showOrderSummary, orderSummary, orderSummaryTotal } = useSelector(state => state.get("orders"));
 
-  const { loadingListDishesMenu, listDishesMenu } = useSelector(state => state.get("menu"));
+  const { loadingListDishesMenu, listDishesMenu, listDishesMenuFilter } = useSelector(state => state.get("menu"));
 
   const { 
     authSucursal, 
@@ -130,13 +127,12 @@ const {
     return orderMatch.length === 0 ? true : orderMatch[0].nQuantity === 0? true : false
   }
 
-  const handleFilterByTypeProduct = (nIdTypeProduct) => {
-    dispatch(rxFilterDishes(nIdTypeProduct))
+  const handleFilterByTypeProduct = (typeFilter) => {
+    dispatch(rxFilterDishesMenu(typeFilter))
   }
 
   const getCardDishes = () => {
-    const list = listDishesComidas?.length > 0 ? listDishesComidas
-                 : listDishesBebidas?.length > 0 ? listDishesBebidas
+    const list = listDishesMenuFilter?.length > 0 ? listDishesMenuFilter
                   : listDishesMenu;
                   
     return list?.map((d, index)=> (
@@ -274,7 +270,7 @@ const {
                     <div className='flex justify-around mb-2'>
                         {
                             listTypesProducts.map((tp, index) => (
-                                <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct(tp.nIdTypeProduct)} loading={loadingListTypesProducts}>
+                                <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct({nIdTypeProduct: tp.nIdTypeProduct, reset: false})} loading={loadingListTypesProducts}>
                                     <div className='flex justify-center'>
                                         <FilterOutlined className='mt-1 mr-2'/>
                                         {tp.sTypeProduct}
@@ -282,6 +278,12 @@ const {
                                 </Button>
                             ))
                         }
+                        <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
+                            <div className='flex justify-center'>
+                                <FilterOutlined className='mt-1 mr-2'/>
+                                Reiniciar
+                            </div>
+                        </Button>
                     </div>
                     <Row gutter={12}>
                         {

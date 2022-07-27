@@ -5,7 +5,8 @@ import { message } from 'antd';
 import {
     FETCH_GET_DISHES_MENU_START,
     FETCH_GET_DISHES_MENU_SUCCESS,
-    FETCH_GET_DISHES_MENU_ERROR
+    FETCH_GET_DISHES_MENU_ERROR,
+    FILTER_DISHES_MENU
 } from '../types'
 
 export const rxGetDishesMenu = (nIdBranchOffice, typeService) => async dispatch => {
@@ -23,3 +24,5 @@ export const rxGetDishesMenu = (nIdBranchOffice, typeService) => async dispatch 
       message.error('Error del servidor.')
     }
   }
+
+export const rxFilterDishesMenu = (payload) => ({type: FILTER_DISHES_MENU, payload})

@@ -17,7 +17,6 @@ import {
   FETCH_DELETE_DISH_START,
   FETCH_DELETE_DISH_SUCCESS,
   FETCH_DELETE_DISH_ERROR,
-  FILTER_DISHES
 } from '../types'
 
 
@@ -64,8 +63,6 @@ export const rxGetDishes = (nIdBranchOffice) => async dispatch => {
     message.error('Error del servidor.')
   }
 }
-
-export const rxFilterDishes = (payload) => ({type: FILTER_DISHES, payload})
 
 export const rxDishSelected = (payload) => ({type: DISH_SELECTED, payload})
 
