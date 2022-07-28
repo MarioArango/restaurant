@@ -42,7 +42,7 @@ const LayoutApp = ({children}) => {
       onOk: () => {
         clearAuth();
         localStorage.removeItem("authSucursal");
-        navigate("/login")
+        window.location.reload();
       },
       onCancel: () => { }
     })

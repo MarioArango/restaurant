@@ -1,30 +1,16 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom';
-import RestrictedComponent from './components/RestrictedComponent';
-import Menu from './routes/Menu';
-import Orders from './routes/Orders';
-import Dishes from './routes/Dishes';
+import { useAuth } from './Hooks/auth';
+import MainApp from './routes';
 import Login from './routes/Login';
-import Users from './routes/configurations/Users';
-import BranchOffices from './routes/configurations/BranchOffiices';
-import Sales from './routes/reports/Sales';
-import TypesProducts from './routes/configurations/TypesProducts';
-import NotFound from './routes/NotFound';
-import LayoutApp from './components/LayoutApp';
 
 function App() {
+  const auth = useAuth();
   return (
-    <Routes>
-      <Route exact path="/login" element={<Login/>} />
-      <Route exact path="/" element={<RestrictedComponent><LayoutApp><Menu/></LayoutApp></RestrictedComponent>} />
-      <Route exact path="/orders" element={<RestrictedComponent><LayoutApp><Orders/></LayoutApp></RestrictedComponent>} />
-      <Route exact path="/users" element={<RestrictedComponent><LayoutApp><Users/></LayoutApp></RestrictedComponent>} />
-      <Route exact path="/branch-offices" element={<RestrictedComponent><LayoutApp><BranchOffices/></LayoutApp></RestrictedComponent>} />
-      <Route exact path="/dishes" element={<RestrictedComponent><LayoutApp><Dishes/></LayoutApp></RestrictedComponent>} />
-      <Route exact path="/sales" element={<RestrictedComponent><LayoutApp><Sales/></LayoutApp></RestrictedComponent>} />
-      <Route exact path="/types-products" element={<RestrictedComponent><LayoutApp><TypesProducts/></LayoutApp></RestrictedComponent>} />
-      <Route path='*' element={<RestrictedComponent><LayoutApp><NotFound/></LayoutApp></RestrictedComponent>}/>
-    </Routes>
+    <>
+      {
+        auth?.isValidate ? <MainApp/> : <Login/>
+      }
+    </>
   );
 }
 

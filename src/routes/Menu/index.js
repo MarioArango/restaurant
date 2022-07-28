@@ -20,7 +20,6 @@ import {
     rxShowTypeService,
     rxShowRate,
     rxUpdateOrder,
-    rxOrderSummaryTotal,
     rxClearAllOrderSummary,
 } from '../../appRedux/actions';
 
