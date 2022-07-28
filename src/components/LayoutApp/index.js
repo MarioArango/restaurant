@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Badge, Button, Dropdown, Layout, Menu, Modal, Select, Tag } from 'antd';
 import { BarChartOutlined, BellOutlined, BorderOutlined, DollarCircleOutlined, PoweroffOutlined, ProfileOutlined, SettingOutlined, ShopOutlined, TagsOutlined, UserOutlined } from '@ant-design/icons';
-import { Link, useNavigate} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth, clearAuth } from '../../Hooks/auth';
 import { rxGetRequestWaiters, rxSetUserAuthSucursal, rxShowTypeService } from '../../appRedux/actions';
 
@@ -26,9 +26,6 @@ const LayoutApp = ({children}) => {
 
   //TODO: GET AUTH LOCAL STORAGE
   const { sBranchOfficesAssigned, sRol } = useAuth();
-  
-  //TODO: REDIRECT
-  const navigate = useNavigate();
 
   //TODO: CLEAR AUTH AND GOT TO LOGIN
   const handleLogout = () => {

@@ -1,13 +1,13 @@
 import { Result, Button } from "antd"
-import { useNavigate } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 
 const NotFound = () => {
   //TODO: HOOK INHERID ANT DESING  
-  const navigate = useNavigate();
+  const history  = useHistory();
 
   //TODO: BACK TO HOME
   const handleBack = () => {
-    navigate('/');
+    history.push('/');
   }
   return (
     <Result

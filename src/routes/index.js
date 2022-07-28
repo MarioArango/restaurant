@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Menu from './Menu';
 import Orders from './Orders';
 import Dishes from './Dishes';
@@ -13,16 +13,16 @@ import LayoutApp from '../components/LayoutApp';
 function App() {
   return (
     <LayoutApp>
-        <Routes>
-            <Route exact path="/" element={<Menu/>}/>
-            <Route exact path="/orders" element={<Orders/>}/>
-            <Route exact path="/users" element={<Users/>} />
-            <Route exact path="/branch-offices" element={<BranchOffices/>}/>
-            <Route exact path="/dishes" element={<Dishes/>}/>
-            <Route exact path="/sales" element={<Sales/>}/>
-            <Route exact path="/types-products" element={<TypesProducts/>}/>
-            <Route path='*' element={<NotFound/>}/>
-        </Routes>
+        <Switch>
+            <Route exact path="/" component={<Menu/>}/>
+            <Route exact path="/orders" component={<Orders/>}/>
+            <Route exact path="/users" component={<Users/>} />
+            <Route exact path="/branch-offices" component={<BranchOffices/>}/>
+            <Route exact path="/dishes" component={<Dishes/>}/>
+            <Route exact path="/sales" component={<Sales/>}/>
+            <Route exact path="/types-products" component={<TypesProducts/>}/>
+            <Route path='*' component={<NotFound/>}/>
+        </Switch>
     </LayoutApp>
   );
 }

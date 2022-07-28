@@ -18,8 +18,6 @@ const Login = () => {
   const [form] = Form.useForm();
   const { validateFields, resetFields } = form;
 
-  const navigate = useNavigate();
-
   const handleLogin = () => {
     validateFields().then((values) => {
         dispatch(rxLoginUser(values.sUsername, values.sPassword, (isValidate, user) => {
