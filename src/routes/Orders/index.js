@@ -2,7 +2,6 @@ import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
-import currency from 'currency-formatter'
 import { CheckOutlined, FileDoneOutlined, ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Button, Result, Steps, Collapse } from 'antd';
 import { cardProps, currencyFE, customScroll, dateFormatList, tableProps } from '../../util/config';
@@ -187,7 +186,7 @@ const Orders = () => {
   }, [authSucursal?.nIdBranchOffice, typeService])
 
   return (
-    <div className='h-screen'>
+    <div>
         {
             sRol === "chef" || sRol === "administrador" || sRol === "mozo"?
             <>

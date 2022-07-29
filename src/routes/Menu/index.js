@@ -214,11 +214,11 @@ const {
    }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
-    <>
+    <div>
         {
             sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
             <>
-                    <Spin spinning={loadingListDishesMenu} className="">
+                    <Spin spinning={loadingListDishesMenu}>
                     <div className='flex justify-between mt-2'>
                         <div>
                             {
@@ -266,7 +266,7 @@ const {
                             </Button>
                         </Affix>
                     </div>
-                    <div className='flex justify-around mb-2'>
+                    <div className='flex justify-around mb-2 overflow-x-auto'>
                         {
                             listTypesProducts.map((tp, index) => (
                                 <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct({nIdTypeProduct: tp.nIdTypeProduct, reset: false})} loading={loadingListTypesProducts}>
@@ -277,12 +277,15 @@ const {
                                 </Button>
                             ))
                         }
-                        <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
-                            <div className='flex justify-center'>
-                                <FilterOutlined className='mt-1 mr-2'/>
-                                Reiniciar
-                            </div>
-                        </Button>
+                        {
+                            listTypesProducts?.length &&
+                            <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
+                                <div className='flex justify-center'>
+                                    <FilterOutlined className='mt-1 mr-2'/>
+                                    Reiniciar
+                                </div>
+                            </Button>
+                        }
                     </div>
                     <Row gutter={12}>
                         {
@@ -317,7 +320,7 @@ const {
                 subTitle="Lo sentimos, no está autorizado para acceder a esta página."
             />
         }
-    </>
+    </div>
   )
 }
 

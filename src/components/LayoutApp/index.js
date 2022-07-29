@@ -13,8 +13,7 @@ const LayoutApp = ({children}) => {
   //TODO: REDUX STATE
   const { 
     authSucursal, 
-    loadingLoginUser, 
-    showTypesService, 
+    loadingLoginUser,
     typeService, 
     numberTable, 
     loadingListRequestWaiter, 
@@ -67,7 +66,7 @@ const LayoutApp = ({children}) => {
   }, [authSucursal?.nIdBranchOffice, typeService])
   
   return (
-    <Layout className="layout flex-col">
+    <Layout className="flex-col">
       <Header>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1" onClick={() => { dispatch(rxShowTypeService(true)) }} >
@@ -157,7 +156,7 @@ const LayoutApp = ({children}) => {
           <Menu.Item key="7">
             <div className='flex-col justify-center items-center'>
               {
-                sRol === "mozo" || sRol === "administrador" && 
+                (sRol === "mozo" || sRol === "administrador") && 
                 <Badge size="small" count={listRequestWaiter?.length}>
                   <Dropdown 
                     overlay={
@@ -193,12 +192,11 @@ const LayoutApp = ({children}) => {
       </Header>
       <Content
         style={{
-          padding: '0 15px',
-          overflow: "auto"
+          padding: '0 15px'
         }}
       >
-        <div>
-            { children }
+        <div className='overflow-y-auto'>
+          { children }
         </div>
       </Content>
       <Footer
@@ -206,10 +204,10 @@ const LayoutApp = ({children}) => {
           textAlign: 'center',
           paddingBlock: "10px",
           paddingInline: "20px",
-          // position: "fixed",
-          // left: 0,
-          // bottom: 0,
-          // width: "100%"
+          position: "fixed",
+          left: 0,
+          bottom: 0,
+          width: "100%"
         }}
         className="bg-gray-300"
       >
