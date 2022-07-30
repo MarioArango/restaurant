@@ -11,6 +11,7 @@ import TypesProducts from './configurations/TypesProducts';
 import LayoutApp from '../components/LayoutApp';
 
 function App() {
+  console.log('app')
   return (
     <LayoutApp>
       <Routes>
