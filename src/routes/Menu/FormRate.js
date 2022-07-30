@@ -1,9 +1,7 @@
-import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Rate, Input, Form, Modal} from 'antd';
 import { SendOutlined,  } from '@ant-design/icons';
-
-import { rxShowRate, rxSendRate } from '../../appRedux/actions';
+import { rxShowRate, rxSendRate, rxShowInitService } from '../../appRedux/actions';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -36,10 +34,10 @@ const FormRate = () => {
                 numberTable
             }
         }
-        console.log(rate, "rate")
         dispatch(rxSendRate(rate, () => {
             resetFields();
             dispatch(rxShowRate(false));
+            dispatch(rxShowInitService(true))
         }))
     })
   }

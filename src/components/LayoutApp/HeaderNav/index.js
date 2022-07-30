@@ -1,18 +1,23 @@
 import { memo, useState, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Avatar, Layout, Menu, Modal } from 'antd';
-import { PoweroffOutlined } from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { Avatar, Button, Layout, Menu, Modal } from 'antd';
+import { PlayCircleOutlined, PoweroffOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { clearAuth } from '../../../Hooks/auth';
+import { clearAuth, useAuth } from '../../../Hooks/auth';
 import { routes } from '../routes';
 import RequestWaiter from './RequestWaiter';
+import { rxClearAllInitService, rxShowInitService, rxShowTypeService } from '../../../appRedux/actions';
 
 const { Header } = Layout;
 
 const HeaderNav = () => {
   const [ menu, setMenu ] = useState([])
+  const { sRol } = useAuth();
+
   //TODO: REDUX STATE
   const { typeService,  numberTable } = useSelector(state => state.get("users"));
+
+  const dispatch = useDispatch();
 
   //TODO: CLEAR AUTH AND GOT TO LOGIN
   const handleLogout = () => {
@@ -26,6 +31,7 @@ const HeaderNav = () => {
       onOk: () => {
         clearAuth();
         localStorage.removeItem("authSucursal");
+        dispatch(rxClearAllInitService())
         window.location.reload();
       },
       onCancel: () => { }
@@ -76,6 +82,14 @@ const HeaderNav = () => {
     return nav;
   }, [])
 
+  const handleShowTypeService = () => {
+    dispatch(rxShowTypeService(true))
+  }
+
+  const handleShowInitService = () => {
+    dispatch(rxShowInitService(true))
+  }
+
   useEffect(() => {
     const navList = headerNav();
     setMenu(navList)
@@ -87,18 +101,34 @@ const HeaderNav = () => {
   console.log("header nav")
   return (
     <Header className='flex justify-between'>
-      <div className='mr-2 hover:cursor-pointer'>
+      <div className='mr-2 hover:cursor-pointer' onClick={handleShowTypeService}>
         <Avatar style={{backgroundColor: "white", verticalAlign: 'middle'}} size="large" gap={1}>
             <span className='text-black font-medium'>
-            {typeof(typeService) === "string" ? typeService[0].toUpperCase():""}
+            {typeof(typeService) === "string" ? typeService.toUpperCase():""}
             {typeof(typeService) === "string" && typeService === "mesa"? numberTable: ""}
             </span>
         </Avatar>
       </div>
+      <div>
+        {
+          (sRol === "mozo" || sRol === "administrador") && (
+            <Button 
+              type="dashed" 
+              onClick={handleShowInitService} 
+              className='mr-2 hover:cursor-pointer'
+            >
+               <div className='flex justify-center text-white'>
+                  <PlayCircleOutlined className='mt-1 mr-2'/>
+                  Iniciar
+              </div>
+            </Button>
+          )
+        }
+      </div>
       <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
         {menu}
       </Menu>
-      <Link to="/dishes">Platos</Link>
+      <RequestWaiter/>
       <div onClick={handleLogout} className="hover:cursor-pointer text-white">
         <div className='flex justify-center items-center'>
           <PoweroffOutlined className='mr-2'/>

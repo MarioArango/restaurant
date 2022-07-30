@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import { CheckOutlined, FileDoneOutlined, ScheduleOutlined} from '@ant-design/icons';
 import { Table, Card, Tag, Button, Result, Steps, Collapse } from 'antd';
-import { cardProps, currencyFE, customScroll, dateFormatList, tableProps } from '../../util/config';
+import { cardProps, dateFormatList, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
 import { 
     rxGetOrders, 
@@ -26,7 +26,6 @@ const Orders = () => {
   } = useSelector(state => state.get("orders"))
 
   const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
-
 
   const dispatch = useDispatch()
 
@@ -53,6 +52,7 @@ const Orders = () => {
         })
         orderToUpd.forEach(os => {
             const updOrder = {
+                dFinished: moment().format(dateFormatList[2]),
                 sState: "finished"
             }
             dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
@@ -119,7 +119,7 @@ const Orders = () => {
                     >
                         <div className='flex justify-center'>
                             <CheckOutlined className='mt-1 mr-2'/> 
-                            <p>Atender</p>
+                            <p>Atendendido</p>
                         </div>
                     </Button>
                 }
@@ -144,28 +144,13 @@ const Orders = () => {
         width: 46,
         align: "center",
     },
-    // {
-    //     key: "sType",
-    //     dataIndex: "sType",
-    //     title: "Tipo",
-    //     width: 60,
-    //     align: "center",
-    // },
     {
         key: "nQuantityTotal",
         dataIndex: "nQuantityTotal",
         title: "Cantidad",
         width: 14,
         align: "right",
-    },
-    // {
-    //     key: "priceTotal",
-    //     dataIndex: "priceTotal",
-    //     title: "Precio Total",
-    //     width: 60,
-    //     align: "right",
-    //     render: value => value ? currency.format(value, currencyFE) : '0.00'
-    // }
+    }
   ]
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS

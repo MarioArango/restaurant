@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment'
 import currency from 'currency-formatter'
@@ -28,6 +27,7 @@ const OrderSummary = (props) => {
   } = useSelector(state => state.get("orders"))
 
   const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
+  const { initService } = useSelector(state => state.get("menu"));
 
   const dispatch = useDispatch()
 
@@ -51,6 +51,8 @@ const OrderSummary = (props) => {
                 }))
         
                 let orderToSend = {
+                    dInitService: initService[0]?.dInitService,
+                    nNumberDiners: initService[0]?.nNumberDiners,
                     dCreated: moment().format(dateFormatList[2]),
                     sState: 'pending',
                     sTypeService: typeService,
@@ -182,8 +184,14 @@ const OrderSummary = (props) => {
                             <div className='font-bold text-base'>S/. {calculatePriceTotalOrderTotal() ? currency.format(Number(calculatePriceTotalOrderTotal()), currencyFE) : '0.00'}</div>
                         </div>
                         }
-                        <Divider/>
-                        <p className='font-bold text-base'>Nuevo pedido</p>
+                        {
+                            orderSummary?.length > 0 && (
+                            <>
+                                <Divider/>
+                                <p className='font-bold text-base'>Nuevo pedido</p>
+                            </>
+                            )
+                        }
                     </>
                 }
                 {

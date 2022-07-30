@@ -1,21 +1,36 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Form, Input, Button, Radio, Space, Col, Row} from "antd";
-import {rxClearAllOrderSummary, rxSetNumberTable, rxSetTypeService, rxShowTypeService} from '../../appRedux/actions';
-import { AuditOutlined, SaveOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
+import { Modal, Input, Button, Radio, Space, Col, Row, message} from "antd";
+import { AuditOutlined, SaveOutlined } from '@ant-design/icons';
 import { currencyOnly } from '../../util/config';
-
-const { Item } = Form;
+import { 
+    rxClearAllOrderSummary, 
+    rxSetNumberTable, 
+    rxSetTypeService, 
+    rxShowTypeService
+} from '../../appRedux/actions';
 
 const TypeService = () => {
     const [valueService, setValueService] = useState(null);
     const [numberTable, setNumberTable] = useState(null);
 
-  const { authSucursal, showTypesService, typeService} = useSelector(state => state.get("users"));
+  const { showTypesService } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
   const handleSaveTypeService = () => {
+    if(valueService === "mesa"){
+        if(numberTable){
+            serviceToSave()
+        }else {
+            message.info("Ingrese el número de mesa")
+        }
+    }else {
+        serviceToSave()
+    }
+  }
+
+  const serviceToSave = () => {
     localStorage.setItem("typeService", valueService);
     localStorage.setItem("numberTable", numberTable);
 
@@ -52,6 +67,8 @@ const TypeService = () => {
         maskClosable={false}
         destroyOnClose
         centered
+        closable={false}
+        keyboard={false}
     >
         <Row gutter={12}>
             <Col span={24} className="mb-3">

@@ -6,7 +6,10 @@ import {
     FETCH_GET_DISHES_MENU_START,
     FETCH_GET_DISHES_MENU_SUCCESS,
     FETCH_GET_DISHES_MENU_ERROR,
-    FILTER_DISHES_MENU
+    FILTER_DISHES_MENU,
+    INIT_SERVICE_MENU,
+    FETCH_INIT_SERVICE,
+    FETCH_CLEAR_INIT_SERVICE
 } from '../types'
 
 export const rxGetDishesMenu = (nIdBranchOffice, typeService) => async dispatch => {
@@ -26,3 +29,9 @@ export const rxGetDishesMenu = (nIdBranchOffice, typeService) => async dispatch 
   }
 
 export const rxFilterDishesMenu = (payload) => ({type: FILTER_DISHES_MENU, payload})
+
+export const rxShowInitService = (payload) => ({type: INIT_SERVICE_MENU, payload})
+
+export const rxInitService = (payload) => ({type: FETCH_INIT_SERVICE, payload})
+
+export const rxClearAllInitService = () => ({type: FETCH_CLEAR_INIT_SERVICE})

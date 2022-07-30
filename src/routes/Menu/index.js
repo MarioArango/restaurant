@@ -21,13 +21,16 @@ import {
     rxShowRate,
     rxUpdateOrder,
     rxClearAllOrderSummary,
+    rxClearAllInitService,
+    rxShowInitService
 } from '../../appRedux/actions';
+import InitService from './InitService';
 
 const Menu = () => {
     
   const { showOrderSummary, orderSummary, orderSummaryTotal } = useSelector(state => state.get("orders"));
 
-  const { loadingListDishesMenu, listDishesMenu, listDishesMenuFilter } = useSelector(state => state.get("menu"));
+  const { loadingListDishesMenu, listDishesMenu, listDishesMenuFilter, showInitService, initService } = useSelector(state => state.get("menu"));
 
   const { 
     authSucursal, 
@@ -194,6 +197,7 @@ const {
             dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
         })
         dispatch(rxClearAllOrderSummary());
+        dispatch(rxClearAllInitService())
         dispatch(rxShowRate(true));
     }else {
         message.info("Debe agregar el número de mesa.")
@@ -209,6 +213,9 @@ const {
     }
     if (!typeService){
         dispatch(rxShowTypeService(true));
+    }
+    if(initService?.length===0){
+        dispatch(rxShowInitService(true))
     }
     // eslint-disable-next-line
    }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
@@ -312,8 +319,10 @@ const {
                     <>
                         <FormRate/>
                     </>
+                    <>
+                        { showInitService && <InitService/> }
+                    </>
             </>
-            
             : <Result
                 status="403"
                 title="403"
