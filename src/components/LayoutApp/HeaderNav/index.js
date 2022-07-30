@@ -1,7 +1,7 @@
 import { memo, useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Avatar, Button, Layout, Menu, Modal } from 'antd';
-import { PlayCircleOutlined, PoweroffOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, PoweroffOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { clearAuth, useAuth } from '../../../Hooks/auth';
 import { routes } from '../routes';
@@ -16,6 +16,7 @@ const HeaderNav = () => {
 
   //TODO: REDUX STATE
   const { typeService,  numberTable } = useSelector(state => state.get("users"));
+  const { initService } = useSelector(state => state.get("menu"));
 
   const dispatch = useDispatch();
 
@@ -83,7 +84,9 @@ const HeaderNav = () => {
   }, [])
 
   const handleShowTypeService = () => {
-    dispatch(rxShowTypeService(true))
+    if(sRol !== "cliente"){
+      dispatch(rxShowTypeService(true))
+    }
   }
 
   const handleShowInitService = () => {
@@ -100,7 +103,7 @@ const HeaderNav = () => {
 
   console.log("header nav")
   return (
-    <Header className='flex justify-between'>
+    <Header className='flex justify-between items-center'>
       <div className='mr-2 hover:cursor-pointer' onClick={handleShowTypeService}>
         <Avatar style={{backgroundColor: "white", verticalAlign: 'middle'}} size="large" gap={1}>
             <span className='text-black font-medium'>
@@ -109,7 +112,7 @@ const HeaderNav = () => {
             </span>
         </Avatar>
       </div>
-      <div>
+      <>
         {
           (sRol === "mozo" || sRol === "administrador") && (
             <Button 
@@ -117,19 +120,31 @@ const HeaderNav = () => {
               onClick={handleShowInitService} 
               className='mr-2 hover:cursor-pointer'
             >
-               <div className='flex justify-center text-white'>
+              <div className='flex justify-center text-white'>
                   <PlayCircleOutlined className='mt-1 mr-2'/>
                   Iniciar
               </div>
             </Button>
           )
         }
-      </div>
+      </>
+      <>
+        {
+          initService?.length > 0 && (
+            <Button shape='circle' className='hover:cursor-default m-2' disabled>
+              <div className='flex justify-center items-center text-black'>
+                <p className="mr-1">{initService[0].nNumberDiners}</p>
+                <UserSwitchOutlined />
+              </div>
+            </Button>
+          )
+        }
+      </>
       <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
         {menu}
       </Menu>
       <RequestWaiter/>
-      <div onClick={handleLogout} className="hover:cursor-pointer text-white">
+      <div onClick={handleLogout} className="hover:cursor-pointer text-white justify-self-end">
         <div className='flex justify-center items-center'>
           <PoweroffOutlined className='mr-2'/>
           <p>Salir</p>

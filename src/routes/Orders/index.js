@@ -42,11 +42,12 @@ const Orders = () => {
     }
   }
 
+  //TODO: FINISHED ORDER
   const handleFinishedOrder = (orderS) => {
     if(typeService && numberTable && authSucursal){
         const orderToUpd = []
         listOrders.forEach(o => {
-            if( o.nNumberTable === orderS.nNumberTable){
+            if( o.nNumberTable === orderS.nNumberTable && o.sState === "requestPayment"){
                 orderToUpd.push(o)
             }
         })
@@ -65,7 +66,7 @@ const Orders = () => {
     {
         key: "index",
         title: "#",
-        width: 20,
+        width: 15,
         align: "center",
         render: (_, __, index) => index + 1,
     },
@@ -79,15 +80,16 @@ const Orders = () => {
     {
         key: "nNumberTable",
         dataIndex: "nNumberTable",
-        title: "Número de mesa",
+        title: "Número mesa",
         width: 20,
-        align: "center"
+        align: "center",
+        render: value => <p className='font-bold text-base'>{value}</p>
     },
     {
         key: "sState",
         dataIndex: "sState",
         title: "Estado",
-        width: 60,
+        width: 40,
         align: "center",
         render: value => value === "pending"? <Tag color="gold">Pendiente</Tag> 
                             :value === "delivered"? <Tag color="blue">Entregado</Tag> 
@@ -98,14 +100,14 @@ const Orders = () => {
         key: "dCreated",
         dataIndex: "dCreated",
         title: "Creado",
-        width: 80,
+        width: 60,
         align: "center",
     },
     {
         key: "",
         dataIndex: "",
         title: "",
-        width: 50,
+        width: 60,
         align: "center",
         render: (_, order) => (
             <>
@@ -218,7 +220,7 @@ const Orders = () => {
                         dataSource={listOrders}
                         rowKey={(order) => order.nIdOrder}
                         rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                        scroll={{x: "80vw", y: "65vh"}}
+                        scroll={{x: 900}}
                         onRow={(order) => ({
                             onClick: () => {
                                 dispatch(rxOrderSelected(order))
@@ -226,7 +228,6 @@ const Orders = () => {
                         })}
                         expandable={{
                             columnWidth: 10,
-                            defaultExpandAllRows: true,
                             expandRowByClick: true,
                             expandedRowRender: (order) => (
                                 <Table
@@ -236,16 +237,17 @@ const Orders = () => {
                                     dataSource={order.dishes}
                                     rowKey={(dish) => dish.nIdDish}
                                     rowClassName={(dish) => dish?.nIdDish === orderDishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                                    // scroll={customScroll()}
                                     onRow={(dish) => ({
                                         onClick: () => {
                                             dispatch(rxOrderDishSelected(dish))
                                         }
                                     })}
+                                    scroll={{x: 600}}
                                     footer={null}
                                 />
                             )
                         }}
+                        footer={null}
                     />
                 }
                 </Card>

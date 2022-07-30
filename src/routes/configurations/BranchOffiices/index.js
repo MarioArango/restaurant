@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
 import { DeleteTwoTone, EditTwoTone, HomeOutlined, PlusOutlined } from '@ant-design/icons';
-import { cardProps, customScroll, tableProps } from '../../../util/config';
+import { cardProps, tableProps } from '../../../util/config';
 import FormBranchOffice from './formBranchOffice';
 import { useAuth } from '../../../Hooks/auth';
 import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../../appRedux/actions';
@@ -126,7 +126,6 @@ const BranchOffices = () => {
                             dataSource={listBranchOffices}
                             rowKey={(branchOffice) => branchOffice.nIdBranchOffice}
                             rowClassName={(branchOffice) => branchOffice?.nIdBranchOffice === branchOfficeSelected?.nIdBranchOffice ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                            // scroll={customScroll()}
                             scroll={{x: "80vw", y: "65vh"}}
                             onRow={(branchOffice) => ({
                                 onClick: () => {

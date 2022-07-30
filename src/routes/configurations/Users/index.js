@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
-import { cardProps, customScroll, tableProps } from '../../../util/config';
+import { cardProps, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../../appRedux/actions';
@@ -134,7 +134,6 @@ const Users = () => {
                     dataSource={listUsers}
                     rowKey={(user) => user.nIdUser}
                     rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                    // scroll={customScroll()}
                     scroll={{x: "80vw", y: "65vh"}}
                     onRow={(user) => ({
                         onClick: () => {

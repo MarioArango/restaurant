@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import currency from 'currency-formatter';
 import { Table, Card, Collapse, Select, Form, DatePicker, Result, Row, Col, message, Button} from 'antd';
-import { cardProps, currencyFE, customScroll, tableProps } from '../../../util/config';
+import { cardProps, currencyFE, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
 import { rxReportSales } from '../../../appRedux/actions';
 import { FilterOutlined } from '@ant-design/icons';

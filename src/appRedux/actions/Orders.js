@@ -18,6 +18,8 @@ import {
   ORDER_SUMMARY_TOTAL,
   CLEAR_ALL_ORDER_SUMMARY
 } from '../types'
+import moment from 'moment';
+import { dateFormatList } from '../../util/config';
 
 export const rxGenerateOrder = (order, cb = null) => async dispatch => {
   dispatch({type: FETCH_GENERATE_ORDER_START})
@@ -41,9 +43,8 @@ export const rxGenerateOrder = (order, cb = null) => async dispatch => {
       let q = query(collection(db, 'orders'), 
       where("nIdBranchOffice", "==", nIdBranchOffice), 
       where("sTypeService", "==", typeService),
-      where("sState", "in", ["pending", "delivered", "requestPayment"]),
-      where("nNumberTable", ">", 0),
-      orderBy("nNumberTable")
+      where("dInitService", ">", moment().format(dateFormatList[0])),
+      orderBy("dInitService", "desc")
     );
       
       const unsub = onSnapshot(q, (querySnapshot) => {

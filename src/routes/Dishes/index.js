@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { Button, Table, Card, Modal, Tooltip, Spin, Result, Switch, Checkbox} from 'antd';
-import { cardProps, currencyFE, customScroll, tableProps } from '../../util/config';
+import { Button, Table, Card, Modal, Tooltip, Result, Checkbox} from 'antd';
+import { cardProps, currencyFE, tableProps } from '../../util/config';
 import { useAuth } from '../../Hooks/auth';
 import FormDish from './FormDish';
 import { 
@@ -170,7 +170,6 @@ const Dishes = () => {
                     dataSource={listDishes}
                     rowKey={(dish) => dish.nIdDish}
                     rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                    scroll={customScroll()}
                     onRow={(dish) => ({
                         onClick: () => {
                             dispatch(rxDishSelected(dish))

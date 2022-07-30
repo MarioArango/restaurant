@@ -232,12 +232,12 @@ const {
                                 (sRol === "cliente" || sRol === "administrador") 
                                     && (typeService === "mesa") 
                                     && orderSummaryTotal?.length > 0 &&
-                                <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
-                                    <div className='flex justify-center'>
-                                        <FileDoneOutlined className='mt-1 mr-2' />
-                                        <p>Pedir Cuenta</p>
-                                    </div>
-                                </Button>
+                                    <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
+                                        <div className='flex justify-center'>
+                                            <FileDoneOutlined className='mt-1 mr-2' />
+                                            <p>Pedir Cuenta</p>
+                                        </div>
+                                    </Button>
                             }
                         </div>
                         <div>
