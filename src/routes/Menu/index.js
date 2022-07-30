@@ -289,7 +289,7 @@ const {
                             <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
                                 <div className='flex justify-center'>
                                     <FilterOutlined className='mt-1 mr-2'/>
-                                    Reiniciar
+                                    Menú completo
                                 </div>
                             </Button>
                         }

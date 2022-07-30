@@ -64,14 +64,14 @@ const FormRate = () => {
             onFinish={handleSaveRate}
             layout="vertical"
         >   
-            <Row gutter={12}>
+            <Row>
                 <Col span={24}>
-                    <Item name="sCommentRate">
+                    <Item name="sCommentRate" label="Comentario">
                         <TextArea rows={2} maxLength={100}/>
                     </Item>
                 </Col>
                 <Col span={24}>
-                    <Item name="nRate">
+                    <Item name="nRate" label="Puntuación">
                         <Rate allowHalf defaultValue={3}/>
                     </Item>
                 </Col>
