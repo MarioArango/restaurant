@@ -196,8 +196,9 @@ const {
             }
             dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
         })
+        //CLEAR
         dispatch(rxClearAllOrderSummary());
-        dispatch(rxClearAllInitService())
+        dispatch(rxClearAllInitService());
         dispatch(rxShowRate(true));
     }else {
         message.info("Debe agregar el número de mesa.")

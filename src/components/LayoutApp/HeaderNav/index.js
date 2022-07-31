@@ -4,7 +4,7 @@ import { Avatar, Button, Layout, Menu, Modal } from 'antd';
 import { PlayCircleOutlined, PoweroffOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { clearAuth, useAuth } from '../../../Hooks/auth';
-import { routes } from '../routes';
+import { routes } from './routes';
 import RequestWaiter from './RequestWaiter';
 import { rxClearAllInitService, rxShowInitService, rxShowTypeService } from '../../../appRedux/actions';
 
@@ -56,7 +56,7 @@ const HeaderNav = () => {
             {
               r.children.map(c => (
                 <Menu.Item key={c.key}>
-                  <Link to={c.to}>
+                  <Link to={`${r.to}${c.to}`}>
                     <div className='flex justify-start items-center'>
                       {c.icon}
                       <p>{c.name}</p>

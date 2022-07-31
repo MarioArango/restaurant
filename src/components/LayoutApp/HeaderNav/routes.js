@@ -2,10 +2,12 @@ import {
     BarChartOutlined, 
     BorderOutlined, 
     DollarCircleOutlined, 
+    FieldTimeOutlined, 
     ProfileOutlined, 
     SettingOutlined, 
     ShopOutlined, 
     SnippetsOutlined, 
+    StarOutlined, 
     TagsOutlined, 
     UserOutlined 
 } from "@ant-design/icons";
@@ -31,6 +33,7 @@ export const routes = [
     },
     {
         key: "4",
+        to: "/reports",
         icon: <BarChartOutlined className='mr-2'/>,
         name: "Reporte",
         children: [
@@ -39,11 +42,24 @@ export const routes = [
                 to: "/sales",
                 icon: <DollarCircleOutlined className='mr-2'/>,
                 name: "Ventas",
-            }
+            },
+            {
+                key: "4.2",
+                to: "/time-orders",
+                icon: <FieldTimeOutlined className='mr-2'/>,
+                name: "Tiempo Pedidos",
+            },
+            {
+                key: "4.3",
+                to: "/rates",
+                icon: <StarOutlined className='mr-2'/>,
+                name: "Puntuaciones",
+            },
         ]
     },
     {
         key: "5",
+        to: "/configuration",
         icon: <SettingOutlined className='mr-2'/>,
         name: "Configuración",
         children: [

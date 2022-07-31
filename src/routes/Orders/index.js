@@ -10,7 +10,8 @@ import {
     rxGetOrders, 
     rxUpdateOrder, 
     rxOrderSelected,
-    rxOrderDishSelected
+    rxOrderDishSelected,
+    rxAddOrderSummaryTotalByClient
 } from '../../appRedux/actions';
 
 const { Panel } = Collapse;
@@ -32,7 +33,7 @@ const Orders = () => {
   const { sRol } = useAuth()
   let { pathname } = useLocation();
 
-  const handleChangeStateOrder = (order) => {
+  const handleDDelivered = (order) => {
     if(order.sState === "pending"){
         const updOrder = {
             dDelivered: moment().format(dateFormatList[2]),
@@ -53,11 +54,21 @@ const Orders = () => {
         })
         orderToUpd.forEach(os => {
             const updOrder = {
-                dFinished: moment().format(dateFormatList[2]),
                 sState: "finished"
             }
             dispatch(rxUpdateOrder(os.nIdOrder, updOrder));
         })
+        //SEND COLLECTION reportSale
+        const orderTotal = {
+            dInitService:  orderToUpd[0]?.dInitService,
+            nNumberDiners:  orderToUpd[0]?.nNumberDiners,
+            dRequestPayment: orderToUpd[0]?.dRequestPayment,
+            nIdBranchOffice: orderToUpd[0]?.nIdBranchOffice,
+            sTypeService: orderToUpd[0]?.sTypeService,
+            nNumberTable: orderToUpd[0]?.nNumberTable?? "",
+            orderSummaryTotal: orderToUpd
+        }
+        dispatch(rxAddOrderSummaryTotalByClient(orderTotal));
     }
   }
 
@@ -117,7 +128,7 @@ const Orders = () => {
                         disabled={order.sState !== "pending"}
                         type='primary'
                         className='bg-primary'
-                        onClick={() => handleChangeStateOrder(order)}
+                        onClick={() => handleDDelivered(order)}
                     >
                         <div className='flex justify-center'>
                             <CheckOutlined className='mt-1 mr-2'/> 
