@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import Rates from './Rates';
 import Sales from './Sales';

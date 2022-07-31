@@ -26,34 +26,36 @@ export const rxAddOrderSummaryTotalByClient = (orderSummaryTotal) => async dispa
 
 //TODO: SALE'S REPORT FOR BRANCHOFFICES AND RANGE TIME
 export const rxReportSales = (nIdBranchOffice, from, to) => async dispatch => {
-  console.log(from, "from")
-  console.log(to, "to")
     dispatch({type: FETCH_REP_SALES_START})
     try {
       const q = query(collection(db, "reportSale"), 
                       where("nIdBranchOffice", "==", nIdBranchOffice),
                       where("dInitService", ">=", from),
-                      where("dRequestPayment", "<=", to),
+                      where("dInitService", "<=", to),
                 );
       const querySnapshot = await getDocs(q);
       const sales = []
       querySnapshot.forEach(doc => {
-        sales.push({...doc.data(), nIdOrder: doc.id}) 
+        sales.push({...doc.data(), nIdSale: doc.id}) 
       })
-      console.log(sales, "sales")
-      const result = sales.map(o => {
+
+      const result = sales.map((s, index) => {
         let nPriceTotal = 0;
-        o.dishes?.forEach(d => {
-          nPriceTotal += d.nPriceTotal
+        s.orderSummaryTotal?.forEach(ot => {
+          ot.dishes?.forEach(d => {
+            nPriceTotal += d.nPriceTotal
+          })
         })
         return {
-          ...o,
+          key: index,
+          nNumberDiners: s.nNumberDiners,
+          dInitService: s.dInitService,
+          dRequestPayment: s.dRequestPayment,
           nPriceTotal
         }
       })
       dispatch({type: FETCH_REP_SALES_SUCCESS, payload: result})
     } catch (error) {
-      console.log(error, "error")
       dispatch({type: FETCH_REP_SALES_ERROR})
       message.error('Error del servidor.')
     }
