@@ -99,6 +99,7 @@ const HeaderNav = () => {
     return () => {
       setMenu([])
     }
+    // eslint-disable-next-line
   }, [])
 
   console.log("header nav")

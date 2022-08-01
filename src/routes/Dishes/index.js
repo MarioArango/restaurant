@@ -134,6 +134,7 @@ const Dishes = () => {
     if(authSucursal){
         dispatch(rxGetDishes(authSucursal.nIdBranchOffice));
     }
+    // eslint-disable-next-line
   }, [authSucursal?.nIdBranchOffice, loadingDeleteDish, loadingAddDish, loadingUpdateDish])
 
   return (

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SaveOutlined, ShopOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import { SaveOutlined, ShopOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button } from 'antd';
 import { requiredField } from '../../../util/config';
 import { rxRegisterBranchOffice, rxUpdateBranchOffice, rxShowFormBranchOff } from '../../../appRedux/actions';
@@ -50,6 +50,7 @@ const FormBranchOffice = () => {
             sBranchOffice: branchOfficeSelected.sBranchOffice
         })
     }
+    // eslint-disable-next-line
   }, [branchOfficeSelected])
 
   return (

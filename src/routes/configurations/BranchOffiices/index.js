@@ -90,6 +90,7 @@ const BranchOffices = () => {
   //TODO: INIT - GET ALL BRANCHOFFICES
   useEffect(() => {
     dispatch(rxGetBranchOffices());
+    // eslint-disable-next-line
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (

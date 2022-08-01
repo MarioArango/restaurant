@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit, orderBy } from "firebase/firestore";
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_REGISTER_USER_START,

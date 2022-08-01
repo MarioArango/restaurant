@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import currency from 'currency-formatter';
 import { Table, Card, Result, message } from 'antd';
-import { cardProps, currencyFE, dateFormatList, tableProps } from '../../../util/config';
+import { cardProps, dateFormatList, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
 import { rxReportRates } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
-// import Excel from '../../../components/Excel';
+import Excel from '../../../components/Excel';
 
 const Rates = () => {
 
@@ -85,9 +84,9 @@ const Rates = () => {
           <Card
               {...cardProps}
               title="Reporte de ventas"
-              // extra={
-              //   <Excel dataSource={listReportRates} columns={columns} fileName="Reporte_ventas"/>
-              // }
+              extra={
+                <Excel dataSource={listReportRates} columns={columns} fileName="Reporte_puntuaciones"/>
+              }
           >
               <Table
                   {...tableProps}

@@ -98,6 +98,7 @@ const Users = () => {
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
     dispatch(rxGetUsers());
+    // eslint-disable-next-line
   }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
   return (

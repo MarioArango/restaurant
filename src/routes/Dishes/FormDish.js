@@ -145,6 +145,7 @@ const FormDish = () => {
     if(authSucursal){
       dispatch(rxGetTypesProducts(authSucursal.nIdBranchOffice));
     }
+    // eslint-disable-next-line
    }, [authSucursal?.nIdBranchOffice])
 
   return (

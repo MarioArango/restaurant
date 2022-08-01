@@ -8,7 +8,7 @@ import { rxReportSales } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
 import { InfoCircleOutlined } from '@ant-design/icons';
-// import Excel from '../../../components/Excel';
+import Excel from '../../../components/Excel';
 
 const Sales = () => {
 
@@ -99,9 +99,9 @@ const Sales = () => {
                   <Tooltip title="Cada número de mesa esta asociada a un cliente."><InfoCircleOutlined className='mt-1 ml-2'/></Tooltip>
                 </div>
               }
-              // extra={
-              //   <Excel dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
-              // }
+              extra={
+                <Excel dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
+              }
           >
               <Table
                   {...tableProps}

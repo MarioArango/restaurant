@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import {
     FETCH_ADD_DISHES_START,
     FETCH_ADD_DISHES_SUCCESS,

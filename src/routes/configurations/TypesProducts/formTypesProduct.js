@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SaveOutlined, ShopOutlined, TagOutlined } from '@ant-design/icons';
+import { SaveOutlined, TagOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button } from 'antd';
 import { requiredField } from '../../../util/config';
 import { rxRegisterTypeProduct, rxUpdateTypeProduct, rxShowFormTypeProduct } from '../../../appRedux/actions';
@@ -53,6 +53,7 @@ const FormTypesProduct = () => {
             sTypeProduct: typeProductSelected.sTypeProduct
         })
     }
+    // eslint-disable-next-line
   }, [typeProductSelected])
 
   return (

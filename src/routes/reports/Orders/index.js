@@ -6,7 +6,7 @@ import { useAuth } from '../../../Hooks/auth';
 import { rxReportOrders } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
-// import Excel from '../../../components/Excel';
+import Excel from '../../../components/Excel';
 
 const Orders = () => {
 
@@ -84,9 +84,9 @@ const Orders = () => {
           <Card
               {...cardProps}
               title="Reporte de pedidos"
-              // extra={
-              //   <Excel dataSource={listReportOrders} columns={columns} fileName="Reporte_ventas"/>
-              // }
+              extra={
+                <Excel dataSource={listReportOrders} columns={columns} fileName="Reporte_pedidos"/>
+              }
           >
               <Table
                   {...tableProps}

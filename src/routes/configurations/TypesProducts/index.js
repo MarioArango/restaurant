@@ -93,6 +93,7 @@ const TypesProducts = () => {
     if(authSucursal){
         dispatch(rxGetTypesProducts(authSucursal.nIdBranchOffice));
     }
+    // eslint-disable-next-line
   }, [authSucursal?.nIdBranchOffice, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (

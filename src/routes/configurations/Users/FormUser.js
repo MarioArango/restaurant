@@ -19,7 +19,7 @@ const FormUser = () => {
   const { 
       loadingListBranchOff,
       listBranchOffices,
-      showFormBranchOffice,
+    //   showFormBranchOffice,
       loadingDeleteBranchOff,
       loadingCreateBranchOff,
       loadingUpdateBranchOff
@@ -75,11 +75,13 @@ const FormUser = () => {
             sBranchOffices: userSelected.sBranchOfficesAssigned?.map(bo => bo.nIdBranchOffice)
         })
     }
+    // eslint-disable-next-line
   }, [userSelected])
 
    //TODO: INIT - GET ALL BRANCHOFFICES
    useEffect(() => {
     dispatch(rxGetBranchOffices());
+    // eslint-disable-next-line
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (
