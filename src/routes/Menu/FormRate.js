@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Rate, Input, Form, Modal} from 'antd';
 import { SendOutlined,  } from '@ant-design/icons';
 import { rxShowRate, rxSendRate, rxShowInitService } from '../../appRedux/actions';
+import moment from 'moment';
+import { dateFormatList } from '../../util/config';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -23,7 +25,8 @@ const FormRate = () => {
   const handleSaveRate = () => {
     validateFields().then((values) => {
         let rate = {
-            authSucursal, 
+            dCreated: moment().format(dateFormatList[2]),
+            nIdBranchOffice: authSucursal?.nIdBranchOffice, 
             typeService, 
             sCommentRate: values.sCommentRate,
             nRate: values.nRate?? 3
@@ -31,7 +34,7 @@ const FormRate = () => {
         if(numberTable){
             rate = {
                 ...rate,
-                numberTable
+                nNumberTable: numberTable
             }
         }
         dispatch(rxSendRate(rate, () => {

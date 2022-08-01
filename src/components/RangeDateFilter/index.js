@@ -52,6 +52,7 @@ const RangeDateFilter = ({ handleFilter, rangeDate, setRangeDate }) => {
           <Row gutter={12}>
             <Col xs={24} sm={12} md={12} lg={12} xl={12} className="flex justify-start">
                 <RangePicker 
+                  allowClear={false}
                   value={rangeDate}
                   onChange={onChangeRangeDate}
                   renderExtraFooter={() => [

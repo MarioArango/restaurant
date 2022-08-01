@@ -4,7 +4,7 @@ import Menu from './Menu';
 import Orders from './Orders';
 import Dishes from './Dishes';
 import NotFound from './NotFound';
-import Reports from './reports'
+import Reports from './Reports'
 import LayoutApp from '../components/LayoutApp';
 import Configuration from './configurations';
 

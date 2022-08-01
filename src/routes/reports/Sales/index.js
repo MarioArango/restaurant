@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import currency from 'currency-formatter';
-import { Table, Card, Result, message } from 'antd';
+import { Table, Card, Result, message, Tooltip } from 'antd';
 import { cardProps, currencyFE, dateFormatList, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
 import { rxReportSales } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
+import { InfoCircleOutlined } from '@ant-design/icons';
 // import Excel from '../../../components/Excel';
 
 const Sales = () => {
 
   const [rangeDate, setRangeDate] = useState([moment(), moment()]);
   
-  const { loadingListSales, listSales } = useSelector(state => state.get("sales"));
+  const { loadingListReportSales, listReportSales } = useSelector(state => state.get("reports"));
   const { authSucursal } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
@@ -37,6 +38,13 @@ const Sales = () => {
         width: 20,
         align: "center",
         render: (_, __, index) => index + 1,
+    },
+    {
+      key: "nNumberTable",
+      dataIndex: "nNumberTable",
+      title: "NÚMERO DE MESA",
+      width: 50,
+      align: "right"
     },
     {
         key: "nNumberDiners",
@@ -85,17 +93,22 @@ const Sales = () => {
           <RangeDateFilter handleFilter={handleFilter} rangeDate={rangeDate} setRangeDate={setRangeDate}/>
           <Card
               {...cardProps}
-              title="Reporte de ventas"
+              title={
+                <div className='flex'>
+                  <p>Reporte de ventas </p>
+                  <Tooltip title="Cada número de mesa esta asociada a un cliente."><InfoCircleOutlined className='mt-1 ml-2'/></Tooltip>
+                </div>
+              }
               // extra={
-              //   <Excel dataSource={listSales} columns={columns} fileName="Reporte_ventas"/>
+              //   <Excel dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
               // }
           >
               <Table
                   {...tableProps}
                   bordered
                   columns={columns}
-                  loading={loadingListSales}
-                  dataSource={listSales}
+                  loading={loadingListReportSales}
+                  dataSource={listReportSales}
                   rowKey={(sale) => sale.nIdSale}
                   rowClassName={(_) => "cursor-pointer"}
                   scroll={{y: "55vh"}}

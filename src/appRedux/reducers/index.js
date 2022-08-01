@@ -4,7 +4,7 @@ import Dishes from './Dishes';
 import Menu from './Menu';
 import Orders from './Orders';
 import Users from './Users';
-import Sales from './Sales';
+import Reports from './Reports';
 import TypesProducts from './TypesProducts';
 
 const rootReducer = combineReducers({
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
     menu: Menu,
     orders: Orders,
     users: Users,
-    sales: Sales,
+    reports: Reports,
     typesProducts: TypesProducts,
 })
 
