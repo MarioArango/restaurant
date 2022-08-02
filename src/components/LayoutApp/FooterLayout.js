@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Select, Layout } from 'antd';
 import { useAuth } from '../../Hooks/auth';
 import { rxSetUserAuthSucursal } from '../../appRedux/actions';
+import { memo } from 'react';
 
 const { Footer } = Layout;
 const { Option } = Select;
@@ -26,19 +27,19 @@ const FooterLayout = () => {
           paddingBlock: "10px",
           paddingInline: "20px",
           position: "fixed",
-          left: 0,
+          left: 80,
           bottom: 0,
           width: "100%"
         }}
         className="bg-gray-300"
       >
         <div className='flex justify-between items-center'>
-          <div>
+          <div className=''>
             {authSucursal && 
               <Select
                 value={authSucursal.nIdBranchOffice}
                 loading={loadingLoginUser}
-                style={{width: 200}}
+                style={{width: 150}}
                 onSelect={handleSelectBrachOffice}
               >
                 {
@@ -59,4 +60,4 @@ const FooterLayout = () => {
   )
 }
 
-export default FooterLayout;
+export default memo(FooterLayout);

@@ -227,7 +227,7 @@ const {
             sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
             <>
                     <Spin spinning={loadingListDishesMenu}>
-                    <div className='flex justify-between mt-2'>
+                    <div className='flex justify-between mt-2 overflow-x-auto'>
                         <div>
                             {
                                 (sRol === "cliente" || sRol === "administrador") 

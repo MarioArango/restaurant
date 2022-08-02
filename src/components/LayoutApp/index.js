@@ -1,4 +1,5 @@
 import { Layout } from 'antd';
+import { memo } from 'react';
 import { useAuth } from '../../Hooks/auth';
 import FooterLayout from './FooterLayout';
 import HeaderNav from './HeaderNav';
@@ -10,26 +11,29 @@ const LayoutApp = ({children}) => {
   const { sRol } = useAuth();
 
   return (
-    <Layout>
+    <Layout className=''>
       {
         sRol !== "cliente" &&
         <SidebarLayout/>
       }
       <Layout>
-      <HeaderNav/>
-        <Content
-          style={{
-            padding: '0 15px'
-          }}
-        >
-          <div className='overflow-y-auto'>
-            { children }
-          </div>
-        </Content>
-        <FooterLayout/>
+        <HeaderNav/>
+          <Content
+            style={{
+              padding: '0 15px'
+            }}
+          >
+            <div className=''>
+              { children }
+            </div>
+          </Content>
+          {
+            sRol !== "cliente" &&
+            <FooterLayout/>
+          }
       </Layout>
     </Layout>
   )
 }
 
-export default LayoutApp;
+export default memo(LayoutApp);
