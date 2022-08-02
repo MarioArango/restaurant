@@ -37,7 +37,7 @@ export const rxGenerateOrder = (order, cb = null) => async dispatch => {
   }
   
   export const rxGetOrders = (nIdBranchOffice, typeService, cb = null) => async dispatch => {
-    console.log(nIdBranchOffice, "rxGetOrders")
+    // console.log(nIdBranchOffice, "rxGetOrders")
     dispatch({type: FETCH_GET_ORDERS_START})
     try {
       let q = query(collection(db, 'orders'), 
@@ -48,7 +48,7 @@ export const rxGenerateOrder = (order, cb = null) => async dispatch => {
     );
       
       const unsub = onSnapshot(q, (querySnapshot) => {
-        console.log("rxGetOrders")
+        // console.log("rxGetOrders")
         const orders = [];
         querySnapshot.forEach(doc => {
             orders.push({...doc.data(), nIdOrder: doc.id}) 
@@ -57,7 +57,7 @@ export const rxGenerateOrder = (order, cb = null) => async dispatch => {
       })
       cb && cb(unsub)
     } catch (error) {
-      console.log(error, "error")
+      // console.log(error, "error")
       dispatch({type: FETCH_GET_ORDERS_ERROR})
       message.error('Error del servidor.')
     }

@@ -163,7 +163,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         limit(10)
       );
       const unsub = onSnapshot(q, (querySnapshot) => {
-        console.log("rxGetRequestWaiters")
+        // console.log("rxGetRequestWaiters")
         const requestWaiters = [];
         querySnapshot.forEach(doc => {
           requestWaiters.push({...doc.data(), nIdRequestWaiter: doc.id}) 

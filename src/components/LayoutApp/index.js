@@ -1,24 +1,33 @@
 import { Layout } from 'antd';
+import { useAuth } from '../../Hooks/auth';
 import FooterLayout from './FooterLayout';
 import HeaderNav from './HeaderNav';
+import SidebarLayout from './SidebarLayout';
 
 const { Content } = Layout;
 
 const LayoutApp = ({children}) => {
-  console.log("layout")
+  const { sRol } = useAuth();
+
   return (
-    <Layout className="flex-col">
+    <Layout>
+      {
+        sRol !== "cliente" &&
+        <SidebarLayout/>
+      }
+      <Layout>
       <HeaderNav/>
-      <Content
-        style={{
-          padding: '0 15px'
-        }}
-      >
-        <div className='overflow-y-auto'>
-          { children }
-        </div>
-      </Content>
-    <FooterLayout/> 
+        <Content
+          style={{
+            padding: '0 15px'
+          }}
+        >
+          <div className='overflow-y-auto'>
+            { children }
+          </div>
+        </Content>
+        <FooterLayout/>
+      </Layout>
     </Layout>
   )
 }
