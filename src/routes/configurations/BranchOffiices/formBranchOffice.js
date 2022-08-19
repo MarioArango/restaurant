@@ -80,7 +80,6 @@ const FormBranchOffice = () => {
                     <Form
                         name='form-branch-office'
                         form={form}
-                        className='gx-form-row0'
                         onFinish={handleSubmit}
                         layout="vertical"
                     >

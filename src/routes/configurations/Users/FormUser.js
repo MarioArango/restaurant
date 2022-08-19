@@ -111,7 +111,6 @@ const FormUser = () => {
                     <Form
                         name='form-user'
                         form={form}
-                        className='gx-form-row0'
                         onFinish={handleSubmit}
                         layout="vertical"
                     >

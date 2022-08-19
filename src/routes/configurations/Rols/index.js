@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin, Result, Tag } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
@@ -62,13 +62,13 @@ const Rols = () => {
         title: "Rol",
         width: 20,
         align: "center",
-        render: (value) => value ? value : "-"
+        render: (value) => value ? <Tag color="blue">{value}</Tag> : "-"
     },
     {
         key: "",
         dataIndex: "",
         title: "",
-        width: 10,
+        width: 5,
         align: "center",
         render: (_, rol) => (
             <div className='flex justify-around'>
