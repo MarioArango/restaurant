@@ -102,7 +102,7 @@ const Users = () => {
   }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
   return (
-    <div className='h-screen'>
+    <div className='min-h-screen'>
         {sRol === "administrador" ?
             <>
                 <Card

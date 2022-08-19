@@ -63,11 +63,24 @@ const Dishes = () => {
   //TODO: UPDATE STATE ACTIVE DISH
   const handleChangeActive = (e, dish) => {
     if(dish){
-        const dishUp = {
-            ...dish,
-            bActive: e.target.checked
-        }
-        dispatch(rxUpdateDish(dishUp.nIdDish, dishUp))
+        const title = `¿Esta seguro de ${dish?.bActive? "desactivar" : "activar"} el plato?`
+        const content = `Cuando este ${dish?.bActive? "inactivo, no": "activo"} aparecera en el menú ofrecido al cliente.`;
+        Modal.confirm({
+            centered: true,
+            title,
+            content: <p>{content}</p>,
+            okText: "Sí",
+            cancelText: "Cancelar",
+            cancelButtonProps: { type: "text" },
+            onOk: () => {
+                const dishUp = {
+                    ...dish,
+                    bActive: e.target.checked
+                }
+                dispatch(rxUpdateDish(dishUp.nIdDish, dishUp))
+            },
+            onCancel: () => { }
+          })
     }
   }
 
@@ -117,14 +130,20 @@ const Dishes = () => {
         width: 50,
         align: "center",
         render: (_, dish) => (
-            <div className='flex justify-around'>
-                <Tooltip title="Editar">
-                 <EditTwoTone onClick={() => handleEditDish(dish)} />
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                    <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
-                </Tooltip>
-            </div>
+            <>
+                {
+                    sRol === "administrador" && (
+                        <div className='flex justify-around'>
+                            <Tooltip title="Editar">
+                            <EditTwoTone onClick={() => handleEditDish(dish)} />
+                            </Tooltip>
+                            <Tooltip title="Eliminar">
+                                <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
+                            </Tooltip> 
+                        </div>
+                    )
+                }
+            </>
         )
     }
   ]
@@ -138,9 +157,9 @@ const Dishes = () => {
   }, [authSucursal?.nIdBranchOffice, loadingDeleteDish, loadingAddDish, loadingUpdateDish])
 
   return (
-    <div className='h-screen'>  
+    <div className='min-h-screen'>  
         {
-            sRol === "administrador"?
+            sRol === "administrador" || sRol === "mozo"?
             <>
                 <Card
                 {...cardProps}
@@ -151,16 +170,22 @@ const Dishes = () => {
                     </div>
                 }
                 extra={
-                    <Button
-                        type="primary"
-                        className='bg-primary'
-                        onClick={handleViewFormDish}
-                    >
-                        <div className='flex justify-between'>
-                            <PlusOutlined className='mt-1 mr-2'/>
-                            <p>Agregar plato</p>
-                        </div>
-                    </Button>
+                    <>
+                        {
+                            sRol === "administrador" && (
+                                <Button
+                                    type="primary"
+                                    className='bg-primary'
+                                    onClick={handleViewFormDish}
+                                >
+                                    <div className='flex justify-between'>
+                                        <PlusOutlined className='mt-1 mr-2'/>
+                                        <p>Agregar plato</p>
+                                    </div>
+                                </Button>
+                            )
+                        }
+                    </>
                 }
             >
                 <Table

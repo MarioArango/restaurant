@@ -184,7 +184,7 @@ const Orders = () => {
   }, [authSucursal?.nIdBranchOffice, typeService])
 
   return (
-    <div>
+    <div className='min-h-screen'>
         {
             sRol === "chef" || sRol === "administrador" || sRol === "mozo"?
             <>
@@ -231,7 +231,7 @@ const Orders = () => {
                         dataSource={listOrders}
                         rowKey={(order) => order.nIdOrder}
                         rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
-                        scroll={{x: 900}}
+                        scroll={{x: 900 }}
                         onRow={(order) => ({
                             onClick: () => {
                                 dispatch(rxOrderSelected(order))

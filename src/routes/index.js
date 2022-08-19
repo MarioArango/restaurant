@@ -12,8 +12,8 @@ function App() {
   return (
     <LayoutApp>
       <Routes>
-          <Route exact path="/" element={<Navigate to="/home"/>}/>
-          <Route exact path="/home" element={<Menu/>}/>
+          <Route exact path="/" element={<Navigate to="/menu"/>}/>
+          <Route exact path="/menu" element={<Menu/>}/>
           <Route exact path="/orders" element={<Orders/>}/>
           <Route exact path="/dishes" element={<Dishes/>}/>
           <Route exact path="/reports/*" element={<Reports/>}/>

@@ -222,7 +222,7 @@ const {
    }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
-    <div>
+    <div className='min-h-screen'>
         {
             sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
             <>

@@ -76,7 +76,7 @@ const Rates = () => {
   }, [authSucursal?.nIdBranchOffice])
 
   return (
-    <div className='h-screen'>
+    <div className='min-h-screen'>
       {
         sRol === "administrador" ?
         <div>

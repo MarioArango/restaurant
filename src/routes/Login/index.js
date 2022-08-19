@@ -29,7 +29,7 @@ const Login = () => {
                 sRol: user.sRol
             }));
             resetFields()
-            navigate("/home")
+            navigate("/menu")
             window.location.reload();
         }else {
             message.error("Credenciales incorrectas")

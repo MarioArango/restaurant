@@ -94,7 +94,7 @@ const BranchOffices = () => {
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (
-    <div className='h-screen'>  
+    <div className='min-h-screen'>  
         {
             sRol === "administrador"?
                 <>

@@ -97,7 +97,7 @@ const TypesProducts = () => {
   }, [authSucursal?.nIdBranchOffice, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
-    <div className='h-screen'>  
+    <div className='min-h-screen'>  
         {
             sRol === "administrador"?
                 <>
