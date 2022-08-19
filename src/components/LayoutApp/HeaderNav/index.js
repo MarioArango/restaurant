@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { Avatar, Button, Layout, Modal } from 'antd';
 import { PlayCircleOutlined, PoweroffOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import { clearAuth, useAuth } from '../../../Hooks/auth';
@@ -11,6 +12,7 @@ const { Header } = Layout;
 const HeaderNav = () => {
   const { sRol } = useAuth();
 
+  const navigate = useNavigate();
   //TODO: REDUX STATE
   const { typeService,  numberTable } = useSelector(state => state.get("users"));
   const { initService } = useSelector(state => state.get("menu"));
@@ -30,6 +32,7 @@ const HeaderNav = () => {
         clearAuth();
         localStorage.removeItem("authSucursal");
         dispatch(rxClearAllInitService())
+        navigate("/login")
         window.location.reload();
       },
       onCancel: () => { }

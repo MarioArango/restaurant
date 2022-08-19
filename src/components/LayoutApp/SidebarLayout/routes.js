@@ -17,7 +17,7 @@ export const routes = [
     {
         key: "1",
         icon: <SnippetsOutlined className="mr-2"/>,
-        label: <Link to="/">Menu</Link>,
+        label: <Link to="/home">Menu</Link>,
     },
     {
         key: "2",

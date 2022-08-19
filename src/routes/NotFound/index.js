@@ -7,7 +7,7 @@ const NotFound = () => {
 
   //TODO: BACK TO HOME
   const handleBack = () => {
-    navigate('/');
+    navigate(-1);
   }
   return (
     <Result

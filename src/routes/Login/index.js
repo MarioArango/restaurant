@@ -4,13 +4,14 @@ import { cardProps, requiredField } from '../../util/config';
 import { IdcardOutlined } from '@ant-design/icons';
 import { setAuth } from '../../Hooks/auth';
 import { rxLoginUser } from '../../appRedux/actions';
+import { useNavigate } from "react-router-dom";
 
 const { Item } = Form;
 
 const Login = () => {
 
   const { loadingLoginUser } = useSelector(state => state.get("users"));
-
+  let navigate = useNavigate();
   const dispatch = useDispatch();
 
   //TODO: HOOKS INHERED FROM ANTD
@@ -28,6 +29,7 @@ const Login = () => {
                 sRol: user.sRol
             }));
             resetFields()
+            navigate("/home")
             window.location.reload();
         }else {
             message.error("Credenciales incorrectas")
