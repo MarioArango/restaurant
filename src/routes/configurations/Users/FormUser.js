@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SaveOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Modal, Form, Row, Col, Input, Button, Select} from 'antd';
 import { requiredField } from '../../../util/config';
-import { rxRegisterUser, rxUpdateUser, rxShowFormUser, rxGetBranchOffices } from '../../../appRedux/actions';
+import { rxRegisterUser, rxUpdateUser, rxShowFormUser, rxGetBranchOffices, rxGetRols} from '../../../appRedux/actions';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -15,6 +15,11 @@ const FormUser = () => {
       loadingCreateUser,
       loadingUpdateUser
   } = useSelector(state => state.get("users"));
+
+  const { 
+    loadingListRols,
+    listRols
+  } = useSelector(state => state.get("rols"));
 
   const { 
       loadingListBranchOff,
@@ -46,7 +51,8 @@ const FormUser = () => {
         const user = {
             sUsername: values.sUsername,
             sPassword,
-            sRol: values.sRol,
+            sRol: listRols.filter(r => r.nIdRol === values.nIdRol)[0]?.sRol?? "",
+            nIdRol: values.nIdRol,
             sBranchOfficesAssigned
         }
         if(userSelected){
@@ -71,7 +77,7 @@ const FormUser = () => {
         setFieldsValue({
             sUsername: userSelected.sUsername,
             sPassword: userSelected.sPassword,
-            sRol: userSelected.sRol,
+            nIdRol: userSelected.nIdRol,
             sBranchOffices: userSelected.sBranchOfficesAssigned?.map(bo => bo.nIdBranchOffice)
         })
     }
@@ -81,9 +87,10 @@ const FormUser = () => {
    //TODO: INIT - GET ALL BRANCHOFFICES
    useEffect(() => {
     dispatch(rxGetBranchOffices());
+    dispatch(rxGetRols());
     // eslint-disable-next-line
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
-
+  
   return (
     <>
         {
@@ -126,12 +133,18 @@ const FormUser = () => {
                                 </Item>
                             </Col>
                             <Col span={24}>
-                                <Item label="Rol" name="sRol" rules={requiredField}>
-                                    <Select>
-                                        <Option value="cliente">Cliente</Option>
-                                        <Option value="mozo">Mozo</Option>
-                                        <Option value="chef">Chef</Option>
-                                        <Option value="administrador">Administrador</Option>
+                                <Item label="Rol" name="nIdRol" rules={requiredField}>
+                                    <Select
+                                        placeholder="Seleccione"
+                                        loading={loadingListRols}
+                                    >
+                                        {
+                                            listRols?.map((r, index) => (
+                                                <Option key={index} value={r.nIdRol}>
+                                                    {r.sRol}
+                                                </Option>
+                                            ))
+                                        }
                                     </Select>
                                 </Item>
                             </Col>

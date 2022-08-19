@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RedoOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
-import { Form, Row, Col, Input, Button, Tree, Drawer, Tooltip, Select, Menu, Dropdown } from 'antd';
+import { Form, Row, Col, Input, Button, Tree, Drawer, Tooltip, Menu, Dropdown } from 'antd';
 import { requiredField } from '../../../util/config';
-import { rolesDefault } from '../../../util/rolesDefault';
 import { rols } from './rols';
+import { rolesDefault } from './rolesDefault';
 import { rxRegisterRol, rxUpdateRol, rxShowFormRol } from '../../../appRedux/actions';
 
 const { Item } = Form;
-const { Option } = Select;
 
 const FormRol = () => {
   const [ permissions, setPermissions  ] = useState([]);
