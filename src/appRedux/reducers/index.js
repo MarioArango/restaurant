@@ -6,6 +6,7 @@ import Orders from './Orders';
 import Users from './Users';
 import Reports from './Reports';
 import TypesProducts from './TypesProducts';
+import Rols from './Rols';
 
 const rootReducer = combineReducers({
     branchOffices: BranchOffices,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     users: Users,
     reports: Reports,
     typesProducts: TypesProducts,
+    rols: Rols,
 })
 
 export default rootReducer;

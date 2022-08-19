@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import { 
     BarChartOutlined, 
     BorderOutlined, 
+    CoffeeOutlined, 
     DollarCircleOutlined, 
     FieldTimeOutlined, 
     ProfileOutlined, 
+    SafetyOutlined, 
     SettingOutlined, 
     ShopOutlined, 
     SnippetsOutlined, 
@@ -26,7 +28,7 @@ export const routes = [
     },
     {
         key: "3",
-        icon: <BorderOutlined className='mr-2' />,
+        icon: <CoffeeOutlined className='mr-2' />,
         label: <Link to="/dishes">Platos</Link>,
     },
     {
@@ -73,6 +75,11 @@ export const routes = [
                 key: "5.3",
                 icon: <ShopOutlined className='mr-2'/>,
                 label: <Link to="/configuration/branch-offices">Sucursales</Link>,
+            },
+            {
+                key: "5.4",
+                icon: <SafetyOutlined className='mr-2'/>,
+                label: <Link to="/configuration/rols">Roles</Link>,
             },
         ]
     }

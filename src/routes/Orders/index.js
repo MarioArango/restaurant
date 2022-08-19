@@ -209,6 +209,7 @@ const Orders = () => {
                     extra={
                         <>
                             {
+                                //falta poner el permiso de atender, porque si puede atender puede finalizar
                                 typeService === "mesa" &&
                                 orderSelected?.sState === "requestPayment" &&
                                 <Button type='primary' className='bg-primary' onClick={() => handleFinishedOrder(orderSelected)}>
