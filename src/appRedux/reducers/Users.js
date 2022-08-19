@@ -43,6 +43,7 @@ const initialState = {
     loadingUpdateUser: false,
     loadingLoginUser: false,
     authSucursal: JSON.parse(localStorage.getItem("authSucursal")),
+    authPermissions: JSON.parse(localStorage.getItem("authPermissions")),
     typeService: localStorage.getItem("typeService"),
     numberTable: localStorage.getItem("numberTable"),
     showTypesService: false,
@@ -172,7 +173,8 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingLoginUser: false,
-                authSucursal: payload.sBranchOfficesAssigned[0]
+                authSucursal: payload?.user?.sBranchOfficesAssigned[0],
+                authPermissions: payload?.permissions
             }
         }
 

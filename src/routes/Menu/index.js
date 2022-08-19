@@ -25,6 +25,7 @@ import {
     rxShowInitService
 } from '../../appRedux/actions';
 import InitService from './InitService';
+import Permissions from '../../components/Permissions';
 
 const Menu = () => {
     
@@ -222,115 +223,107 @@ const {
    }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
-    <div className='min-h-screen'>
-        {
-            sRol === "mozo" || sRol === "administrador" || sRol === "cliente"?
-            <>
-                    <Spin spinning={loadingListDishesMenu}>
-                    <div className='flex justify-between mt-2 overflow-x-auto'>
-                        <div>
-                            {
-                                (sRol === "cliente" || sRol === "administrador") 
-                                    && (typeService === "mesa") 
-                                    && orderSummaryTotal?.length > 0 &&
-                                    <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
-                                        <div className='flex justify-center'>
-                                            <FileDoneOutlined className='mt-1 mr-2' />
-                                            <p>Pedir Cuenta</p>
-                                        </div>
-                                    </Button>
-                            }
-                        </div>
-                        <div>
-                            {
-                                (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
-                                <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
-                                    <div className='flex justify-center'>
-                                        <UserOutlined className='mt-1 mr-2' />
-                                        <p>Solicitar Mozo</p>
-                                    </div>
-                                </Button>
-                            }
-                        </div>
-                        <Affix offsetTop={20} className="mb-4">
-                            <Button 
-                                type='primary'
-                                className='bg-primary' 
-                                onClick={handleGenerateOrder}
-                                disabled={!typeService}
-                            >
-                                <div className='flex justify-between'>
-                                    <ShoppingOutlined className='mt-1 mr-2'/> 
-                                    <p>
-                                        {
-                                            (orderSummary?.length === 0 && orderSummaryTotal?.length > 0)
-                                            ? "Ver resumen de pedido"
-                                            : orderSummary?.length > 0 
-                                                ?"Generar Pedido" 
-                                                : "Generar Pedido"
-                                        }
-                                    </p>
-                                </div>
-                            </Button>
-                        </Affix>
-                    </div>
-                    <div className='flex justify-around mb-2 overflow-x-auto'>
-                        {
-                            listTypesProducts.map((tp, index) => (
-                                <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct({nIdTypeProduct: tp.nIdTypeProduct, reset: false})} loading={loadingListTypesProducts}>
-                                    <div className='flex justify-center'>
-                                        <FilterOutlined className='mt-1 mr-2'/>
-                                        {tp.sTypeProduct}
-                                    </div>
-                                </Button>
-                            ))
-                        }
-                        {
-                            listTypesProducts?.length &&
-                            <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
-                                <div className='flex justify-center'>
-                                    <FilterOutlined className='mt-1 mr-2'/>
-                                    Menú completo
-                                </div>
-                            </Button>
-                        }
-                    </div>
-                    <Row gutter={12}>
-                        {
-                            getCardDishes()
-                        }
-                        <BackTop duration={500} className='hover:p-[1px]' >
-                            <Tooltip title="Subir">
-                                <img src={rowTop} width="40px" alt="subir"/>
-                            </Tooltip>
-                        </BackTop>
-                    </Row>
+    <Permissions permission={"menu"}>
+        <>
+            <Spin spinning={loadingListDishesMenu}>
+            <div className='flex justify-between mt-2 overflow-x-auto'>
+                <div>
                     {
-                        showOrderSummary &&
-                        <OrderSummary 
-                            quantityByDish={quantityByDish}
-                            handleAddQtyDish={handleAddQtyDish}
-                            handleDelQtyDish={handleDelQtyDish}
-                        />
+                        (sRol === "cliente" || sRol === "administrador") 
+                            && (typeService === "mesa") 
+                            && orderSummaryTotal?.length > 0 &&
+                            <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
+                                <div className='flex justify-center'>
+                                    <FileDoneOutlined className='mt-1 mr-2' />
+                                    <p>Pedir Cuenta</p>
+                                </div>
+                            </Button>
                     }
-                    </Spin>
-                    <>
-                        { showTypesService && <TypeService/> }
-                    </>
-                    <>
-                        <FormRate/>
-                    </>
-                    <>
-                        { showInitService && <InitService/> }
-                    </>
+                </div>
+                <div>
+                    {
+                        (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
+                        <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
+                            <div className='flex justify-center'>
+                                <UserOutlined className='mt-1 mr-2' />
+                                <p>Solicitar Mozo</p>
+                            </div>
+                        </Button>
+                    }
+                </div>
+                <Affix offsetTop={20} className="mb-4">
+                    <Button 
+                        type='primary'
+                        className='bg-primary' 
+                        onClick={handleGenerateOrder}
+                        disabled={!typeService}
+                    >
+                        <div className='flex justify-between'>
+                            <ShoppingOutlined className='mt-1 mr-2'/> 
+                            <p>
+                                {
+                                    (orderSummary?.length === 0 && orderSummaryTotal?.length > 0)
+                                    ? "Ver resumen de pedido"
+                                    : orderSummary?.length > 0 
+                                        ?"Generar Pedido" 
+                                        : "Generar Pedido"
+                                }
+                            </p>
+                        </div>
+                    </Button>
+                </Affix>
+            </div>
+            <div className='flex justify-around mb-2 overflow-x-auto'>
+                {
+                    listTypesProducts.map((tp, index) => (
+                        <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct({nIdTypeProduct: tp.nIdTypeProduct, reset: false})} loading={loadingListTypesProducts}>
+                            <div className='flex justify-center'>
+                                <FilterOutlined className='mt-1 mr-2'/>
+                                {tp.sTypeProduct}
+                            </div>
+                        </Button>
+                    ))
+                }
+                {
+                    listTypesProducts?.length &&
+                    <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
+                        <div className='flex justify-center'>
+                            <FilterOutlined className='mt-1 mr-2'/>
+                            Menú completo
+                        </div>
+                    </Button>
+                }
+            </div>
+            <Row gutter={12}>
+                {
+                    getCardDishes()
+                }
+                <BackTop duration={500} className='hover:p-[1px]' >
+                    <Tooltip title="Subir">
+                        <img src={rowTop} width="40px" alt="subir"/>
+                    </Tooltip>
+                </BackTop>
+            </Row>
+            {
+                showOrderSummary &&
+                <OrderSummary 
+                    quantityByDish={quantityByDish}
+                    handleAddQtyDish={handleAddQtyDish}
+                    handleDelQtyDish={handleDelQtyDish}
+                />
+            }
+            </Spin>
+            <>
+                { showTypesService && <TypeService/> }
             </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+            <>
+                <FormRate/>
+            </>
+            <>
+                { showInitService && <InitService/> }
+            </>
+        </>
+    </Permissions>
   )
 }
 

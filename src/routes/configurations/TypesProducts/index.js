@@ -6,6 +6,7 @@ import { cardProps, tableProps } from '../../../util/config';
 import FormTypesProduct from './formTypesProduct';
 import { useAuth } from '../../../Hooks/auth';
 import { rxDeleteTypeProduct, rxGetTypesProducts, rxShowFormTypeProduct, rxTypeProductSelected } from '../../../appRedux/actions';
+import Permissions from '../../../components/Permissions';
 
 const TypesProducts = () => {
   const { 
@@ -97,10 +98,8 @@ const TypesProducts = () => {
   }, [authSucursal?.nIdBranchOffice, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
-    <div className='min-h-screen'>  
-        {
-            sRol === "administrador"?
-                <>
+    <Permissions permission='configurations.types-products'>  
+        <>
                     <Card
                         {...cardProps}
                         title={
@@ -145,14 +144,8 @@ const TypesProducts = () => {
                         showFormTypeProduct && 
                         <FormTypesProduct />
                     }
-                </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+        </>
+    </Permissions>
   )
 }
 

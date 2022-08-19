@@ -13,6 +13,7 @@ import {
     rxShowFormDishes, 
     rxUpdateDish
 } from '../../appRedux/actions';
+import Permissions from '../../components/Permissions';
 
 const Dishes = () => {
   //TODO: REDUX STATE
@@ -157,10 +158,8 @@ const Dishes = () => {
   }, [authSucursal?.nIdBranchOffice, loadingDeleteDish, loadingAddDish, loadingUpdateDish])
 
   return (
-    <div className='min-h-screen'>  
-        {
-            sRol === "administrador" || sRol === "mozo"?
-            <>
+    <Permissions permission='dishes'>  
+        <>
                 <Card
                 {...cardProps}
                 title={
@@ -209,14 +208,8 @@ const Dishes = () => {
                 { 
                 showFormDishes && <FormDish/>
                 }
-            </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+        </>
+    </Permissions>
   )
 }
 

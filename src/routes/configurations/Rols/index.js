@@ -6,6 +6,7 @@ import { cardProps, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
 import FormRol from './FormRol';
 import { rxDeleteRol, rxGetRols, rxShowFormRol, rxRolSelected } from '../../../appRedux/actions';
+import Permissions from '../../../components/Permissions';
 
 const Rols = () => {
   const { 
@@ -94,9 +95,8 @@ const Rols = () => {
   }, [loadingDeleteRol, loadingCreateRol, loadingUpdateRol])
 
   return (
-    <div className='min-h-screen'>
-        {sRol === "administrador" ?
-            <>
+    <Permissions permission='configurations.rols'>
+        <>
                 <Card
                 {...cardProps}
                 title={
@@ -142,14 +142,8 @@ const Rols = () => {
                     showFormRol && 
                     <FormRol />
                 }
-            </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+        </>
+    </Permissions>
   )
 }
 

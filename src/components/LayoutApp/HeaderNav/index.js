@@ -31,6 +31,7 @@ const HeaderNav = () => {
       onOk: () => {
         clearAuth();
         localStorage.removeItem("authSucursal");
+        localStorage.removeItem("authPermissions");
         dispatch(rxClearAllInitService())
         navigate("/login")
         window.location.reload();

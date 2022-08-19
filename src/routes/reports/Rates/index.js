@@ -7,6 +7,7 @@ import { rxReportRates } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
 import Excel from '../../../components/Excel';
+import Permissions from '../../../components/Permissions';
 
 const Rates = () => {
 
@@ -76,37 +77,29 @@ const Rates = () => {
   }, [authSucursal?.nIdBranchOffice])
 
   return (
-    <div className='min-h-screen'>
-      {
-        sRol === "administrador" ?
-        <div>
-          <RangeDateFilter handleFilter={handleFilter} rangeDate={rangeDate} setRangeDate={setRangeDate}/>
-          <Card
-              {...cardProps}
-              title="Reporte de ventas"
-              extra={
-                <Excel dataSource={listReportRates} columns={columns} fileName="Reporte_puntuaciones"/>
-              }
-          >
-              <Table
-                  {...tableProps}
-                  bordered
-                  columns={columns}
-                  loading={loadingListReportRates}
-                  dataSource={listReportRates}
-                  rowKey={(rate) => rate.nIdRate}
-                  rowClassName={(_) => "cursor-pointer"}
-                  scroll={{y: "55vh"}}
-              />
-          </Card>
-        </div>
-        : <Result
-            status="403"
-            title="403"
-            subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-        />
-      }
-    </div>
+    <Permissions permission="reports.rates">
+      <>
+        <RangeDateFilter handleFilter={handleFilter} rangeDate={rangeDate} setRangeDate={setRangeDate}/>
+        <Card
+            {...cardProps}
+            title="Reporte de ventas"
+            extra={
+              <Excel dataSource={listReportRates} columns={columns} fileName="Reporte_puntuaciones"/>
+            }
+        >
+            <Table
+                {...tableProps}
+                bordered
+                columns={columns}
+                loading={loadingListReportRates}
+                dataSource={listReportRates}
+                rowKey={(rate) => rate.nIdRate}
+                rowClassName={(_) => "cursor-pointer"}
+                scroll={{y: "55vh"}}
+            />
+        </Card>
+      </>
+    </Permissions>
   )
 }
 

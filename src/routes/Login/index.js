@@ -24,9 +24,9 @@ const Login = () => {
         if(isValidate){
             setAuth(({
                 isValidate: true, 
-                sUsername: user.sUsername,
-                sBranchOfficesAssigned: user.sBranchOfficesAssigned,
-                sRol: user.sRol
+                sUsername: user?.sUsername,
+                sBranchOfficesAssigned: user?.sBranchOfficesAssigned,
+                sRol: user?.sRol
             }));
             resetFields()
             navigate("/menu")

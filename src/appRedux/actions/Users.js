@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit } from "firebase/firestore";
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit, getDoc } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_REGISTER_USER_START,
@@ -91,6 +91,22 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
     }
   }
 
+  const getRols = async (nIdRol) => {
+    let permissions = [];
+    try {
+      const querySnapshot = await getDocs(collection(db, 'rols'));
+      querySnapshot.forEach(doc => {
+        if(doc.id === nIdRol){
+          permissions.push({...doc.data(), nIdRol: doc.id}) 
+        }
+      })
+      localStorage.setItem("authPermissions", JSON.stringify(permissions))
+      return permissions;
+    } catch (error) {
+      // console.log(error, "error")
+    }
+  }
+
   export const rxLoginUser = (sUsername, sPassword, cb = null) => async dispatch =>{
     dispatch({type: FETCH_LOGIN_USER_START})
     try {
@@ -100,10 +116,17 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       if(querySnapshot?.docs?.length > 0){
         querySnapshot.forEach((doc) => {
           const user = doc.data();
+
           const sPasswordDecryp = atob(user.sPassword);
           if(user.sUsername === sUsername && sPasswordDecryp === sPassword){
             localStorage.setItem("authSucursal", JSON.stringify(user.sBranchOfficesAssigned[0]))
-            dispatch({type: FETCH_LOGIN_USER_SUCCESS, payload: user})
+
+            let permissions = []; 
+            getRols(user.nIdRol).then(data => {
+              permissions = data;
+            })
+
+            dispatch({type: FETCH_LOGIN_USER_SUCCESS, payload: {user, permissions}})
             message.success("Bienvenido")
             cb && cb(true, user)
           }else {
@@ -116,6 +139,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         cb && cb(false)
       }
     } catch (error) {
+      console.log(error, "error")
       dispatch({type: FETCH_LOGIN_USER_ERROR})
       message.error('Error del servidor.')
     }

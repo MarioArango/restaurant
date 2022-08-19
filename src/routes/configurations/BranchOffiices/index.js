@@ -6,6 +6,7 @@ import { cardProps, tableProps } from '../../../util/config';
 import FormBranchOffice from './formBranchOffice';
 import { useAuth } from '../../../Hooks/auth';
 import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../../appRedux/actions';
+import Permissions from '../../../components/Permissions';
 
 const BranchOffices = () => {
   const { 
@@ -94,10 +95,8 @@ const BranchOffices = () => {
   }, [loadingDeleteBranchOff, loadingCreateBranchOff, loadingUpdateBranchOff])
 
   return (
-    <div className='min-h-screen'>  
-        {
-            sRol === "administrador"?
-                <>
+    <Permissions permission='configurations.branchoffices'>  
+        <>
                     <Card
                         {...cardProps}
                         title={
@@ -142,14 +141,8 @@ const BranchOffices = () => {
                         showFormBranchOffice && 
                         <FormBranchOffice />
                     }
-                </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+        </>
+    </Permissions>
   )
 }
 

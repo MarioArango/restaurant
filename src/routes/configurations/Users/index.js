@@ -6,6 +6,7 @@ import { cardProps, tableProps } from '../../../util/config';
 import { useAuth } from '../../../Hooks/auth';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../../appRedux/actions';
+import Permissions from '../../../components/Permissions';
 
 const Users = () => {
   const { 
@@ -102,9 +103,8 @@ const Users = () => {
   }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
   return (
-    <div className='min-h-screen'>
-        {sRol === "administrador" ?
-            <>
+    <Permissions permission='configurations.users'>
+        <>
                 <Card
                 {...cardProps}
                 title={
@@ -150,14 +150,8 @@ const Users = () => {
                     showFormUser && 
                     <FormUser />
                 }
-            </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+        </>
+    </Permissions>
   )
 }
 

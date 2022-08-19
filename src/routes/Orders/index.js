@@ -13,6 +13,7 @@ import {
     rxOrderDishSelected,
     rxAddOrderSummaryTotalByClient
 } from '../../appRedux/actions';
+import Permissions from '../../components/Permissions';
 
 const { Panel } = Collapse;
 const { Step } = Steps;
@@ -184,10 +185,8 @@ const Orders = () => {
   }, [authSucursal?.nIdBranchOffice, typeService])
 
   return (
-    <div className='min-h-screen'>
-        {
-            sRol === "chef" || sRol === "administrador" || sRol === "mozo"?
-            <>
+    <Permissions permission="orders">
+        <>
                 <Collapse defaultActiveKey={['1']} className="my-3">
                     <Panel key="1" header="Proceso del pedido">
                         <Steps size='small' current={3}>
@@ -263,14 +262,8 @@ const Orders = () => {
                     />
                 }
                 </Card>
-            </>
-            : <Result
-                status="403"
-                title="403"
-                subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-            />
-        }
-    </div>
+        </>
+    </Permissions>
   )
 }
 

@@ -7,6 +7,7 @@ import { rxReportOrders } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
 import Excel from '../../../components/Excel';
+import Permissions from '../../../components/Permissions';
 
 const Orders = () => {
 
@@ -76,10 +77,8 @@ const Orders = () => {
   }, [authSucursal?.nIdBranchOffice])
 
   return (
-    <div className='min-h-screen'>
-      {
-        sRol === "administrador" ?
-        <div>
+    <Permissions permission='reports.time-orders'>
+      <>
           <RangeDateFilter handleFilter={handleFilter} rangeDate={rangeDate} setRangeDate={setRangeDate}/>
           <Card
               {...cardProps}
@@ -99,14 +98,8 @@ const Orders = () => {
                   scroll={{y: "55vh"}}
               />
           </Card>
-        </div>
-        : <Result
-            status="403"
-            title="403"
-            subTitle="Lo sentimos, no está autorizado para acceder a esta página."
-        />
-      }
-    </div>
+      </>
+    </Permissions>
   )
 }
 
