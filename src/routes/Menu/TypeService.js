@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Input, Button, Radio, Space, Col, Row, message} from "antd";
+import { Modal, Button, Radio, Space, Col, Row, message, InputNumber} from "antd";
 import { AuditOutlined, SaveOutlined } from '@ant-design/icons';
-import { currencyOnly } from '../../util/config';
+import { numbersOnly } from '../../util/config';
 import { 
     rxClearAllOrderSummary, 
     rxSetNumberTable, 
@@ -78,15 +78,18 @@ const TypeService = () => {
                         <Radio value="mesa">
                             Mesa
                             {valueService === "mesa" ? (
-                                <Input
+                                <InputNumber
+                                    className="w-full"
                                     placeholder='Ingrese el número de mesa'
-                                    onChange={(e) => setNumberTable(e.target.value)}
+                                    onChange={(value) => setNumberTable(value)}
                                     value={numberTable}
                                     style={{
                                         width: 200,
                                         marginLeft: 57,
                                     }}
-                                    onKeyDown={currencyOnly}
+                                    onKeyDown={numbersOnly}
+                                    min={1}
+                                    max={20}
                                 />
                             ) : null}
                         </Radio>

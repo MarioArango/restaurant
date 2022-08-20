@@ -76,7 +76,7 @@ const FormUser = () => {
     if(userSelected && showFormUser){
         setFieldsValue({
             sUsername: userSelected.sUsername,
-            sPassword: userSelected.sPassword,
+            sPassword: atob(userSelected.sPassword),
             nIdRol: userSelected.nIdRol,
             sBranchOffices: userSelected.sBranchOfficesAssigned?.map(bo => bo.nIdBranchOffice)
         })

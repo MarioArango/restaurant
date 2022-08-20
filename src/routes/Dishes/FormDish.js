@@ -222,8 +222,8 @@ const FormDish = () => {
                             <Item label="Tipo de Producto" name="nIdTypeProduct" rules={requiredField}>
                                 <Select loading={loadingListTypesProducts}>
                                   {
-                                    listTypesProducts.map(tp => (
-                                    <Option value={tp.nIdTypeProduct}>{tp.sTypeProduct}</Option>
+                                    listTypesProducts.map((tp, index) => (
+                                    <Option key={index} value={tp.nIdTypeProduct}>{tp.sTypeProduct}</Option>
                                     ))
                                   }
                                 </Select>
@@ -232,8 +232,8 @@ const FormDish = () => {
                         <Col span={24}>
                             <Item label="Tipo de Servicio" name="sTypeService" rules={requiredField}>
                                 <Select>
-                                    <Option value="mesa">Mesa</Option>
-                                    <Option value="barra">Barra</Option>
+                                    <Option key="mesa" value="mesa">Mesa</Option>
+                                    <Option key="barra" value="barra">Barra</Option>
                                 </Select>
                             </Item>
                         </Col>

@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Modal, Input, Button, Col, Row, Form} from "antd";
+import { Modal, Button, Col, Row, Form, InputNumber} from "antd";
 import { PlayCircleOutlined, SaveOutlined } from '@ant-design/icons';
-import { currencyOnly, dateFormatList, requiredField } from '../../util/config';
+import { dateFormatList, numbersOnly, requiredField } from '../../util/config';
 import { usePermission } from '../../Hooks/usePermission';
 import { rxShowInitService, rxInitService } from '../../appRedux/actions';
 
@@ -64,7 +64,7 @@ const InitService = () => {
             <Row gutter={12}>
                 <Col span={24}>
                     <Item name="nNumberDiners" label="Número de comensales" rules={requiredField}>
-                        <Input onKeyDown={currencyOnly}/>
+                        <InputNumber onKeyDown={numbersOnly} min={1} max={20} className="w-full"/>
                     </Item>
                 </Col>
                 <Col span={24}>

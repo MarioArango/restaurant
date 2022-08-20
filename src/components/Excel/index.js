@@ -25,9 +25,9 @@ const Excel = ({dataSource, columns, fileName}) => {
         >
             <ExcelSheet data={dataSource} name={fileName}>
                 {
-                    columns.map(c => {
+                    columns.map((c, index) => {
                         return (
-                            <ExcelColumn label={c.title} value={c.dataIndex}/>
+                            <ExcelColumn key={index} label={c.title} value={c.dataIndex}/>
                         )
                     })
                 }
