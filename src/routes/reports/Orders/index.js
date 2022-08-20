@@ -84,7 +84,7 @@ const Orders = () => {
               {...cardProps}
               title="Reporte de pedidos"
               extra={
-                permExportExcel && <Excel dataSource={listReportOrders} columns={columns} fileName="Reporte_pedidos"/>
+                <Excel permission={permExportExcel} dataSource={listReportOrders} columns={columns} fileName="Reporte_pedidos"/>
               }
           >
               <Table

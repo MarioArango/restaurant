@@ -99,7 +99,7 @@ const Sales = () => {
                 </div>
               }
               extra={
-                permExportExcel && <Excel dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
+                 <Excel permission={permExportExcel} dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
               }
           >
               <Table

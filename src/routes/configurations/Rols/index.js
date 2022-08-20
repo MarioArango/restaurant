@@ -7,6 +7,8 @@ import FormRol from './FormRol';
 import { rxDeleteRol, rxGetRols, rxShowFormRol, rxRolSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
+import PButton from '../../../components/PButton';
+import PIconEditDelete from '../../../components/PIconEditDelete';
 
 const Rols = () => {
   const { 
@@ -74,24 +76,14 @@ const Rols = () => {
         width: 5,
         align: "center",
         render: (_, rol) => (
-            <div className='flex justify-around'>
-                {
-                    permEdit && 
-                    <Tooltip title="Editar">
-                        <Spin spinning={loadingUpdateRol}>
-                            <EditTwoTone onClick={() => handleEditRol(rol)} />
-                        </Spin>
-                    </Tooltip>
-                }
-                {
-                    permDelete &&
-                    <Tooltip title="Eliminar">
-                        <Spin spinning={loadingDeleteRol}>
-                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteRol(rol)} />
-                        </Spin>
-                    </Tooltip>
-                }
-            </div>
+            <PIconEditDelete
+                permissionEdit={permEdit}
+                permissionDelete={permDelete}
+                handleClickEdit={() => handleEditRol(rol)} 
+                handleClickDelete={() => handleDeleteRol(rol)}
+                spinningEdit={loadingUpdateRol}
+                spinningDelete={loadingDeleteRol}
+            />
         )
     }
   ]
@@ -114,17 +106,13 @@ const Rols = () => {
                     </div>
                 }
                 extra={
-                    permAdd && 
-                    <Button
-                        type="primary"
-                        className='bg-primary'
-                        onClick={handleViewFormRol}
-                    >
-                        <div className='flex justify-between'>
-                            <PlusOutlined className='mt-1 mr-2'/>
-                            <p>Agregar Rol</p>
-                        </div>
-                    </Button>
+                    <PButton
+                        permission={permAdd}
+                        handleClick={handleViewFormRol}
+                        loading={loadingCreateRol}
+                        icon={<PlusOutlined className='mt-1 mr-2' />}
+                        text="Agregar Rol"
+                    />
                 }
             >
                 <Table
@@ -141,7 +129,9 @@ const Rols = () => {
                             dispatch(rxRolSelected(rol))
                         },
                         onDoubleClick: () => {
-                            handleEditRol(rol)
+                            if(permEdit){
+                                handleEditRol(rol)
+                            }
                         }
                     })}
                 />

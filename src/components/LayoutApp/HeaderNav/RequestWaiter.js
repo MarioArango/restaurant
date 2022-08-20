@@ -2,8 +2,8 @@ import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge, Button, Dropdown, Menu, Tag } from 'antd';
 import { BellOutlined} from '@ant-design/icons';
-import { useAuth } from '../../../Hooks/auth';
 import { rxGetRequestWaiters } from '../../../appRedux/actions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const RequestWaiter = () => {
   //TODO: REDUX STATE
@@ -17,11 +17,11 @@ const RequestWaiter = () => {
   const dispatch = useDispatch();
 
   //TODO: GET AUTH LOCAL STORAGE
-  const { sRol } = useAuth();
+  const permRequestWaiter = usePermission("menu.request-waiter");
 
    //TODO: INIT - GET ALL REQUEST WAITERS
    useEffect(() => {
-    if((sRol === "mozo" || sRol === "administrador") && typeService === "mesa"){
+    if(permRequestWaiter && typeService === "mesa"){
         if(authSucursal && typeService){
             let unsub;
             dispatch(rxGetRequestWaiters(authSucursal.nIdBranchOffice, (us) => {
@@ -39,7 +39,7 @@ const RequestWaiter = () => {
   return (
     <>
         {
-            (sRol === "mozo" || sRol === "administrador") && 
+            permRequestWaiter && 
             <div className='flex-col justify-center items-center mr-2'>
                 <Badge size="small" count={listRequestWaiter?.length}>
                     <Dropdown 

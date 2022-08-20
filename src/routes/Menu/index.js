@@ -26,10 +26,11 @@ import {
 import InitService from './InitService';
 import Permissions from '../../components/Permissions';
 import { usePermission } from '../../Hooks/usePermission';
+import PButton from '../../components/PButton';
 
 const Menu = () => {
     
-  const { showOrderSummary, orderSummary, orderSummaryTotal } = useSelector(state => state.get("orders"));
+  const { showOrderSummary, orderSummary, orderSummaryTotal, loadingUpdateStateOrders } = useSelector(state => state.get("orders"));
 
   const { loadingListDishesMenu, listDishesMenu, listDishesMenuFilter, showInitService, initService } = useSelector(state => state.get("menu"));
 
@@ -230,24 +231,27 @@ const {
             <div className='flex justify-between mt-2 overflow-x-auto'>
                 <div>
                     {
-                        permRequestPayment && typeService === "mesa" && orderSummaryTotal?.length > 0 &&
-                            <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
-                                <div className='flex justify-center'>
-                                    <FileDoneOutlined className='mt-1 mr-2' />
-                                    <p>Pedir Cuenta</p>
-                                </div>
-                            </Button>
+                        typeService === "mesa" && orderSummaryTotal?.length > 0 &&
+                            <PButton
+                                permission={permRequestPayment}
+                                handleClick={handleRequestPayment}
+                                loading={loadingUpdateStateOrders}
+                                icon={<FileDoneOutlined className='mt-1 mr-2' />}
+                                text="Pedir Cuenta"
+                            />
                     }
                 </div>
                 <div>
                     {
-                        permRequestWaiter && (typeService === "mesa") &&
-                            <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
-                                <div className='flex justify-center'>
-                                    <UserOutlined className='mt-1 mr-2' />
-                                    <p>Solicitar Mozo</p>
-                                </div>
-                            </Button>
+                        (typeService === "mesa") &&
+                        <PButton
+                            permission={permRequestWaiter}
+                            handleClick={handleRequestWaiter}
+                            loading={loadingRequestWaiter}
+                            icon={<UserOutlined className='mt-1 mr-2' />}
+                            text="Solicitar Mozo"
+                        />
+                            
                     }
                 </div>
                 <Affix offsetTop={20} className="mb-4">

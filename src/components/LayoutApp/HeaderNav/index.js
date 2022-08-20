@@ -3,14 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { Avatar, Button, Layout, Modal } from 'antd';
 import { PlayCircleOutlined, PoweroffOutlined, UserSwitchOutlined } from '@ant-design/icons';
-import { clearAuth, useAuth } from '../../../Hooks/auth';
+import { clearAuth } from '../../../Hooks/auth';
 import RequestWaiter from './RequestWaiter';
 import { rxClearAllInitService, rxShowInitService, rxShowTypeService } from '../../../appRedux/actions';
+import { usePermission } from '../../../Hooks/usePermission';
+import PButton from '../../PButton';
 
 const { Header } = Layout;
 
 const HeaderNav = () => {
-  const { sRol } = useAuth();
 
   const navigate = useNavigate();
   //TODO: REDUX STATE
@@ -18,6 +19,7 @@ const HeaderNav = () => {
   const { initService } = useSelector(state => state.get("menu"));
 
   const dispatch = useDispatch();
+  const permInitService = usePermission("menu.init-service");
 
   //TODO: CLEAR AUTH AND GOT TO LOGIN
   const handleLogout = () => {
@@ -41,7 +43,7 @@ const HeaderNav = () => {
   }
 
   const handleShowTypeService = () => {
-    if(sRol !== "cliente"){
+    if(permInitService){
       dispatch(rxShowTypeService(true))
     }
   }
@@ -60,22 +62,13 @@ const HeaderNav = () => {
                 </span>
             </Avatar>
           </div>
-          <div>
-            {
-              (sRol === "mozo" || sRol === "administrador") && (
-                <Button 
-                  type="dashed" 
-                  onClick={handleShowInitService} 
-                  className='mr-2 hover:cursor-pointer'
-                >
-                  <div className='flex justify-center text-white'>
-                      <PlayCircleOutlined className='mt-1 mr-2'/>
-                      Iniciar
-                  </div>
-                </Button>
-              )
-            }
-          </div>
+          <PButton
+              permission={permInitService}
+              handleClick={handleShowInitService}
+              loading={false}
+              icon={<PlayCircleOutlined className='mt-1 mr-2' />}
+              text="Iniciar"
+          />
           <div>
             {
               initService?.length > 0 && (

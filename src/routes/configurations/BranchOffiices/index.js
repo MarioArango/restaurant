@@ -7,6 +7,8 @@ import FormBranchOffice from './formBranchOffice';
 import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
+import PIconEditDelete from '../../../components/PIconEditDelete';
+import PButton from '../../../components/PButton';
 
 const BranchOffices = () => {
   const { 
@@ -74,24 +76,14 @@ const BranchOffices = () => {
         width: 30,
         align: "center",
         render: (_, branchOffice) => (
-            <div className='flex justify-around'>
-                {
-                    permEdit &&
-                    <Tooltip title="Editar">
-                        <Spin spinning={loadingUpdateBranchOff}>
-                            <EditTwoTone onClick={() => handleEditBranchOffice(branchOffice)} />
-                        </Spin>
-                    </Tooltip>
-                }
-                {
-                    permDelete && 
-                    <Tooltip title="Eliminar">
-                        <Spin spinning={loadingDeleteBranchOff}>
-                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteBranchOffice(branchOffice)} />
-                        </Spin>
-                    </Tooltip>
-                }
-            </div>
+            <PIconEditDelete 
+                permissionEdit={permEdit}
+                permissionDelete={permDelete}
+                handleClickEdit={() => handleEditBranchOffice(branchOffice)} 
+                handleClickDelete={() => handleDeleteBranchOffice(branchOffice)}
+                spinningEdit={loadingUpdateBranchOff}
+                spinningDelete={loadingDeleteBranchOff}
+            />
         )
     }
   ]
@@ -114,17 +106,13 @@ const BranchOffices = () => {
                             </div>
                         }
                         extra={
-                            permAdd &&
-                            <Button
-                                type="primary"
-                                className='bg-primary'
-                                onClick={handleViewFormBranchOffice}
-                            >
-                                <div className='flex justify-between'>
-                                    <PlusOutlined className='mt-1 mr-2'/>
-                                    <p>Agregar sucursal</p>
-                                </div>
-                            </Button>
+                            <PButton
+                                permission={permAdd}
+                                handleClick={handleViewFormBranchOffice}
+                                loading={loadingCreateBranchOff}
+                                icon={<PlusOutlined className='mt-1 mr-2' />}
+                                text="Agregar sucursal"
+                            />
                         }
                     >
                         <Table
@@ -141,7 +129,9 @@ const BranchOffices = () => {
                                     dispatch(rxBranchOffSelected(branchOffice))
                                 },
                                 onDoubleClick: () => {
-                                    handleEditBranchOffice(branchOffice)
+                                    if(permEdit){
+                                        handleEditBranchOffice(branchOffice)
+                                    }
                                 }
                             })}
                         />

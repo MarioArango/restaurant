@@ -14,6 +14,8 @@ import {
 } from '../../appRedux/actions';
 import Permissions from '../../components/Permissions';
 import { usePermission } from '../../Hooks/usePermission';
+import PButton from '../../components/PButton';
+import PIconEditDelete from '../../components/PIconEditDelete';
 
 const Dishes = () => {
   //TODO: REDUX STATE
@@ -126,7 +128,15 @@ const Dishes = () => {
         title: "Activo",
         width: 80,
         align: "center",
-        render: (value, dish) =>  <Checkbox checked={value} onChange={(e) => handleChangeActive(e, dish)} disabled={!permDishesActive}/>
+        render: (value, dish) =>  permDishesActive
+                                    ? <Checkbox checked={value} onChange={(e) => handleChangeActive(e, dish)}/>
+                                    : <Tooltip 
+                                        title={<p className='text-black font-semibold'>Necesitas permiso para ejecutar esta acción!</p>} 
+                                        color="#F7F6DC" 
+                                        placement="left"
+                                      >
+                                        <Checkbox disabled/>
+                                      </Tooltip>
     },
     {
         key: "",
@@ -135,20 +145,14 @@ const Dishes = () => {
         width: 50,
         align: "center",
         render: (_, dish) => (
-            <div className='flex justify-around'>
-                {
-                    permDishesEdit && 
-                    <Tooltip title="Editar">
-                        <EditTwoTone onClick={() => handleEditDish(dish)} />
-                    </Tooltip>
-                }
-                {
-                    permDishesDelete && 
-                    <Tooltip title="Eliminar">
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
-                    </Tooltip>
-                }
-            </div>
+            <PIconEditDelete  
+                permissionEdit={permDishesEdit}
+                permissionDelete={permDishesDelete}
+                handleClickEdit={() => handleEditDish(dish)} 
+                handleClickDelete={() => handleDeleteDish(dish)}
+                spinningEdit={loadingUpdateDish}
+                spinningDelete={loadingDeleteDish}
+            />
         )
     }
   ]
@@ -173,22 +177,12 @@ const Dishes = () => {
                     </div>
                 }
                 extra={
-                    <>
-                        {
-                            permDishesAdd && (
-                                <Button
-                                    type="primary"
-                                    className='bg-primary'
-                                    onClick={handleViewFormDish}
-                                >
-                                    <div className='flex justify-between'>
-                                        <PlusOutlined className='mt-1 mr-2'/>
-                                        <p>Agregar plato</p>
-                                    </div>
-                                </Button>
-                            )
-                        }
-                    </>
+                    <PButton
+                        permission={permDishesAdd}
+                        handleClick={handleViewFormDish}
+                        icon={<PlusOutlined className='mt-1 mr-2' />}
+                        text="Agregar plato"
+                    />
                 }
             >
                 <Table
@@ -204,13 +198,15 @@ const Dishes = () => {
                             dispatch(rxDishSelected(dish))
                         },
                         onDoubleClick: () => {
-                            handleEditDish(dish)
+                            if(permDishesEdit){
+                                handleEditDish(dish)
+                            }
                         }
                     })}
                 />
                 </Card>
                 { 
-                showFormDishes && <FormDish/>
+                    showFormDishes && <FormDish/>
                 }
         </>
     </Permissions>

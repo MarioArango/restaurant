@@ -7,6 +7,8 @@ import FormTypesProduct from './formTypesProduct';
 import { rxDeleteTypeProduct, rxGetTypesProducts, rxShowFormTypeProduct, rxTypeProductSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
+import PIconEditDelete from '../../../components/PIconEditDelete';
+import PButton from '../../../components/PButton';
 
 const TypesProducts = () => {
   const { 
@@ -76,24 +78,14 @@ const TypesProducts = () => {
         width: 30,
         align: "center",
         render: (_, typeProduct) => (
-            <div className='flex justify-around'>
-                {
-                    permEdit && 
-                    <Tooltip title="Editar">
-                        <Spin spinning={loadingUpdateTypeProduct}>
-                            <EditTwoTone onClick={() => handleEditTypeProduct(typeProduct)} />
-                        </Spin>
-                    </Tooltip>
-                }
-                {
-                    permDelete && 
-                    <Tooltip title="Eliminar">
-                        <Spin spinning={loadingDeleteTypeProduct}>
-                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteTypeProduct(typeProduct)} />
-                        </Spin>
-                    </Tooltip>
-                }
-            </div>
+            <PIconEditDelete  
+                permissionEdit={permEdit}
+                permissionDelete={permDelete}
+                handleClickEdit={() => handleEditTypeProduct(typeProduct)} 
+                handleClickDelete={() => handleDeleteTypeProduct(typeProduct)}
+                spinningEdit={loadingUpdateTypeProduct}
+                spinningDelete={loadingDeleteTypeProduct}
+            />
         )
     }
   ]
@@ -118,17 +110,13 @@ const TypesProducts = () => {
                             </div>
                         }
                         extra={
-                            permAdd &&
-                            <Button
-                                type="primary"
-                                className='bg-primary'
-                                onClick={handleViewFormTypeProduct}
-                            >
-                                <div className='flex justify-between'>
-                                    <PlusOutlined className='mt-1 mr-2'/>
-                                    <p>Agregar</p>
-                                </div>
-                            </Button>
+                            <PButton
+                                permission={permAdd}
+                                handleClick={handleViewFormTypeProduct}
+                                loading={loadingCreateTypeProduct}
+                                icon={<PlusOutlined className='mt-1 mr-2' />}
+                                text="Agregar"
+                            />
                         }
                     >
                         <Table
@@ -145,7 +133,9 @@ const TypesProducts = () => {
                                     dispatch(rxTypeProductSelected(typeProduct))
                                 },
                                 onDoubleClick: () => {
-                                    handleEditTypeProduct(typeProduct)
+                                    if(permEdit){
+                                        handleEditTypeProduct(typeProduct)
+                                    }
                                 }
                             })}
                         />

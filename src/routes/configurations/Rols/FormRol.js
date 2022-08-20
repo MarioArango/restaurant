@@ -128,22 +128,22 @@ const FormRol = () => {
                                         items={[
                                           {
                                             key: "1",
-                                            label: "administrador",
+                                            label: "Administrador",
                                             onClick: () => handleReturnPermDefault("administrador")
                                           },
                                           {
                                             key: "2",
-                                            label: "cliente",
+                                            label: "Cliente",
                                             onClick: () => handleReturnPermDefault("cliente")
                                           },
                                           {
                                             key: "3",
-                                            label: "mozo",
+                                            label: "Mozo",
                                             onClick: () => handleReturnPermDefault("mozo")
                                           },
                                           {
                                             key: "4",
-                                            label: "chef",
+                                            label: "Chef",
                                             onClick: () => handleReturnPermDefault("chef")
                                           },
                                           

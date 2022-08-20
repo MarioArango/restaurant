@@ -13,7 +13,7 @@ const LayoutApp = ({children}) => {
   return (
     <Layout className=''>
       {
-        sRol !== "cliente" &&
+        sRol !== "Cliente" &&
         <SidebarLayout/>
       }
       <Layout>
@@ -28,7 +28,7 @@ const LayoutApp = ({children}) => {
             </div>
           </Content>
           {
-            sRol !== "cliente" &&
+            sRol !== "Cliente" &&
             <FooterLayout/>
           }
       </Layout>

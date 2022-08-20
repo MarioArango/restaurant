@@ -7,6 +7,8 @@ import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
+import PIconEditDelete from '../../../components/PIconEditDelete';
+import PButton from '../../../components/PButton';
 
 const Users = () => {
   const { 
@@ -82,24 +84,14 @@ const Users = () => {
         width: 10,
         align: "center",
         render: (_, user) => (
-            <div className='flex justify-around'>
-                {
-                    permEdit && 
-                    <Tooltip title="Editar">
-                        <Spin spinning={loadingUpdateUser}>
-                            <EditTwoTone onClick={() => handleEditUser(user)} />
-                        </Spin>
-                    </Tooltip>
-                }
-                {
-                    permDelete && 
-                    <Tooltip title="Eliminar">
-                        <Spin spinning={loadingDeleteUser}>
-                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
-                        </Spin>
-                    </Tooltip>
-                }
-            </div>
+            <PIconEditDelete  
+                permissionEdit={permEdit}
+                permissionDelete={permDelete}
+                handleClickEdit={() => handleEditUser(user)} 
+                handleClickDelete={() => handleDeleteUser(user)}
+                spinningEdit={loadingUpdateUser}
+                spinningDelete={loadingDeleteUser}
+            />
         )
     }
   ]
@@ -122,18 +114,13 @@ const Users = () => {
                     </div>
                 }
                 extra={
-                    permAdd &&
-                    <Button
-                        type="primary"
-                        className='bg-primary'
-                        onClick={handleViewFormUser}
-                    >
-                        <div className='flex justify-between'>
-                            <PlusOutlined className='mt-1 mr-2'/>
-                            <p>Agregar usuario</p>
-                        </div>
-                        
-                    </Button>
+                    <PButton
+                        permission={permAdd}
+                        handleClick={handleViewFormUser}
+                        loading={loadingCreateUser}
+                        icon={<PlusOutlined className='mt-1 mr-2' />}
+                        text="Agregar usuario"
+                    />
                 }
             >
                 <Table
@@ -150,7 +137,9 @@ const Users = () => {
                             dispatch(rxUserSelected(user))
                         },
                         onDoubleClick: () => {
-                            handleEditUser(user)
+                            if(permEdit){
+                                handleEditUser(user)
+                            }
                         }
                     })}
                 />

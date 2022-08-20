@@ -14,6 +14,7 @@ import {
     rxOrderDishSelected,
     rxAddOrderSummaryTotalByClient
 } from '../../appRedux/actions';
+import PButton from '../../components/PButton';
 
 
 const { Panel } = Collapse;
@@ -123,23 +124,13 @@ const Orders = () => {
         width: 60,
         align: "center",
         render: (_, order) => (
-            <>
-                {
-                    permAttendOrder &&
-                    <Button 
-                        disabled={order.sState !== "pending"}
-                        type='primary'
-                        className='bg-primary'
-                        onClick={() => handleDDelivered(order)}
-                    >
-                        <div className='flex justify-center'>
-                            <CheckOutlined className='mt-1 mr-2'/> 
-                            <p>Atendendido</p>
-                        </div>
-                    </Button>
-                }
-            </>
-                
+            <PButton
+                permission={permAttendOrder}
+                handleClick={() => handleDDelivered(order)}
+                icon={<CheckOutlined className='mt-1 mr-2' />}
+                text="Atendendido"
+                disabled={order.sState !== "pending"}
+            />  
         )
     }
   ]
