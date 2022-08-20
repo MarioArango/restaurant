@@ -95,7 +95,7 @@ const Orders = () => {
                   dataSource={listReportOrders}
                   rowKey={(dish) => dish.nIdDish}
                   rowClassName={(_) => "cursor-pointer"}
-                  scroll={{y: "55vh"}}
+                  scroll={{y: "55vh", x: 1000}}
               />
           </Card>
       </>

@@ -110,7 +110,7 @@ const Sales = () => {
                   dataSource={listReportSales}
                   rowKey={(sale) => sale.nIdSale}
                   rowClassName={(_) => "cursor-pointer"}
-                  scroll={{y: "55vh"}}
+                  scroll={{y: "55vh", x: 1000}}
                   summary={(sales) => {
                     let priceTotal = 0;
                     sales?.forEach(s => {

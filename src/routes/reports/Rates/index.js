@@ -96,7 +96,7 @@ const Rates = () => {
                 dataSource={listReportRates}
                 rowKey={(rate) => rate.nIdRate}
                 rowClassName={(_) => "cursor-pointer"}
-                scroll={{y: "55vh"}}
+                scroll={{y: "55vh", x: 1000}}
             />
         </Card>
       </>
