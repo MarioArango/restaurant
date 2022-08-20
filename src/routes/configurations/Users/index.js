@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Result, Tag } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin, Tag } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
-import { useAuth } from '../../../Hooks/auth';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const Users = () => {
   const { 
@@ -21,7 +21,9 @@ const Users = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permAdd = usePermission("configurations.users.add");
+  const permEdit = usePermission("configurations.users.edit");
+  const permDelete = usePermission("configurations.users.delete");
 
   const handleViewFormUser = () => {
     dispatch(rxUserSelected(null))
@@ -81,16 +83,22 @@ const Users = () => {
         align: "center",
         render: (_, user) => (
             <div className='flex justify-around'>
-                <Tooltip title="Editar">
-                    <Spin spinning={loadingUpdateUser}>
-                        <EditTwoTone onClick={() => handleEditUser(user)} />
-                    </Spin>
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDeleteUser}>
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
-                    </Spin>
-                </Tooltip>
+                {
+                    permEdit && 
+                    <Tooltip title="Editar">
+                        <Spin spinning={loadingUpdateUser}>
+                            <EditTwoTone onClick={() => handleEditUser(user)} />
+                        </Spin>
+                    </Tooltip>
+                }
+                {
+                    permDelete && 
+                    <Tooltip title="Eliminar">
+                        <Spin spinning={loadingDeleteUser}>
+                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteUser(user)} />
+                        </Spin>
+                    </Tooltip>
+                }
             </div>
         )
     }
@@ -114,6 +122,7 @@ const Users = () => {
                     </div>
                 }
                 extra={
+                    permAdd &&
                     <Button
                         type="primary"
                         className='bg-primary'

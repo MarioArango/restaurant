@@ -2,8 +2,7 @@ import { useSelector } from 'react-redux';
 import { Result } from "antd";
 
 const Permissions = ({children, permission = "without-permission"}) => {
-  const { authPermissions } = useSelector(state => state.get("users"));
-  
+  const { authPermissions } = useSelector(state => state.get("users"));  
   return (
     <div  className='min-h-screen'>
         {

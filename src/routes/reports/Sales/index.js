@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import currency from 'currency-formatter';
-import { Table, Card, Result, message, Tooltip } from 'antd';
+import { Table, Card, message, Tooltip } from 'antd';
 import { cardProps, currencyFE, dateFormatList, tableProps } from '../../../util/config';
-import { useAuth } from '../../../Hooks/auth';
 import { rxReportSales } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import Excel from '../../../components/Excel';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const Sales = () => {
 
@@ -20,7 +20,7 @@ const Sales = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permExportExcel = usePermission("reports.sales.export-excel");
 
   const handleFilter = () => {
     if(authSucursal){
@@ -99,7 +99,7 @@ const Sales = () => {
                 </div>
               }
               extra={
-                <Excel dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
+                permExportExcel && <Excel dataSource={listReportSales} columns={columns} fileName="Reporte_ventas"/>
               }
           >
               <Table

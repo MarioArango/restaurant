@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Result } from 'antd';
+import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd';
 import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined, UserOutlined, FileDoneOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
-import { useAuth } from '../../Hooks/auth';
 import { currencyFE, dateFormatList } from '../../util/config';
 import OrderSummary from './OrderSummary';
 import TypeService from './TypeService';
@@ -26,6 +25,7 @@ import {
 } from '../../appRedux/actions';
 import InitService from './InitService';
 import Permissions from '../../components/Permissions';
+import { usePermission } from '../../Hooks/usePermission';
 
 const Menu = () => {
     
@@ -51,7 +51,8 @@ const {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth();
+  const permRequestPayment = usePermission("menu.request-payment");
+  const permRequestWaiter = usePermission("menu.request-waiter");
 
   //TODO: SHOW ORDER SUMMARY
   const handleGenerateOrder = () => {
@@ -223,15 +224,13 @@ const {
    }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
   return (
-    <Permissions permission={"menu"}>
+    <Permissions permission="menu">
         <>
             <Spin spinning={loadingListDishesMenu}>
             <div className='flex justify-between mt-2 overflow-x-auto'>
                 <div>
                     {
-                        (sRol === "cliente" || sRol === "administrador") 
-                            && (typeService === "mesa") 
-                            && orderSummaryTotal?.length > 0 &&
+                        permRequestPayment && typeService === "mesa" && orderSummaryTotal?.length > 0 &&
                             <Button type='primary' className='bg-primary' onClick={handleRequestPayment} loading={false}>
                                 <div className='flex justify-center'>
                                     <FileDoneOutlined className='mt-1 mr-2' />
@@ -242,13 +241,13 @@ const {
                 </div>
                 <div>
                     {
-                        (sRol === "cliente" || sRol === "administrador") && (typeService === "mesa") &&
-                        <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
-                            <div className='flex justify-center'>
-                                <UserOutlined className='mt-1 mr-2' />
-                                <p>Solicitar Mozo</p>
-                            </div>
-                        </Button>
+                        permRequestWaiter && (typeService === "mesa") &&
+                            <Button type='primary' className='bg-primary' onClick={handleRequestWaiter} loading={loadingRequestWaiter}>
+                                <div className='flex justify-center'>
+                                    <UserOutlined className='mt-1 mr-2' />
+                                    <p>Solicitar Mozo</p>
+                                </div>
+                            </Button>
                     }
                 </div>
                 <Affix offsetTop={20} className="mb-4">

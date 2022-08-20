@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Table, Card, Result, message } from 'antd';
+import { Table, Card, message } from 'antd';
 import { cardProps, dateFormatList, tableProps } from '../../../util/config';
-import { useAuth } from '../../../Hooks/auth';
 import { rxReportOrders } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
 import Excel from '../../../components/Excel';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const Orders = () => {
 
@@ -18,7 +18,7 @@ const Orders = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permExportExcel = usePermission("reports.time-orders.export-excel");
 
   const handleFilter = () => {
     if(authSucursal){
@@ -84,7 +84,7 @@ const Orders = () => {
               {...cardProps}
               title="Reporte de pedidos"
               extra={
-                <Excel dataSource={listReportOrders} columns={columns} fileName="Reporte_pedidos"/>
+                permExportExcel && <Excel dataSource={listReportOrders} columns={columns} fileName="Reporte_pedidos"/>
               }
           >
               <Table

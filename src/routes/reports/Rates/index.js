@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Table, Card, Result, message } from 'antd';
+import { Table, Card, message } from 'antd';
 import { cardProps, dateFormatList, tableProps } from '../../../util/config';
-import { useAuth } from '../../../Hooks/auth';
 import { rxReportRates } from '../../../appRedux/actions';
 import moment from 'moment';
 import RangeDateFilter from '../../../components/RangeDateFilter';
 import Excel from '../../../components/Excel';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const Rates = () => {
 
@@ -18,7 +18,8 @@ const Rates = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permExportExcel = usePermission("reports.rates.export-excel");
+
 
   const handleFilter = () => {
     if(authSucursal){
@@ -84,7 +85,7 @@ const Rates = () => {
             {...cardProps}
             title="Reporte de ventas"
             extra={
-              <Excel dataSource={listReportRates} columns={columns} fileName="Reporte_puntuaciones"/>
+              permExportExcel && <Excel dataSource={listReportRates} columns={columns} fileName="Reporte_puntuaciones"/>
             }
         >
             <Table

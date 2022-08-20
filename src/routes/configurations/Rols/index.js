@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Result, Tag } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin, Tag } from 'antd';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
-import { useAuth } from '../../../Hooks/auth';
 import FormRol from './FormRol';
 import { rxDeleteRol, rxGetRols, rxShowFormRol, rxRolSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const Rols = () => {
   const { 
@@ -21,7 +21,9 @@ const Rols = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permAdd = usePermission("configurations.rols.add");
+  const permEdit = usePermission("configurations.rols.edit");
+  const permDelete = usePermission("configurations.rols.delete");
 
   const handleViewFormRol = () => {
     dispatch(rxRolSelected(null))
@@ -73,16 +75,22 @@ const Rols = () => {
         align: "center",
         render: (_, rol) => (
             <div className='flex justify-around'>
-                <Tooltip title="Editar">
-                    <Spin spinning={loadingUpdateRol}>
-                        <EditTwoTone onClick={() => handleEditRol(rol)} />
-                    </Spin>
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDeleteRol}>
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteRol(rol)} />
-                    </Spin>
-                </Tooltip>
+                {
+                    permEdit && 
+                    <Tooltip title="Editar">
+                        <Spin spinning={loadingUpdateRol}>
+                            <EditTwoTone onClick={() => handleEditRol(rol)} />
+                        </Spin>
+                    </Tooltip>
+                }
+                {
+                    permDelete &&
+                    <Tooltip title="Eliminar">
+                        <Spin spinning={loadingDeleteRol}>
+                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteRol(rol)} />
+                        </Spin>
+                    </Tooltip>
+                }
             </div>
         )
     }
@@ -106,6 +114,7 @@ const Rols = () => {
                     </div>
                 }
                 extra={
+                    permAdd && 
                     <Button
                         type="primary"
                         className='bg-primary'
@@ -115,7 +124,6 @@ const Rols = () => {
                             <PlusOutlined className='mt-1 mr-2'/>
                             <p>Agregar Rol</p>
                         </div>
-                        
                     </Button>
                 }
             >

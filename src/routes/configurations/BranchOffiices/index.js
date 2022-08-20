@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
 import { DeleteTwoTone, EditTwoTone, HomeOutlined, PlusOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
 import FormBranchOffice from './formBranchOffice';
-import { useAuth } from '../../../Hooks/auth';
 import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const BranchOffices = () => {
   const { 
@@ -21,7 +21,9 @@ const BranchOffices = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permAdd = usePermission("configurations.branchoffices.add");
+  const permEdit = usePermission("configurations.branchoffices.edit");
+  const permDelete = usePermission("configurations.branchoffices.delete");
 
   const handleViewFormBranchOffice = () => {
     dispatch(rxBranchOffSelected(null))
@@ -73,16 +75,22 @@ const BranchOffices = () => {
         align: "center",
         render: (_, branchOffice) => (
             <div className='flex justify-around'>
-                <Tooltip title="Editar">
-                    <Spin spinning={loadingUpdateBranchOff}>
-                        <EditTwoTone onClick={() => handleEditBranchOffice(branchOffice)} />
-                    </Spin>
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDeleteBranchOff}>
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteBranchOffice(branchOffice)} />
-                    </Spin>
-                </Tooltip>
+                {
+                    permEdit &&
+                    <Tooltip title="Editar">
+                        <Spin spinning={loadingUpdateBranchOff}>
+                            <EditTwoTone onClick={() => handleEditBranchOffice(branchOffice)} />
+                        </Spin>
+                    </Tooltip>
+                }
+                {
+                    permDelete && 
+                    <Tooltip title="Eliminar">
+                        <Spin spinning={loadingDeleteBranchOff}>
+                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteBranchOffice(branchOffice)} />
+                        </Spin>
+                    </Tooltip>
+                }
             </div>
         )
     }
@@ -106,6 +114,7 @@ const BranchOffices = () => {
                             </div>
                         }
                         extra={
+                            permAdd &&
                             <Button
                                 type="primary"
                                 className='bg-primary'

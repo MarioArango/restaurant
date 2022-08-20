@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Result } from 'antd';
+import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
 import { DeleteTwoTone, EditTwoTone, HomeOutlined, PlusOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
 import FormTypesProduct from './formTypesProduct';
-import { useAuth } from '../../../Hooks/auth';
 import { rxDeleteTypeProduct, rxGetTypesProducts, rxShowFormTypeProduct, rxTypeProductSelected } from '../../../appRedux/actions';
 import Permissions from '../../../components/Permissions';
+import { usePermission } from '../../../Hooks/usePermission';
 
 const TypesProducts = () => {
   const { 
@@ -23,7 +23,10 @@ const TypesProducts = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permAdd = usePermission("configurations.types-products.add");
+  const permEdit = usePermission("configurations.types-products.edit");
+  const permDelete = usePermission("configurations.types-products.delete");
+
 
   const handleViewFormTypeProduct = () => {
     dispatch(rxTypeProductSelected(null))
@@ -74,16 +77,22 @@ const TypesProducts = () => {
         align: "center",
         render: (_, typeProduct) => (
             <div className='flex justify-around'>
-                <Tooltip title="Editar">
-                    <Spin spinning={loadingUpdateTypeProduct}>
-                        <EditTwoTone onClick={() => handleEditTypeProduct(typeProduct)} />
-                    </Spin>
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                    <Spin spinning={loadingDeleteTypeProduct}>
-                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteTypeProduct(typeProduct)} />
-                    </Spin>
-                </Tooltip>
+                {
+                    permEdit && 
+                    <Tooltip title="Editar">
+                        <Spin spinning={loadingUpdateTypeProduct}>
+                            <EditTwoTone onClick={() => handleEditTypeProduct(typeProduct)} />
+                        </Spin>
+                    </Tooltip>
+                }
+                {
+                    permDelete && 
+                    <Tooltip title="Eliminar">
+                        <Spin spinning={loadingDeleteTypeProduct}>
+                            <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteTypeProduct(typeProduct)} />
+                        </Spin>
+                    </Tooltip>
+                }
             </div>
         )
     }
@@ -109,6 +118,7 @@ const TypesProducts = () => {
                             </div>
                         }
                         extra={
+                            permAdd &&
                             <Button
                                 type="primary"
                                 className='bg-primary'

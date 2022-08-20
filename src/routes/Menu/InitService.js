@@ -3,17 +3,18 @@ import moment from 'moment';
 import { Modal, Input, Button, Col, Row, Form} from "antd";
 import { PlayCircleOutlined, SaveOutlined } from '@ant-design/icons';
 import { currencyOnly, dateFormatList, requiredField } from '../../util/config';
-import { useAuth } from '../../Hooks/auth';
+import { usePermission } from '../../Hooks/usePermission';
 import { rxShowInitService, rxInitService } from '../../appRedux/actions';
 
 const { Item } = Form;
 
 const InitService = () => {
-    const { sRol } = useAuth();
 
-    const { showInitService } = useSelector(state => state.get("menu"));
+  const { showInitService } = useSelector(state => state.get("menu"));
 
   const dispatch = useDispatch();
+
+  const permInitService = usePermission("menu.init-service");
 
   const [form] = Form.useForm();
   const { validateFields, resetFields } = form;
@@ -51,8 +52,8 @@ const InitService = () => {
         maskClosable={false}
         destroyOnClose
         centered
-        closable={ sRol === "mozo" || sRol === "administrador"? true : false}
-        keyboard={ sRol === "mozo" || sRol === "administrador"? true : false}
+        closable={permInitService}
+        keyboard={permInitService}
     >
         <Form
             name="form-init-service"

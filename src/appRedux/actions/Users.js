@@ -1,5 +1,5 @@
 import { db } from '../../firebase/firebaseConfig';
-import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit, getDoc } from "firebase/firestore";
+import { doc, addDoc, deleteDoc, updateDoc, onSnapshot, collection, where, query, getDocs, limit } from "firebase/firestore";
 import { message } from 'antd';
 import {
   FETCH_REGISTER_USER_START,
@@ -103,7 +103,6 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       localStorage.setItem("authPermissions", JSON.stringify(permissions))
       return permissions;
     } catch (error) {
-      // console.log(error, "error")
     }
   }
 
@@ -124,11 +123,10 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
             let permissions = []; 
             getRols(user.nIdRol).then(data => {
               permissions = data;
+              dispatch({type: FETCH_LOGIN_USER_SUCCESS, payload: {user, permissions}})
+              message.success("Bienvenido")
+              cb && cb(true, user)
             })
-
-            dispatch({type: FETCH_LOGIN_USER_SUCCESS, payload: {user, permissions}})
-            message.success("Bienvenido")
-            cb && cb(true, user)
           }else {
             dispatch({type: FETCH_LOGIN_USER_ERROR})
             cb && cb(false)
@@ -139,7 +137,6 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         cb && cb(false)
       }
     } catch (error) {
-      console.log(error, "error")
       dispatch({type: FETCH_LOGIN_USER_ERROR})
       message.error('Error del servidor.')
     }
@@ -187,7 +184,6 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
         limit(10)
       );
       const unsub = onSnapshot(q, (querySnapshot) => {
-        // console.log("rxGetRequestWaiters")
         const requestWaiters = [];
         querySnapshot.forEach(doc => {
           requestWaiters.push({...doc.data(), nIdRequestWaiter: doc.id}) 

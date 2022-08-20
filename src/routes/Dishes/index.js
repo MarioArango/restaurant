@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
 import { DeleteTwoTone, EditTwoTone, PlusOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { Button, Table, Card, Modal, Tooltip, Result, Checkbox} from 'antd';
+import { Button, Table, Card, Modal, Tooltip, Checkbox} from 'antd';
 import { cardProps, currencyFE, tableProps } from '../../util/config';
-import { useAuth } from '../../Hooks/auth';
 import FormDish from './FormDish';
 import { 
     rxGetDishes, 
@@ -14,6 +13,7 @@ import {
     rxUpdateDish
 } from '../../appRedux/actions';
 import Permissions from '../../components/Permissions';
+import { usePermission } from '../../Hooks/usePermission';
 
 const Dishes = () => {
   //TODO: REDUX STATE
@@ -31,7 +31,11 @@ const Dishes = () => {
 
   const dispatch = useDispatch();
 
-  const { sRol } = useAuth()
+  const permDishesActive = usePermission("dishes.active");
+  const permDishesAdd = usePermission("dishes.add");
+  const permDishesEdit = usePermission("dishes.edit");
+  const permDishesDelete = usePermission("dishes.delete");
+
 
   //TODO: SHOW FORM DISH
   const handleViewFormDish = () => {
@@ -122,7 +126,7 @@ const Dishes = () => {
         title: "Activo",
         width: 80,
         align: "center",
-        render: (value, dish) => <Checkbox checked={value} onChange={(e) => handleChangeActive(e, dish)}/>
+        render: (value, dish) =>  <Checkbox checked={value} onChange={(e) => handleChangeActive(e, dish)} disabled={!permDishesActive}/>
     },
     {
         key: "",
@@ -131,20 +135,20 @@ const Dishes = () => {
         width: 50,
         align: "center",
         render: (_, dish) => (
-            <>
+            <div className='flex justify-around'>
                 {
-                    sRol === "administrador" && (
-                        <div className='flex justify-around'>
-                            <Tooltip title="Editar">
-                            <EditTwoTone onClick={() => handleEditDish(dish)} />
-                            </Tooltip>
-                            <Tooltip title="Eliminar">
-                                <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
-                            </Tooltip> 
-                        </div>
-                    )
+                    permDishesEdit && 
+                    <Tooltip title="Editar">
+                        <EditTwoTone onClick={() => handleEditDish(dish)} />
+                    </Tooltip>
                 }
-            </>
+                {
+                    permDishesDelete && 
+                    <Tooltip title="Eliminar">
+                        <DeleteTwoTone twoToneColor="#ed4956" onClick={() => handleDeleteDish(dish)} />
+                    </Tooltip>
+                }
+            </div>
         )
     }
   ]
@@ -171,7 +175,7 @@ const Dishes = () => {
                 extra={
                     <>
                         {
-                            sRol === "administrador" && (
+                            permDishesAdd && (
                                 <Button
                                     type="primary"
                                     className='bg-primary'

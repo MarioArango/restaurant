@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import { CheckOutlined, FileDoneOutlined, ScheduleOutlined} from '@ant-design/icons';
-import { Table, Card, Tag, Button, Result, Steps, Collapse } from 'antd';
+import { Table, Card, Tag, Button, Steps, Collapse } from 'antd';
 import { cardProps, dateFormatList, tableProps } from '../../util/config';
-import { useAuth } from '../../Hooks/auth';
+import Permissions from '../../components/Permissions';
+import { usePermission } from '../../Hooks/usePermission';
 import { 
     rxGetOrders, 
     rxUpdateOrder, 
@@ -13,7 +14,7 @@ import {
     rxOrderDishSelected,
     rxAddOrderSummaryTotalByClient
 } from '../../appRedux/actions';
-import Permissions from '../../components/Permissions';
+
 
 const { Panel } = Collapse;
 const { Step } = Steps;
@@ -31,7 +32,7 @@ const Orders = () => {
 
   const dispatch = useDispatch()
 
-  const { sRol } = useAuth()
+  const permAttendOrder = usePermission("orders.attend-order");
   let { pathname } = useLocation();
 
   const handleDDelivered = (order) => {
@@ -124,7 +125,7 @@ const Orders = () => {
         render: (_, order) => (
             <>
                 {
-                    (sRol === "administrador" || sRol === "mozo") &&
+                    permAttendOrder &&
                     <Button 
                         disabled={order.sState !== "pending"}
                         type='primary'
