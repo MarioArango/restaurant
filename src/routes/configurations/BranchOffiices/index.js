@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin } from 'antd';
-import { DeleteTwoTone, EditTwoTone, HomeOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, Card, Modal } from 'antd';
+import { HomeOutlined, PlusOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
 import FormBranchOffice from './formBranchOffice';
 import { rxDeleteBranchOffice, rxGetBranchOffices, rxShowFormBranchOff, rxBranchOffSelected } from '../../../appRedux/actions';

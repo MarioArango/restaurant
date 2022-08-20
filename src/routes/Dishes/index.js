@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import currency from 'currency-formatter';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { Button, Table, Card, Modal, Tooltip, Checkbox} from 'antd';
+import { PlusOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { Table, Card, Modal, Tooltip, Checkbox} from 'antd';
 import { cardProps, currencyFE, tableProps } from '../../util/config';
 import FormDish from './FormDish';
 import { 

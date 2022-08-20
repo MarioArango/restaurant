@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Tag } from 'antd';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
+import { Table, Card, Modal, Tag } from 'antd';
+import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
 import FormRol from './FormRol';
 import { rxDeleteRol, rxGetRols, rxShowFormRol, rxRolSelected } from '../../../appRedux/actions';
