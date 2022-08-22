@@ -121,7 +121,7 @@ const BranchOffices = () => {
                             columns={columns}
                             loading={loadingListBranchOff}
                             dataSource={listBranchOffices}
-                            rowKey={(branchOffice) => branchOffice.nIdBranchOffice}
+                            rowKey={(branchOffice) => branchOffice?.nIdBranchOffice}
                             rowClassName={(branchOffice) => branchOffice?.nIdBranchOffice === branchOfficeSelected?.nIdBranchOffice ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                             scroll={{x: "80vw", y: "65vh"}}
                             onRow={(branchOffice) => ({

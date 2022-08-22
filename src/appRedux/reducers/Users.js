@@ -64,10 +64,17 @@ const Users = (state = initialState, { type, payload }) => {
             }
         }
         case FETCH_GET_USERS_SUCCESS: {
+            const listUsers = [];
+             payload?.users.forEach(u => {
+                const isOk = u?.sBranchOfficesAssigned?.some(b => b.nIdBranchOffice === payload.nIdBranchOffice);
+                if(isOk){
+                    listUsers.push(u);
+                }
+            })
             return {
                 ...state,
                 loadingListUsers: false,
-                listUsers: payload
+                listUsers
             }
         }
         case FETCH_GET_USERS_ERROR: {

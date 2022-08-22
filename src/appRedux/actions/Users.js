@@ -64,15 +64,15 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
     }
   } 
   
-  export const rxGetUsers = (cb = null) => async dispatch => {
+  export const rxGetUsers = (nIdBranchOffice) => async dispatch => {
     dispatch({type: FETCH_GET_USERS_START})
     try {
-      const querySnapshot = await getDocs(collection(db, 'users'), cb);
+      const querySnapshot = await getDocs(collection(db, 'users'));
       const users = []
       querySnapshot.forEach(doc => {
           users.push({...doc.data(), nIdUser: doc.id}) 
       })
-      dispatch({type: FETCH_GET_USERS_SUCCESS, payload: users})
+      dispatch({type: FETCH_GET_USERS_SUCCESS, payload: {users, nIdBranchOffice}})
     } catch (error) {
     dispatch({type: FETCH_GET_USERS_ERROR})
       message.error('Error del servidor.')

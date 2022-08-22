@@ -221,7 +221,7 @@ const Orders = () => {
                         columns={columns}
                         loading={loadingGetOrders || loadingUpdateStateOrders}
                         dataSource={listOrders}
-                        rowKey={(order) => order.nIdOrder}
+                        rowKey={(order) => order?.nIdOrder}
                         rowClassName={(order) => order?.nIdOrder === orderSelected?.nIdOrder ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                         scroll={{x: 900 }}
                         onRow={(order) => ({
@@ -237,8 +237,8 @@ const Orders = () => {
                                     {...tableProps}
                                     bordered
                                     columns={columnsDishes}
-                                    dataSource={order.dishes}
-                                    rowKey={(dish) => dish.nIdDish}
+                                    dataSource={order?.dishes}
+                                    rowKey={(dish) => dish?.nIdDish}
                                     rowClassName={(dish) => dish?.nIdDish === orderDishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                                     onRow={(dish) => ({
                                         onClick: () => {

@@ -93,7 +93,7 @@ const Orders = () => {
                   columns={columns}
                   loading={loadingListReportOrders}
                   dataSource={listReportOrders}
-                  rowKey={(dish) => dish.nIdDish}
+                  rowKey={(dish) => dish?.nIdDish}
                   rowClassName={(_) => "cursor-pointer"}
                   scroll={{y: "55vh", x: 1000}}
               />

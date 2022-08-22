@@ -125,7 +125,7 @@ const TypesProducts = () => {
                             columns={columns}
                             loading={loadingListTypesProducts}
                             dataSource={listTypesProducts}
-                            rowKey={(typeProduct) => typeProduct.nIdTypeProduct}
+                            rowKey={(typeProduct) => typeProduct?.nIdTypeProduct}
                             rowClassName={(typeProduct) => typeProduct?.nIdTypeProduct === typeProductSelected?.nIdTypeProduct ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                             scroll={{x: "80vw", y: "65vh"}}
                             onRow={(typeProduct) => ({

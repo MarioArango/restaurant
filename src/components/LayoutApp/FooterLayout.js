@@ -34,13 +34,14 @@ const FooterLayout = () => {
         className="bg-gray-300"
       >
         <div className='flex justify-between items-center'>
-          <div className=''>
+          <div>
             {authSucursal && 
               <Select
                 value={authSucursal.nIdBranchOffice}
                 loading={loadingLoginUser}
                 style={{width: 150}}
                 onSelect={handleSelectBrachOffice}
+                placement="topRight"
               >
                 {
                   sBranchOfficesAssigned?.map((boa, index) => (

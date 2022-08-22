@@ -108,7 +108,7 @@ const Sales = () => {
                   columns={columns}
                   loading={loadingListReportSales}
                   dataSource={listReportSales}
-                  rowKey={(sale) => sale.nIdSale}
+                  rowKey={(sale) => sale?.nIdSale}
                   rowClassName={(_) => "cursor-pointer"}
                   scroll={{y: "55vh", x: 1000}}
                   summary={(sales) => {

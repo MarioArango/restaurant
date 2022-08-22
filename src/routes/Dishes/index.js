@@ -191,7 +191,7 @@ const Dishes = () => {
                     columns={columns}
                     loading={loadingListDishes || loadingUpdateDish || loadingDeleteDish}
                     dataSource={listDishes}
-                    rowKey={(dish) => dish.nIdDish}
+                    rowKey={(dish) => dish?.nIdDish}
                     rowClassName={(dish) => dish?.nIdDish === dishSelected?.nIdDish ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                     onRow={(dish) => ({
                         onClick: () => {

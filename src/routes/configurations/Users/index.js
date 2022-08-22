@@ -24,7 +24,8 @@ const Users = () => {
     userSelected,
     loadingDeleteUser,
     loadingCreateUser,
-    loadingUpdateUser
+    loadingUpdateUser,
+    authSucursal
   } = useSelector(state => state.get("users"));
 
   const { loadingListRols, listRols } = useSelector(state => state.get("rols"));
@@ -126,10 +127,12 @@ const Users = () => {
   
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
-    dispatch(rxGetUsers());
-    dispatch(rxGetRols());
+    if(authSucursal){
+        dispatch(rxGetUsers(authSucursal?.nIdBranchOffice));
+        dispatch(rxGetRols());
+    }
     // eslint-disable-next-line
-  }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
+  }, [authSucursal?.nIdBranchOffice, loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
   return (
     <Permissions permission='configurations.users'>
@@ -158,7 +161,7 @@ const Users = () => {
                     columns={columns}
                     loading={loadingListUsers}
                     dataSource={listUsers}
-                    rowKey={(user) => user.nIdUser}
+                    rowKey={(user) => user?.nIdUser}
                     rowClassName={(user) => user?.nIdUser === userSelected?.nIdUser ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                     scroll={{x: "80vw", y: "65vh"}}
                     onRow={(user) => ({

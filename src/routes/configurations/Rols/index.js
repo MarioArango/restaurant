@@ -121,7 +121,7 @@ const Rols = () => {
                     columns={columns}
                     loading={loadingListRols}
                     dataSource={listRols}
-                    rowKey={(rol) => rol.nIdRol}
+                    rowKey={(rol) => rol?.nIdRol}
                     rowClassName={(rol) => rol?.nIdRol === rolSelected?.nIdRol ? "bg-blue-50 cursor-pointer" : "cursor-pointer"}
                     scroll={{x: "80vw", y: "65vh"}}
                     onRow={(rol) => ({
