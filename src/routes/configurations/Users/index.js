@@ -1,16 +1,22 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { Button, Table, Card, Tooltip, Modal, Spin, Tag } from 'antd';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined, UserOutlined } from '@ant-design/icons';
+import { Table, Card, Tag, Tree, Modal, Tooltip, Alert } from 'antd';
+import { PlusOutlined, UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { cardProps, tableProps } from '../../../util/config';
-import FormUser from './FormUser';
-import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected } from '../../../appRedux/actions';
-import Permissions from '../../../components/Permissions';
+import { rols } from '../Rols/rols';
 import { usePermission } from '../../../Hooks/usePermission';
 import PIconEditDelete from '../../../components/PIconEditDelete';
 import PButton from '../../../components/PButton';
+import Permissions from '../../../components/Permissions';
+import FormUser from './FormUser';
+import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected, rxGetRols } from '../../../appRedux/actions';
+
 
 const Users = () => {
+
+  const [ permissions, setPermissions  ] = useState(null);
+  const [ visiblePermission, setVisiblePermissions  ] = useState(false);
+
   const { 
     loadingListUsers,
     listUsers,
@@ -21,6 +27,8 @@ const Users = () => {
     loadingUpdateUser
   } = useSelector(state => state.get("users"));
 
+  const { loadingListRols, listRols } = useSelector(state => state.get("rols"));
+  
   const dispatch = useDispatch();
 
   const permAdd = usePermission("configurations.users.add");
@@ -53,6 +61,18 @@ const Users = () => {
       })
   }
 
+  //TODO: GET DATA ROL WITH PERMISSION BY idRol
+  const handleGetRolById = (nIdRol) => {
+    const permission = listRols?.filter(r => r.nIdRol === nIdRol)[0];
+    setPermissions(permission);
+    setVisiblePermissions(true);
+  }
+
+  const handleCancel = () => {
+    setPermissions(null);
+    setVisiblePermissions(false);
+  }
+
   const columns = [
     {
         key: "index",
@@ -65,7 +85,7 @@ const Users = () => {
         key: "sUsername",
         dataIndex: "sUsername",
         title: "Usuario",
-        width: 45,
+        width: 30,
         align: "center",
         render: (value) => value ? value : "-"
     },
@@ -76,6 +96,14 @@ const Users = () => {
         width: 20,
         align: "center",
         render: (value) => <Tag color="blue">{value}</Tag>
+    },
+    {
+        key: "nIdRol",
+        dataIndex: "nIdRol",
+        title: "Permisos",
+        width: 20,
+        align: "center",
+        render: (value) => <Tooltip title="Ver permisos asignados"><UnlockOutlined onClick={() => handleGetRolById(value)}/></Tooltip>
     },
     {
         key: "",
@@ -99,6 +127,7 @@ const Users = () => {
   //TODO: INIT - GET ALL USERS
   useEffect(() => {
     dispatch(rxGetUsers());
+    dispatch(rxGetRols());
     // eslint-disable-next-line
   }, [loadingDeleteUser, loadingCreateUser, loadingUpdateUser])
 
@@ -148,6 +177,32 @@ const Users = () => {
                     showFormUser && 
                     <FormUser />
                 }
+                <Modal
+                    title={
+                        <div className='flex justify-start'>
+                            <UnlockOutlined className='mt-1 mr-2'/>
+                            <p>Rol y Permiso</p>
+                        </div>
+                    }
+                    visible={visiblePermission}
+                    bodyStyle={{ padding: 10 }}
+                    width="350px"
+                    onCancel={handleCancel}
+                    footer={null}
+                    destroyOnClose
+                    loading={loadingListRols}
+                >
+                    <Alert message={permissions?.sRol?? ""} type="info" className='mb-2'/>
+                    <Tree
+                        defaultExpandAll
+                        checkable
+                        checkedKeys={permissions?.sPermissions? JSON.parse(permissions?.sPermissions): []}
+                        treeData={rols}
+                        showIcon
+                        checkStrictly
+                        blockNode
+                    />
+                </Modal>
         </>
     </Permissions>
   )

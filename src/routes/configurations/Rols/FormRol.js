@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RedoOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
+import { RedoOutlined, SaveOutlined, UnlockOutlined } from '@ant-design/icons';
 import { Form, Row, Col, Input, Button, Tree, Drawer, Tooltip, Menu, Dropdown } from 'antd';
 import { requiredField } from '../../../util/config';
 import { rols } from './rols';
@@ -74,11 +74,11 @@ const FormRol = () => {
             <Drawer
               title={rolSelected? 
                   <div className='flex justify-start'>
-                      <UserOutlined className='mt-1 mr-2'/>
+                      <UnlockOutlined className='mt-1 mr-2'/>
                       <p>Editar Rol</p>
                   </div> : 
                   <div className='flex justify-start'>
-                      <UserOutlined className='mt-1 mr-2'/>
+                      <UnlockOutlined className='mt-1 mr-2'/>
                       <p>Registrar Rol</p>
                   </div>
               }
