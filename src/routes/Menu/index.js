@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin } from 'antd';
+import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Segmented } from 'antd';
 import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined, UserOutlined, FileDoneOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { currencyFE, dateFormatList } from '../../util/config';
@@ -30,6 +30,8 @@ import PButton from '../../components/PButton';
 
 const Menu = () => {
     
+  const [ listFilterMenu, setListFilterMenu ] = useState([]);
+
   const { showOrderSummary, orderSummary, orderSummaryTotal, loadingUpdateStateOrders } = useSelector(state => state.get("orders"));
 
   const { loadingListDishesMenu, listDishesMenu, listDishesMenuFilter, showInitService, initService } = useSelector(state => state.get("menu"));
@@ -224,12 +226,25 @@ const {
     // eslint-disable-next-line
    }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
 
-  return (
+   //TODO: INIT
+   useEffect(() => {
+        if(authSucursal){
+            let lisFilter = listTypesProducts?.map((tp, index) => ({
+                label: tp.sTypeProduct,
+                value: tp.nIdTypeProduct,
+                key: index
+            }))
+            listTypesProducts?.length && lisFilter.push({label: "Menú Completo", value: "", index: "index"});
+            setListFilterMenu(lisFilter);
+        }
+   }, [authSucursal?.nIdBranchOffice, listTypesProducts])
+
+   return (
     <Permissions permission="menu">
         <>
             <Spin spinning={loadingListDishesMenu}>
-            <div className='flex justify-between mt-2 overflow-x-auto'>
-                <div>
+            <div className='flex justify-between overflow-x-auto'>
+                <div className='mr-2'>
                     {
                         typeService === "mesa" && orderSummaryTotal?.length > 0 &&
                             <PButton
@@ -241,7 +256,7 @@ const {
                             />
                     }
                 </div>
-                <div>
+                <div className='mr-2'>
                     {
                         (typeService === "mesa") &&
                         <PButton
@@ -254,48 +269,37 @@ const {
                             
                     }
                 </div>
-                <Affix offsetTop={20} className="mb-4">
-                    <Button 
-                        type='primary'
-                        className='bg-primary' 
-                        onClick={handleGenerateOrder}
-                        disabled={!typeService}
-                    >
-                        <div className='flex justify-between'>
-                            <ShoppingOutlined className='mt-1 mr-2'/> 
-                            <p>
-                                {
-                                    (orderSummary?.length === 0 && orderSummaryTotal?.length > 0)
-                                    ? "Ver resumen de pedido"
-                                    : orderSummary?.length > 0 
-                                        ?"Generar Pedido" 
-                                        : "Generar Pedido"
-                                }
-                            </p>
-                        </div>
-                    </Button>
-                </Affix>
-            </div>
-            <div className='flex justify-around mb-2 overflow-x-auto'>
-                {
-                    listTypesProducts.map((tp, index) => (
-                        <Button key={index} type='dashed' onClick={() => handleFilterByTypeProduct({nIdTypeProduct: tp.nIdTypeProduct, reset: false})} loading={loadingListTypesProducts}>
-                            <div className='flex justify-center'>
-                                <FilterOutlined className='mt-1 mr-2'/>
-                                {tp.sTypeProduct}
+                <div>
+                    <Affix offsetTop={20} className="mb-4">
+                        <Button 
+                            type='primary'
+                            className='bg-primary' 
+                            onClick={handleGenerateOrder}
+                            disabled={!typeService}
+                        >
+                            <div className='flex justify-between'>
+                                <ShoppingOutlined className='mt-1 mr-2'/> 
+                                <p>
+                                    {
+                                        (orderSummary?.length === 0 && orderSummaryTotal?.length > 0)
+                                        ? "Ver resumen de pedido"
+                                        : orderSummary?.length > 0 
+                                            ?"Generar Pedido" 
+                                            : "Generar Pedido"
+                                    }
+                                </p>
                             </div>
                         </Button>
-                    ))
-                }
-                {
-                    listTypesProducts?.length &&
-                    <Button key="reset" type='dashed' onClick={() => handleFilterByTypeProduct({reset: true})} loading={loadingListTypesProducts}>
-                        <div className='flex justify-center'>
-                            <FilterOutlined className='mt-1 mr-2'/>
-                            Menú completo
-                        </div>
-                    </Button>
-                }
+                    </Affix>
+                </div>
+            </div>
+            <div className='flex justify-center mb-2'>
+                <div className='overflow-x-auto'>
+                    <Segmented
+                        options={listFilterMenu} 
+                        onChange={(value) => handleFilterByTypeProduct({nIdTypeProduct: value, reset: !Boolean(value)})}
+                    />
+                </div>
             </div>
             <Row gutter={12}>
                 {
