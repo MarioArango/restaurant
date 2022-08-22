@@ -23,7 +23,7 @@ const LayoutApp = ({children}) => {
               padding: '0 15px'
             }}
           >
-            <div className=''>
+            <div className='mt-2'>
               { children }
             </div>
           </Content>
