@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { Row, Col, Button, message, Badge, Affix, BackTop, Tooltip, Spin, Segmented } from 'antd';
-import { PlusOutlined, MinusOutlined, ShoppingOutlined, FilterOutlined, UserOutlined, FileDoneOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, ShoppingOutlined, UserOutlined, FileDoneOutlined } from '@ant-design/icons';
 import currency from 'currency-formatter';
 import { currencyFE, dateFormatList } from '../../util/config';
 import OrderSummary from './OrderSummary';
@@ -237,12 +237,13 @@ const {
             listTypesProducts?.length && lisFilter.push({label: "Menú Completo", value: "", index: "index"});
             setListFilterMenu(lisFilter);
         }
+    // eslint-disable-next-line
    }, [authSucursal?.nIdBranchOffice, listTypesProducts])
 
    return (
     <Permissions permission="menu">
         <>
-            <Spin spinning={loadingListDishesMenu}>
+            <Spin spinning={loadingListDishesMenu || loadingListTypesProducts}>
             <div className='flex justify-between overflow-x-auto'>
                 <div className='mr-2'>
                     {
