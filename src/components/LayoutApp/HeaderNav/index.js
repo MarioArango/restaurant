@@ -62,13 +62,16 @@ const HeaderNav = () => {
                 </span>
             </Avatar>
           </div>
-          <PButton
+          {
+            permInitService && 
+            <PButton
               permission={permInitService}
               handleClick={handleShowInitService}
               loading={false}
               icon={<PlayCircleOutlined className='mt-1 mr-2' />}
               text="Iniciar"
-          />
+            />
+          }
           <div>
             {
               initService?.length > 0 && (

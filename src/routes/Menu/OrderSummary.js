@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment'
 import currency from 'currency-formatter'
-import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider, Modal} from 'antd'
+import { Row, Col, Drawer, List, Skeleton, Avatar, Button, Popconfirm, Divider, Modal, message} from 'antd'
 import { PlusOutlined, MinusOutlined, DeleteTwoTone} from '@ant-design/icons';
 import { SendOutlined } from '@ant-design/icons'
 import { currencyFE, dateFormatList } from '../../util/config'
@@ -9,7 +9,8 @@ import {
     rxGenerateOrder,
     rxShowOrderSummary,
     rxOrderSummary,
-    rxOrderSummaryTotal
+    rxOrderSummaryTotal,
+    rxShowInitService
  } from '../../appRedux/actions';
 
 const OrderSummary = (props) => {
@@ -40,40 +41,45 @@ const OrderSummary = (props) => {
             cancelText: "Cancelar",
             cancelButtonProps: { type: "text" },
             onOk: () => {
-                const orderFormat = orderSummary.map(o => ({
-                    nPriceTotal: calculatePriceTotalByDish(o), 
-                    nQuantityTotal: o.nQuantity,
-                    nIdDish: o.nIdDish,
-                    sName: o.sName,
-                    nPrice: o.nPrice,
-                    sPhoto: o.sPhoto,
-                    sType: o.sType
-                }))
-        
-                let orderToSend = {
-                    dInitService: initService[0]?.dInitService,
-                    nNumberDiners: initService[0]?.nNumberDiners,
-                    dCreated: moment().format(dateFormatList[2]),
-                    sState: 'pending',
-                    sTypeService: typeService,
-                    nIdBranchOffice: authSucursal.nIdBranchOffice,
-                    dishes: orderFormat
-                }
-                if(typeService === "mesa"){
-                    orderToSend = {
-                        ...orderToSend,
-                        nNumberTable: parseInt(numberTable)
+                if(initService?.length>0){
+                    const orderFormat = orderSummary.map(o => ({
+                        nPriceTotal: calculatePriceTotalByDish(o), 
+                        nQuantityTotal: o.nQuantity,
+                        nIdDish: o.nIdDish,
+                        sName: o.sName,
+                        nPrice: o.nPrice,
+                        sPhoto: o.sPhoto,
+                        sType: o.sType
+                    }))
+            
+                    let orderToSend = {
+                        dInitService: initService[0]?.dInitService,
+                        nNumberDiners: initService[0]?.nNumberDiners,
+                        dCreated: moment().format(dateFormatList[2]),
+                        sState: 'pending',
+                        sTypeService: typeService,
+                        nIdBranchOffice: authSucursal.nIdBranchOffice,
+                        dishes: orderFormat
                     }
-                }
-                dispatch(rxGenerateOrder(orderToSend, (nIdOrder) => {
-                    const orderAddDb = {
-                        nIdOrder,
-                        ...orderToSend,
+                    if(typeService === "mesa"){
+                        orderToSend = {
+                            ...orderToSend,
+                            nNumberTable: parseInt(numberTable)
+                        }
                     }
-                    const orderSummaryTotal = JSON.parse(localStorage.getItem('orderSummaryTotal'))?? [];
-                    localStorage.setItem('orderSummaryTotal', JSON.stringify([...orderSummaryTotal, orderAddDb]));
-                    dispatch(rxOrderSummaryTotal(orderAddDb))
-                }))
+                    dispatch(rxGenerateOrder(orderToSend, (nIdOrder) => {
+                        const orderAddDb = {
+                            nIdOrder,
+                            ...orderToSend,
+                        }
+                        const orderSummaryTotal = JSON.parse(localStorage.getItem('orderSummaryTotal'))?? [];
+                        localStorage.setItem('orderSummaryTotal', JSON.stringify([...orderSummaryTotal, orderAddDb]));
+                        dispatch(rxOrderSummaryTotal(orderAddDb))
+                    }))
+                }else {
+                    message.info("Primero debe iniciar el servicio.")
+                    dispatch(rxShowInitService(true))
+                }
             },
             onCancel: () => { }
         })

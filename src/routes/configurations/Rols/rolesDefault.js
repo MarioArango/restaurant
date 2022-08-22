@@ -2,8 +2,7 @@ export const rolesDefault = {
     cliente: [
         'menu', 
         'menu.request-waiter', 
-        'menu.request-payment', 
-        'menu.init-service'
+        'menu.request-payment'
     ],
 
     administrador: [
