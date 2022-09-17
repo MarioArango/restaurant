@@ -97,7 +97,7 @@ const TypeService = () => {
                 </Radio.Group>
             </Col>
             <Col span={24}>
-                <Button type="primary" className='bg-primary' block onClick={handleSaveTypeService}>
+                <Button type="primary" block onClick={handleSaveTypeService}>
                     <div className='flex justify-center'>
                         <SaveOutlined className="mt-1 mr-2"/>
                         <p>Guardar</p>

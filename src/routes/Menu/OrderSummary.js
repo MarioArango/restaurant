@@ -147,7 +147,7 @@ const OrderSummary = (props) => {
                     </div>
                 </div>
                 <Col span={24}>
-                    <Button type="primary" loading={loadingGenerateOrder} className="bg-primary" block onClick={handleSendOrder}>
+                    <Button type="primary" loading={loadingGenerateOrder} block onClick={handleSendOrder}>
                         <div className='flex justify-center'>
                             <SendOutlined className='mt-1 mr-2'/>
                             <p>Enviar</p>
@@ -226,7 +226,7 @@ const OrderSummary = (props) => {
                                 />
                                 <Button 
                                     type="primary"
-                                    className='bg-primary mr-2'
+                                    className='mr-2'
                                     shape="circle" 
                                     icon={<PlusOutlined/>} 
                                     onClick={() => handleAddQtyDish(dish)} 

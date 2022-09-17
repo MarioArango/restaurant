@@ -96,7 +96,6 @@ const FormTypesProduct = () => {
                                 <Button 
                                     htmlType='submit'
                                     type='primary' 
-                                    className='bg-primary' 
                                     block
                                     loading={loadingCreateTypeProduct}
                                 >

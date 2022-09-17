@@ -15,11 +15,7 @@ const NotFound = () => {
         title="404"
         subTitle="La página visitada no existe."
         extra={
-        <Button 
-            type="primary" 
-            className="bg-primary"
-            onClick={handleBack}
-        >
+        <Button type="primary" onClick={handleBack}>
             Regresar
         </Button>}
     />

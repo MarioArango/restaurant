@@ -169,7 +169,6 @@ const FormUser = () => {
                                 <Button 
                                     htmlType='submit'
                                     type='primary' 
-                                    className='bg-primary' 
                                     block
                                     loading={loadingCreateUser}
                                 >

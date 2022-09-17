@@ -243,12 +243,7 @@ const FormDish = () => {
                             </Item>
                         </Col>
                         <Col span={24}>
-                            <Button 
-                              block 
-                              className='bg-primary' 
-                              htmlType='submit' 
-                              type='primary'
-                            >
+                            <Button block htmlType='submit' type='primary'>
                               <div className='flex justify-center'>
                                 <SaveOutlined className='mt-1 mr-2' />
                                 <p>{dishSelected? "Guardar cambios" : "Agregar"}</p>

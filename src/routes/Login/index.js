@@ -69,13 +69,7 @@ const Login = () => {
                     </Item>
                 </Col>
                 <Col span={24}>
-                    <Button 
-                        htmlType='submit'
-                        type='primary' 
-                        className='bg-primary' 
-                        block 
-                        loading={loadingLoginUser}
-                    >
+                    <Button htmlType='submit' type='primary' block loading={loadingLoginUser}>
                         Ingresar
                     </Button>
                 </Col>

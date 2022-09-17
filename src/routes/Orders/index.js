@@ -203,7 +203,7 @@ const Orders = () => {
                                 //falta poner el permiso de atender, porque si puede atender puede finalizar
                                 typeService === "mesa" &&
                                 orderSelected?.sState === "requestPayment" &&
-                                <Button type='primary' className='bg-primary' onClick={() => handleFinishedOrder(orderSelected)}>
+                                <Button type='primary' onClick={() => handleFinishedOrder(orderSelected)}>
                                     <div className='flex justify-center'>
                                         <FileDoneOutlined className='mt-1 mr-2' />
                                         <p>Finalizar { orderSelected?.sTypeService} {orderSelected?.nNumberTable}</p>

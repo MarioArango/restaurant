@@ -56,31 +56,31 @@ const RangeDateFilter = ({ handleFilter, rangeDate, setRangeDate }) => {
                   value={rangeDate}
                   onChange={onChangeRangeDate}
                   renderExtraFooter={() => [
-                  <Button key="1" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("currentYear")}>
+                  <Button key="1" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentYear")}>
                     Año actual
                   </Button>,
-                  <Button key="2" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("lastMonth")}>
+                  <Button key="2" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("lastMonth")}>
                     Mes pasado
                   </Button>,
-                  <Button key="3" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("currentMonth")}>
+                  <Button key="3" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentMonth")}>
                     Mes actual
                   </Button>,
-                  <Button key="4" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("lastWeek")}>
+                  <Button key="4" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("lastWeek")}>
                     Semana pasada
                   </Button>,
-                  <Button key="5" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("currentWeek")}>
+                  <Button key="5" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentWeek")}>
                     Semana actual
                   </Button>,
-                  <Button key="6" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("yesterday")}>
+                  <Button key="6" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("yesterday")}>
                     Ayer
                   </Button>,
-                  <Button key="7" size='small' type='primary' className='mr-2 bg-primary' onClick={() => handleSelectDate("today")}>
+                  <Button key="7" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("today")}>
                     Hoy
                   </Button>
                 ]} />
             </Col>
             <Col xs={24} sm={12} md={12} lg={12} xl={12} className="flex justify-end">
-              <Button onClick={handleFilter} type="primary" className="bg-primary">
+              <Button onClick={handleFilter} type="primary">
                 <div className='flex justify-center'>
                   <FilterOutlined className='mt-1 mr-2'/>
                   <p>Filtrar</p>

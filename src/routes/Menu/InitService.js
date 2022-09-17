@@ -68,7 +68,7 @@ const InitService = () => {
                     </Item>
                 </Col>
                 <Col span={24}>
-                    <Button htmlType='submit' type='primary' className='bg-primary' block>
+                    <Button htmlType='submit' type='primary' block>
                         <div className='flex justify-center'>
                             <SaveOutlined className='mt-1 mr-2'/>
                             <p>Iniciar</p>

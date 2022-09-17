@@ -164,7 +164,7 @@ const {
                             </p>
                             <div className='flex justify-between'>
                                 <Button shape='round' onClick={() => handleDelQtyDish(d)} icon={<MinusOutlined jey="del"/>} disabled={disabledDelete(d)}/>
-                                <Button shape='round' className='bg-primary' type='primary' icon={<PlusOutlined key="add" />} onClick={() => handleAddQtyDish(d)}/>
+                                <Button shape='round' type='primary' icon={<PlusOutlined key="add" />} onClick={() => handleAddQtyDish(d)}/>
                             </div>
                         </div>
                     </div>
@@ -274,7 +274,6 @@ const {
                     <Affix offsetTop={20} className="mb-4">
                         <Button 
                             type='primary'
-                            className='bg-primary' 
                             onClick={handleGenerateOrder}
                             disabled={!typeService}
                         >

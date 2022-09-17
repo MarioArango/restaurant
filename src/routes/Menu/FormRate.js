@@ -79,7 +79,7 @@ const FormRate = () => {
                     </Item>
                 </Col>
                 <Col span={24}>
-                    <Button htmlType='submit' type='primary' className='bg-primary' block>
+                    <Button htmlType='submit' type='primary' block>
                         <div className='flex justify-center'>
                             <SendOutlined className='mt-1 mr-2'/>
                             <p>Enviar</p>

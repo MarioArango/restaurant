@@ -43,16 +43,16 @@ const RequestWaiter = () => {
             <div className='flex-col justify-center items-center mr-2'>
                 <Badge size="small" count={listRequestWaiter?.length}>
                     <Dropdown 
-                    overlay={
-                        <Menu
-                        items={
-                            listRequestWaiter.length > 0 
-                            ? listRequestWaiter?.map((rw, index) => ({key: index, label:<div><Tag color="green" >Mesa {rw.sNumberTable}</Tag><Tag color="blue">{rw.dCreatedHour + ":" + rw.dCreatedMin + " h"}</Tag></div> })) 
-                            : [{key:"1", label: "No hay solicitudes"}]}
-                        />
-                    } 
-                    placement="bottom" 
-                    className='bg-primary'
+                        overlay={
+                            <Menu
+                            items={
+                                listRequestWaiter.length > 0 
+                                ? listRequestWaiter?.map((rw, index) => ({key: index, label:<div><Tag color="green" >Mesa {rw.sNumberTable}</Tag><Tag color="blue">{rw.dCreatedHour + ":" + rw.dCreatedMin + " h"}</Tag></div> })) 
+                                : [{key:"1", label: "No hay solicitudes"}]}
+                            />
+                        } 
+                        placement="bottom" 
+                        className='bg-primary'
                     >
                     <Button 
                         className='bg-fondo' 

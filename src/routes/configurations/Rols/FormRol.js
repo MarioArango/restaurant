@@ -92,7 +92,6 @@ const FormRol = () => {
                   <Button
                       htmlType='submit'
                       type='primary' 
-                      className='bg-primary' 
                       block
                       loading={loadingCreateRol || loadingUpdateRol}
                       onClick={handleSubmit}

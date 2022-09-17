@@ -92,8 +92,7 @@ const FormBranchOffice = () => {
                             <Col span={24}>
                                 <Button 
                                     htmlType='submit'
-                                    type='primary' 
-                                    className='bg-primary' 
+                                    type='primary'
                                     block
                                     loading={loadingCreateBranchOff}
                                 >

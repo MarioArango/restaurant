@@ -7,7 +7,6 @@ const PButton = ({permission, handleClick, loading, icon, text, disabled = false
             permission ? 
             <Button
                 type="primary"
-                className='bg-primary'
                 onClick={handleClick}
                 loading={loading}
                 disabled={disabled}
@@ -23,7 +22,6 @@ const PButton = ({permission, handleClick, loading, icon, text, disabled = false
              >
                 <Button
                     type="primary"
-                    className='bg-primary'
                     disabled
                 >
                     <div className='flex justify-between'>
