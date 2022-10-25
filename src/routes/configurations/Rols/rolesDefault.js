@@ -8,8 +8,9 @@ export const rolesDefault = {
     administrador: [
         'menu', 
         'menu.request-payment', 
-        'menu.request-waiter', 
-        'menu.init-service', 
+        'menu.request-waiter',
+        'menu.init-number-table',
+        'menu.init-service',
         'orders', 
         'orders.attend-order', 
         'dishes', 
@@ -46,6 +47,7 @@ export const rolesDefault = {
     mozo: [
         'menu', 
         'menu.request-waiter', 
+        'menu.init-number-table',
         'menu.init-service', 
         'orders', 
         'orders.attend-order',

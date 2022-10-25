@@ -17,7 +17,6 @@ import {
     SHOW_FORM_USER,
     USER_SELECTED,
     USER_AUTH_SUCURSAL,
-    USER_SET_TYPE_SERVICE,
     USER_SET_NUMBER_TABLE,
     USER_SHOW_TYPE_SERVICE,
     FETCH_REQUEST_WAITER_START,
@@ -29,29 +28,46 @@ import {
     USER_SHOW_RATE,
     FETCH_SEND_RATE_START,
     FETCH_SEND_RATE_SUCCESS,
-    FETCH_SEND_RATE_ERROR
+    FETCH_SEND_RATE_ERROR,
+    USER_CLEAR_INIT_ACCOUNT,
+    FETCH_VERIFY_USER_START,
+    FETCH_VERIFY_USER_SUCCESS,
+    FETCH_VERIFY_USER_ERROR,
+    SHOW_VERIFY_USER
 } from "../types";
 
 
 const initialState = {
     loadingListUsers: false,
     listUsers: [],
+    
     showFormUser: false,
+    
     userSelected: null,
+    
     loadingDeleteUser: false,
     loadingCreateUser: false,
     loadingUpdateUser: false,
     loadingLoginUser: false,
-    authSucursal: JSON.parse(localStorage.getItem("authSucursal")),
-    authPermissions: JSON.parse(localStorage.getItem("authPermissions")),
-    typeService: localStorage.getItem("typeService"),
-    numberTable: localStorage.getItem("numberTable"),
+    
+    authSucursal: JSON.parse(localStorage.getItem("authSucursal"))?? null,
+    authPermissions: JSON.parse(localStorage.getItem("authPermissions"))?? null,
+    numberTable: localStorage.getItem("numberTable")?? null,
+    
     showTypesService: false,
+
     loadingRequestWaiter: false,
+    
     loadingListRequestWaiter: false,
     listRequestWaiter: [],
+
     showRate: false,
-    loadingSendRate: false
+    loadingSendRate: false,
+
+    loadingVerifyUser: false,
+    verifyUser: false,
+
+    showVerifyUser: false
 };
 
 const Users = (state = initialState, { type, payload }) => {
@@ -201,14 +217,6 @@ const Users = (state = initialState, { type, payload }) => {
         }
 
         //TODO: USER TYPE SERVICE
-        case USER_SET_TYPE_SERVICE: {
-            return {
-                ...state,
-                typeService: payload
-            }
-        }
-
-        //TODO: USER TYPE SERVICE
         case USER_SET_NUMBER_TABLE: {
             return {
                 ...state,
@@ -277,7 +285,7 @@ const Users = (state = initialState, { type, payload }) => {
             }
         }
 
-        //SEND RATE
+        //TODO: SEND RATE
         case FETCH_SEND_RATE_START: {
             return {
                 ...state,
@@ -296,6 +304,48 @@ const Users = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingSendRate: false
+            }
+        }
+
+        //TODO: CLEAR NUMBERTABLE
+        case USER_CLEAR_INIT_ACCOUNT: {
+            localStorage.removeItem("authSucursal");
+            localStorage.removeItem("authPermissions");
+            localStorage.removeItem("numberTable");
+            return {
+                ...state,
+                authSucursal: null,
+                authPermissions: null,
+                numberTable: null
+            }
+        }
+        //TODO: VERIFY USER
+        case FETCH_VERIFY_USER_START: {
+            return {
+                ...state,
+                loadingVerifyUser: true
+            }
+        }
+
+        case FETCH_VERIFY_USER_SUCCESS: {
+            return {
+                ...state,
+                loadingVerifyUser: false,
+                verifyUser: payload
+            }
+        }
+
+        case FETCH_VERIFY_USER_ERROR: {
+            return {
+                ...state,
+                loadingVerifyUser: false
+            }
+        }
+        //TODO: SHOW VERIFY USER
+        case SHOW_VERIFY_USER: {
+            return {
+                ...state,
+                showVerifyUser: payload
             }
         }
 

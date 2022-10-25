@@ -7,12 +7,7 @@ import { usePermission } from '../../../Hooks/usePermission';
 
 const RequestWaiter = () => {
   //TODO: REDUX STATE
-  const { 
-    authSucursal, 
-    typeService, 
-    loadingListRequestWaiter, 
-    listRequestWaiter
-  } = useSelector(state => state.get("users"));
+  const { authSucursal, loadingListRequestWaiter, listRequestWaiter } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
@@ -21,8 +16,8 @@ const RequestWaiter = () => {
 
    //TODO: INIT - GET ALL REQUEST WAITERS
    useEffect(() => {
-    if(permRequestWaiter && typeService === "mesa"){
-        if(authSucursal && typeService){
+    if(permRequestWaiter){
+        if(authSucursal){
             let unsub;
             dispatch(rxGetRequestWaiters(authSucursal.nIdBranchOffice, (us) => {
                 unsub = us
@@ -34,7 +29,7 @@ const RequestWaiter = () => {
         } 
     }
   // eslint-disable-next-line
-  }, [authSucursal?.nIdBranchOffice, typeService])
+  }, [authSucursal?.nIdBranchOffice])
   
   return (
     <>

@@ -12,10 +12,10 @@ import {
     FETCH_CLEAR_INIT_SERVICE
 } from '../types'
 
-export const rxGetDishesMenu = (nIdBranchOffice, typeService) => async dispatch => {
+export const rxGetDishesMenu = (nIdBranchOffice) => async dispatch => {
     dispatch({type: FETCH_GET_DISHES_MENU_START})
     try {
-      const q = query(collection(db, "dishes"), where("nIdBranchOffice", "==", nIdBranchOffice), where("sTypeService", "==", typeService));
+      const q = query(collection(db, "dishes"), where("nIdBranchOffice", "==", nIdBranchOffice));
       const querySnapshot = await getDocs(q);
       const dishes = [];
       querySnapshot.forEach(doc => {

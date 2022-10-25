@@ -21,15 +21,9 @@ const { Panel } = Collapse;
 const { Step } = Steps;
 
 const Orders = () => {
-  const { 
-      loadingGetOrders,
-      listOrders,
-      orderSelected,
-      orderDishSelected,
-      loadingUpdateStateOrders
-  } = useSelector(state => state.get("orders"))
 
-  const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
+  const { loadingGetOrders, listOrders, orderSelected, orderDishSelected, loadingUpdateStateOrders } = useSelector(state => state.get("orders"))
+  const { authSucursal, numberTable } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch()
 
@@ -48,7 +42,7 @@ const Orders = () => {
 
   //TODO: FINISHED ORDER
   const handleFinishedOrder = (orderS) => {
-    if(typeService && numberTable && authSucursal){
+    if(numberTable && authSucursal){
         const orderToUpd = []
         listOrders.forEach(o => {
             if( o.nNumberTable === orderS.nNumberTable && o.sState === "requestPayment"){
@@ -67,7 +61,6 @@ const Orders = () => {
             nNumberDiners:  orderToUpd[0]?.nNumberDiners,
             dRequestPayment: orderToUpd[0]?.dRequestPayment,
             nIdBranchOffice: orderToUpd[0]?.nIdBranchOffice,
-            sTypeService: orderToUpd[0]?.sTypeService,
             nNumberTable: orderToUpd[0]?.nNumberTable?? "",
             orderSummaryTotal: orderToUpd
         }
@@ -83,13 +76,6 @@ const Orders = () => {
         width: 15,
         align: "center",
         render: (_, __, index) => index + 1,
-    },
-    {
-        key: "sTypeService",
-        dataIndex: "sTypeService",
-        title: "Tipo de servicio",
-        width: 20,
-        align: "center",
     },
     {
         key: "nNumberTable",
@@ -162,9 +148,9 @@ const Orders = () => {
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
   useEffect(() => {
         if(pathname === "/orders"){
-            if(authSucursal && typeService){
+            if(authSucursal){
                 let unsub;
-                dispatch(rxGetOrders(authSucursal.nIdBranchOffice, typeService, (us) => {
+                dispatch(rxGetOrders(authSucursal.nIdBranchOffice, (us) => {
                     unsub = us
                 }))  
                 return () => {
@@ -174,7 +160,7 @@ const Orders = () => {
             } 
         }
     // eslint-disable-next-line
-  }, [authSucursal?.nIdBranchOffice, typeService])
+  }, [authSucursal?.nIdBranchOffice])
 
   return (
     <Permissions permission="orders">
@@ -200,13 +186,11 @@ const Orders = () => {
                     extra={
                         <>
                             {
-                                //falta poner el permiso de atender, porque si puede atender puede finalizar
-                                typeService === "mesa" &&
                                 orderSelected?.sState === "requestPayment" &&
                                 <Button type='primary' onClick={() => handleFinishedOrder(orderSelected)}>
                                     <div className='flex justify-center'>
                                         <FileDoneOutlined className='mt-1 mr-2' />
-                                        <p>Finalizar { orderSelected?.sTypeService} {orderSelected?.nNumberTable}</p>
+                                        <p>Finalizar Mesa {orderSelected?.nNumberTable}</p>
                                     </div>
                                 </Button>
                             }

@@ -12,6 +12,10 @@ export const rols = [
           key: 'menu.request-waiter',
         },
         {
+          title: 'Iniciar número de mesa',
+          key: 'menu.init-number-table',
+        },
+        {
           title: 'Iniciar servicio',
           key: 'menu.init-service',
         }

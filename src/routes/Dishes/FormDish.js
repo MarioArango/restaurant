@@ -44,7 +44,6 @@ const FormDish = () => {
           sName: values.sName?? '',
           sDescription: values.sDescription?? '',
           nIdTypeProduct: values.nIdTypeProduct?? '',
-          sTypeService: values.sTypeService?? '',
           nPrice: values.nPrice? Number(values.nPrice) : 0,
           nQuantity: 0,
           bActive: true,
@@ -134,7 +133,6 @@ const FormDish = () => {
           sName: dishSelected.sName,
           sDescription: dishSelected.sDescription,
           nIdTypeProduct: dishSelected.nIdTypeProduct,
-          sTypeService: dishSelected.sTypeService,
           nPrice: dishSelected.nPrice
       });
     }
@@ -168,9 +166,6 @@ const FormDish = () => {
                     form={form}
                     onFinish={handleSaveDish}
                     layout="vertical"
-                    initialValues={{
-                      sTypeService: "mesa"
-                    }}
                 >
                     <Row gutter={12}>
                         <Col span={24}>
@@ -226,14 +221,6 @@ const FormDish = () => {
                                     <Option key={index} value={tp.nIdTypeProduct}>{tp.sTypeProduct}</Option>
                                     ))
                                   }
-                                </Select>
-                            </Item>
-                        </Col>
-                        <Col span={24}>
-                            <Item label="Tipo de Servicio" name="sTypeService" rules={requiredField}>
-                                <Select>
-                                    <Option key="mesa" value="mesa">Mesa</Option>
-                                    <Option key="barra" value="barra">Barra</Option>
                                 </Select>
                             </Item>
                         </Col>

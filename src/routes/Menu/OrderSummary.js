@@ -20,14 +20,8 @@ const OrderSummary = (props) => {
       handleDelQtyDish
      } = props;
      
-  const {
-    showOrderSummary,
-    orderSummary,
-    loadingGenerateOrder,
-    orderSummaryTotal
-  } = useSelector(state => state.get("orders"))
-
-  const { authSucursal, typeService, numberTable } = useSelector(state => state.get("users"));
+  const { showOrderSummary, orderSummary, loadingGenerateOrder, orderSummaryTotal } = useSelector(state => state.get("orders"))
+  const { authSucursal, numberTable } = useSelector(state => state.get("users"));
   const { initService } = useSelector(state => state.get("menu"));
 
   const dispatch = useDispatch()
@@ -57,16 +51,11 @@ const OrderSummary = (props) => {
                         nNumberDiners: initService[0]?.nNumberDiners,
                         dCreated: moment().format(dateFormatList[2]),
                         sState: 'pending',
-                        sTypeService: typeService,
                         nIdBranchOffice: authSucursal.nIdBranchOffice,
-                        dishes: orderFormat
+                        dishes: orderFormat,
+                        nNumberTable: parseInt(numberTable)
                     }
-                    if(typeService === "mesa"){
-                        orderToSend = {
-                            ...orderToSend,
-                            nNumberTable: parseInt(numberTable)
-                        }
-                    }
+
                     dispatch(rxGenerateOrder(orderToSend, (nIdOrder) => {
                         const orderAddDb = {
                             nIdOrder,
@@ -147,7 +136,7 @@ const OrderSummary = (props) => {
                     </div>
                 </div>
                 <Col span={24}>
-                    <Button type="primary" loading={loadingGenerateOrder} block onClick={handleSendOrder}>
+                    <Button disabled={!orderSummary?.length} type="primary" loading={loadingGenerateOrder} block onClick={handleSendOrder}>
                         <div className='flex justify-center'>
                             <SendOutlined className='mt-1 mr-2'/>
                             <p>Enviar</p>

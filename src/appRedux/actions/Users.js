@@ -20,7 +20,6 @@ import {
   SHOW_FORM_USER,
   USER_SELECTED,
   USER_AUTH_SUCURSAL,
-  USER_SET_TYPE_SERVICE,
   USER_SET_NUMBER_TABLE,
   USER_SHOW_TYPE_SERVICE,
   FETCH_REQUEST_WAITER_START,
@@ -32,7 +31,12 @@ import {
   USER_SHOW_RATE,
   FETCH_SEND_RATE_START,
   FETCH_SEND_RATE_SUCCESS,
-  FETCH_SEND_RATE_ERROR
+  FETCH_SEND_RATE_ERROR,
+  USER_CLEAR_INIT_ACCOUNT,
+  FETCH_VERIFY_USER_START,
+  FETCH_VERIFY_USER_SUCCESS,
+  FETCH_VERIFY_USER_ERROR,
+  SHOW_VERIFY_USER
 } from '../types'
 import moment from 'moment';
 
@@ -148,8 +152,6 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
 
   export const rxSetUserAuthSucursal = (payload) => ({type: USER_AUTH_SUCURSAL, payload});
 
-  export const rxSetTypeService = (payload) => ({type: USER_SET_TYPE_SERVICE, payload});
-
   export const rxSetNumberTable = (payload) => ({type: USER_SET_NUMBER_TABLE, payload});
 
   export const rxShowTypeService = (payload) => ({type: USER_SHOW_TYPE_SERVICE, payload});
@@ -237,3 +239,33 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
       message.error('Error del servidor.')
     }
   } 
+
+  export const rxClearInitAccount = (payload) => ({type: USER_CLEAR_INIT_ACCOUNT, payload});
+
+  export const rxShowVerifyUser = (payload) => ({type: SHOW_VERIFY_USER, payload});
+
+  export const rxVerifyUser = (sUsername, sPassword) => async dispatch =>{
+    dispatch({type: FETCH_VERIFY_USER_START})
+    try {
+      const sPasswordEncrypt = btoa(sPassword);
+      const q = query(collection(db, "users"), where("sUsername", "==", sUsername), where("sPassword", "==", sPasswordEncrypt));
+      const querySnapshot = await getDocs(q);
+      if(querySnapshot?.docs?.length > 0){
+        querySnapshot.forEach((doc) => {
+          const user = doc.data();
+
+          const sPasswordDecryp = atob(user.sPassword);
+          if(user.sUsername === sUsername && sPasswordDecryp === sPassword){
+            dispatch({type: FETCH_VERIFY_USER_SUCCESS, payload: true})
+          }else {
+            dispatch({type: FETCH_VERIFY_USER_ERROR})
+          }
+        })
+      }else {
+        dispatch({type: FETCH_VERIFY_USER_ERROR})
+      }
+    } catch (error) {
+      dispatch({type: FETCH_VERIFY_USER_ERROR})
+      message.error('Error del servidor.')
+    }
+  }

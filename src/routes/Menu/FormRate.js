@@ -9,13 +9,7 @@ const { Item } = Form;
 const { TextArea } = Input;
 
 const FormRate = () => {
-  const { 
-      authSucursal, 
-      typeService, 
-      numberTable,
-      loadingSendRate,
-      showRate
-  } = useSelector(state => state.get("users"));
+  const { authSucursal, numberTable, loadingSendRate, showRate } = useSelector(state => state.get("users"));
 
   const dispatch = useDispatch();
 
@@ -26,27 +20,23 @@ const FormRate = () => {
     validateFields().then((values) => {
         let rate = {
             dCreated: moment().format(dateFormatList[2]),
-            nIdBranchOffice: authSucursal?.nIdBranchOffice, 
-            typeService, 
-            sCommentRate: values.sCommentRate,
-            nRate: values.nRate?? 3
-        }
-        if(numberTable){
-            rate = {
-                ...rate,
-                nNumberTable: numberTable
-            }
+            nIdBranchOffice: authSucursal?.nIdBranchOffice,
+            sCommentRate: values.sCommentRate?? "",
+            nRate: values.nRate?? 3,
+            nNumberTable: numberTable
+
         }
         dispatch(rxSendRate(rate, () => {
             resetFields();
             dispatch(rxShowRate(false));
-            dispatch(rxShowInitService(true))
+            dispatch(rxShowInitService(true));
         }))
     })
   }
 
   const handleCancelRate = () => {
     dispatch(rxShowRate(false));
+    dispatch(rxShowInitService(true));
   }
 
   return (

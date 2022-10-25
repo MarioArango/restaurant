@@ -36,13 +36,7 @@ const Menu = () => {
 
   const { loadingListDishesMenu, listDishesMenu, listDishesMenuFilter, showInitService, initService } = useSelector(state => state.get("menu"));
 
-  const { 
-    authSucursal, 
-    typeService, 
-    numberTable, 
-    loadingRequestWaiter, 
-    showTypesService
-} = useSelector(state => state.get("users"));
+  const { authSucursal, numberTable, loadingRequestWaiter, showTypesService } = useSelector(state => state.get("users"));
 
 const { 
     loadingListTypesProducts,
@@ -176,7 +170,7 @@ const {
 
   //TODO: REQUEST WAITER
   const handleRequestWaiter = () => {
-    if(typeService && numberTable && authSucursal){
+    if(numberTable && authSucursal){
         const requestWaiter = {
             nIdBranchOffice: authSucursal.nIdBranchOffice,
             sNumberTable: numberTable,
@@ -193,7 +187,7 @@ const {
 
   //TODO: REQUEST PAYMENT
   const handleRequestPayment = () => {
-    if(typeService && numberTable && authSucursal){
+    if(numberTable && authSucursal){
         orderSummaryTotal.forEach(os => {
             const updOrder = {
                 dRequestPayment: moment().format(dateFormatList[2]),
@@ -213,18 +207,18 @@ const {
 
   //TODO: INIT - GET ALL DISHES FOR CLIENTS
    useEffect(() => {
-    if(authSucursal && typeService){
-        dispatch(rxGetDishesMenu(authSucursal.nIdBranchOffice, typeService));
+    if(authSucursal){
+        dispatch(rxGetDishesMenu(authSucursal.nIdBranchOffice));
         dispatch(rxGetTypesProducts(authSucursal.nIdBranchOffice));
     }
-    if (!typeService){
+    if (!numberTable){
         dispatch(rxShowTypeService(true));
     }
-    if(initService?.length===0){
+    if(initService?.length===0 && numberTable){
         dispatch(rxShowInitService(true))
     }
     // eslint-disable-next-line
-   }, [authSucursal?.nIdBranchOffice, typeService, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct])
+   }, [authSucursal?.nIdBranchOffice, loadingDeleteTypeProduct, loadingCreateTypeProduct, loadingUpdateTypeProduct, numberTable])
 
    //TODO: INIT
    useEffect(() => {
@@ -247,7 +241,7 @@ const {
             <div className='flex justify-between overflow-x-auto'>
                 <div className='mr-2'>
                     {
-                        typeService === "mesa" && orderSummaryTotal?.length > 0 &&
+                        orderSummaryTotal?.length > 0 &&
                             <PButton
                                 permission={permRequestPayment}
                                 handleClick={handleRequestPayment}
@@ -258,24 +252,20 @@ const {
                     }
                 </div>
                 <div className='mr-2'>
-                    {
-                        (typeService === "mesa") &&
-                        <PButton
-                            permission={permRequestWaiter}
-                            handleClick={handleRequestWaiter}
-                            loading={loadingRequestWaiter}
-                            icon={<UserOutlined className='mt-1 mr-2' />}
-                            text="Solicitar Mozo"
-                        />
-                            
-                    }
+                    <PButton
+                        permission={permRequestWaiter}
+                        handleClick={handleRequestWaiter}
+                        loading={loadingRequestWaiter}
+                        icon={<UserOutlined className='mt-1 mr-2' />}
+                        text="Solicitar Mozo"
+                    />
                 </div>
                 <div>
                     <Affix offsetTop={20} className="mb-4">
                         <Button 
                             type='primary'
                             onClick={handleGenerateOrder}
-                            disabled={!typeService}
+                            disabled={!numberTable}
                         >
                             <div className='flex justify-between'>
                                 <ShoppingOutlined className='mt-1 mr-2'/> 
