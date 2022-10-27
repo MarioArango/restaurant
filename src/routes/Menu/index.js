@@ -148,15 +148,15 @@ const {
                                 alt="Imagen del plato."
                             />
                         </div>
-                        <div className="card-body mx-4 mt-1">
-                            <div className='flex justify-between items-center mb-1'>
+                        <div className="card-body mx-4 mt-1" style={{height: "110px"}}>
+                            <div className='flex justify-between items-center mb-1' style={{height: "30px"}}>
                                 <h4 className="font-semibold text-sm">{d.sName}</h4>
                                 <h4 className="font-semibold text-base">S/. {d.nPrice ? currency.format(d.nPrice, currencyFE) : '0.00'}</h4>
                             </div>
-                            <p className="opcacity-60 mb-2 h-auto">
+                            <p className="opcacity-60 mb-2 h-auto" style={{height: "50px"}}>
                                 {d.sDescription}
                             </p>
-                            <div className='flex justify-between'>
+                            <div className='flex justify-between' style={{height: "30px"}}>
                                 <Button shape='round' onClick={() => handleDelQtyDish(d)} icon={<MinusOutlined jey="del"/>} disabled={disabledDelete(d)}/>
                                 <Button shape='round' type='primary' icon={<PlusOutlined key="add" />} onClick={() => handleAddQtyDish(d)}/>
                             </div>
@@ -291,7 +291,7 @@ const {
                     />
                 </div>
             </div>
-            <Row gutter={12}>
+            <Row gutter={12} className="mb-10">
                 {
                     getCardDishes()
                 }
