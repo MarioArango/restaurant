@@ -16,8 +16,14 @@ import Permissions from '../../components/Permissions';
 import { usePermission } from '../../Hooks/usePermission';
 import PButton from '../../components/PButton';
 import PIconEditDelete from '../../components/PIconEditDelete';
+import withFilterTable from '../../HOC/withFilterTable';
 
-const Dishes = () => {
+const Dishes = (props) => {
+   //TODO: INHERID 
+   const { 
+    getFilterItemsProps,
+    getColumnSearchProps
+   } = props; 
   //TODO: REDUX STATE
   const { 
     listDishes, 
@@ -106,6 +112,7 @@ const Dishes = () => {
         title: "Nombre",
         width: 120,
         align: "center",
+        ...getColumnSearchProps('sName')
     },
     {
         key: "sType",
@@ -113,6 +120,10 @@ const Dishes = () => {
         title: "Tipo",
         width: 80,
         align: "center",
+        ...getFilterItemsProps({
+            dataIndex: "sType",
+            dataSource: listDishes
+          }),
     },
     {
         key: "nPrice",
@@ -128,7 +139,7 @@ const Dishes = () => {
         title: "Activo",
         width: 80,
         align: "center",
-        render: (value, dish) =>  permDishesActive
+        render: (value, dish) => permDishesActive
                                     ? <Checkbox checked={value} onChange={(e) => handleChangeActive(e, dish)}/>
                                     : <Tooltip 
                                         title={<p className='text-black font-semibold'>Necesitas permiso para ejecutar esta acción!</p>} 
@@ -136,7 +147,7 @@ const Dishes = () => {
                                         placement="left"
                                       >
                                         <Checkbox disabled/>
-                                      </Tooltip>
+                                      </Tooltip>,
     },
     {
         key: "",
@@ -213,4 +224,4 @@ const Dishes = () => {
   )
 }
 
-export default Dishes;
+export default withFilterTable(Dishes);

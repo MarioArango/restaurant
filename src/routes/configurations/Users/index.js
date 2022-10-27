@@ -10,9 +10,11 @@ import PButton from '../../../components/PButton';
 import Permissions from '../../../components/Permissions';
 import FormUser from './FormUser';
 import { rxDeleteUser, rxGetUsers, rxShowFormUser, rxUserSelected, rxGetRols } from '../../../appRedux/actions';
+import withFilterTable from '../../../HOC/withFilterTable';
 
 
-const Users = () => {
+const Users = (props) => {
+  const { getColumnSearchProps, getFilterItemsProps } = props;
 
   const [ permissions, setPermissions  ] = useState(null);
   const [ visiblePermission, setVisiblePermissions  ] = useState(false);
@@ -88,7 +90,8 @@ const Users = () => {
         title: "Usuario",
         width: 30,
         align: "center",
-        render: (value) => value ? value : "-"
+        render: (value) => value ? value : "-",
+        ...getColumnSearchProps('sUsername')
     },
     {
         key: "sRol",
@@ -96,7 +99,11 @@ const Users = () => {
         title: "Rol",
         width: 20,
         align: "center",
-        render: (value) => <Tag color="blue">{value}</Tag>
+        render: (value) => <Tag color="blue">{value}</Tag>,
+        ...getFilterItemsProps({
+            dataIndex: "sRol",
+            dataSource: listUsers
+          }),
     },
     {
         key: "nIdRol",
@@ -211,4 +218,4 @@ const Users = () => {
   )
 }
 
-export default Users;
+export default withFilterTable(Users);

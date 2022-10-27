@@ -9,8 +9,11 @@ import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
 import PIconEditDelete from '../../../components/PIconEditDelete';
 import PButton from '../../../components/PButton';
+import withFilterTable from '../../../HOC/withFilterTable';
 
-const BranchOffices = () => {
+const BranchOffices = (props) => {
+  const { getColumnSearchProps } = props;
+
   const { 
     loadingListBranchOff,
     listBranchOffices,
@@ -67,7 +70,8 @@ const BranchOffices = () => {
         title: "Sucursal",
         width: 200,
         align: "center",
-        render: (value) => value ? value : "-"
+        render: (value) => value ? value : "-",
+        ...getColumnSearchProps('sBranchOffice')
     },
     {
         key: "",
@@ -145,4 +149,4 @@ const BranchOffices = () => {
   )
 }
 
-export default BranchOffices;
+export default withFilterTable(BranchOffices);

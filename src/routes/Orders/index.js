@@ -15,12 +15,17 @@ import {
     rxAddOrderSummaryTotalByClient
 } from '../../appRedux/actions';
 import PButton from '../../components/PButton';
+import withFilterTable from '../../HOC/withFilterTable';
 
 
 const { Panel } = Collapse;
 const { Step } = Steps;
 
-const Orders = () => {
+const Orders = (props) => {
+
+  const {
+    getFilterItemsProps
+  } = props;
 
   const { loadingGetOrders, listOrders, orderSelected, orderDishSelected, loadingUpdateStateOrders } = useSelector(state => state.get("orders"))
   const { authSucursal, numberTable } = useSelector(state => state.get("users"));
@@ -71,19 +76,16 @@ const Orders = () => {
   //TODO: COLUMNS TABLE
   const columns = [
     {
-        key: "index",
-        title: "#",
-        width: 15,
-        align: "center",
-        render: (_, __, index) => index + 1,
-    },
-    {
         key: "nNumberTable",
         dataIndex: "nNumberTable",
         title: "Número mesa",
         width: 20,
         align: "center",
-        render: value => <p className='font-bold text-base'>{value}</p>
+        render: value => <p className='font-bold text-base'>{value}</p>,
+        ...getFilterItemsProps({
+            dataIndex: "nNumberTable",
+            dataSource: listOrders
+          }),
     },
     {
         key: "sState",
@@ -94,7 +96,17 @@ const Orders = () => {
         render: value => value === "pending"? <Tag color="gold">Pendiente</Tag> 
                             :value === "delivered"? <Tag color="blue">Entregado</Tag> 
                             :value === "requestPayment"? <Tag color="red">Cuenta solicitada</Tag> 
-                            :value === "finished"? <Tag color="success">Finalizado</Tag> : ""
+                            :value === "finished"? <Tag color="success">Finalizado</Tag> : "",
+        ...getFilterItemsProps({
+          dataIndex: "sState",
+          dataSource: listOrders,
+          labels: {
+            pending: "Pendiente",
+            delivered: "Entregado",
+            requestPayment: "Cuenta solicitada",
+            finished: "Finalizado"
+          }
+        }),
     },
     {
         key: "dCreated",
@@ -243,4 +255,4 @@ const Orders = () => {
   )
 }
 
-export default Orders;
+export default withFilterTable(Orders);

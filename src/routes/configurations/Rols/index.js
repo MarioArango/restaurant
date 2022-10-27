@@ -9,8 +9,10 @@ import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
 import PButton from '../../../components/PButton';
 import PIconEditDelete from '../../../components/PIconEditDelete';
+import withFilterTable from '../../../HOC/withFilterTable';
 
-const Rols = () => {
+const Rols = (props) => {
+  const { getColumnSearchProps } = props;  
   const { 
     loadingListRols,
     listRols,
@@ -67,7 +69,8 @@ const Rols = () => {
         title: "Rol",
         width: 20,
         align: "center",
-        render: (value) => value ? <Tag color="blue">{value}</Tag> : "-"
+        render: (value) => value ? <Tag color="blue">{value}</Tag> : "-",
+        ...getColumnSearchProps('sRol')
     },
     {
         key: "",
@@ -145,4 +148,4 @@ const Rols = () => {
   )
 }
 
-export default Rols;
+export default withFilterTable(Rols);

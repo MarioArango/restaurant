@@ -9,8 +9,10 @@ import Permissions from '../../../components/Permissions';
 import { usePermission } from '../../../Hooks/usePermission';
 import PIconEditDelete from '../../../components/PIconEditDelete';
 import PButton from '../../../components/PButton';
+import withFilterTable from '../../../HOC/withFilterTable';
 
-const TypesProducts = () => {
+const TypesProducts = (props) => {
+  const { getColumnSearchProps } = props;
   const { 
     loadingListTypesProducts,
     listTypesProducts,
@@ -70,6 +72,7 @@ const TypesProducts = () => {
         title: "Tipo de Producto",
         width: 200,
         align: "center",
+        ...getColumnSearchProps('sTypeProduct')
     },
     {
         key: "",
@@ -149,4 +152,4 @@ const TypesProducts = () => {
   )
 }
 
-export default TypesProducts;
+export default withFilterTable(TypesProducts);
