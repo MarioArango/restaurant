@@ -8,15 +8,19 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const Excel = ({permission = false, dataSource = [], columns = [], fileName = ""}) => {
-
     return (
         <>
             {
-                permission ? 
+                permission? 
                 <ExcelFile 
+                    filename={fileName}
                     element={
                         <Tooltip title="Exportar a Excel">
-                            <Button style={{background: "green", color: "white", border: "1px solid white"}} type="default">
+                            <Button 
+                                type="default"
+                                className="bg-green-600 text-white border-green hover:bg-green-700 hover:text-white hover:border-white"
+                                disabled={!dataSource?.length}
+                            >
                                 <div className="flex">
                                     <FileExcelOutlined className="mt-1 mr-2" />
                                     <p>Excel</p>
