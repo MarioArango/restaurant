@@ -1,12 +1,10 @@
 import { useSelector } from 'react-redux';
-import { Collapse, DatePicker, Row, Col, message, Button} from 'antd';
-import { FilterOutlined } from '@ant-design/icons';
+import { DatePicker, message, Button} from 'antd';
 import moment from 'moment';
 
 const { RangePicker } = DatePicker;
-const { Panel } = Collapse;
 
-const RangeDateFilter = ({ handleFilter, rangeDate, setRangeDate }) => {
+const RangeDateFilter = ({ rangeDate, setRangeDate }) => {
     
   const { authSucursal } = useSelector(state => state.get("users"));
 
@@ -47,49 +45,33 @@ const RangeDateFilter = ({ handleFilter, rangeDate, setRangeDate }) => {
   }
 
   return (
-    <Collapse defaultActiveKey={['1']} className="my-3 py-0" >
-        <Panel header="Filtro" key="1">
-          <Row gutter={12}>
-            <Col xs={24} sm={12} md={12} lg={12} xl={12} className="flex justify-start">
-                <RangePicker 
-                  allowClear={false}
-                  value={rangeDate}
-                  onChange={onChangeRangeDate}
-                  renderExtraFooter={() => [
-                  <Button key="1" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentYear")}>
-                    Año actual
-                  </Button>,
-                  <Button key="2" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("lastMonth")}>
-                    Mes pasado
-                  </Button>,
-                  <Button key="3" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentMonth")}>
-                    Mes actual
-                  </Button>,
-                  <Button key="4" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("lastWeek")}>
-                    Semana pasada
-                  </Button>,
-                  <Button key="5" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentWeek")}>
-                    Semana actual
-                  </Button>,
-                  <Button key="6" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("yesterday")}>
-                    Ayer
-                  </Button>,
-                  <Button key="7" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("today")}>
-                    Hoy
-                  </Button>
-                ]} />
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={12} xl={12} className="flex justify-end">
-              <Button onClick={handleFilter} type="primary">
-                <div className='flex justify-center'>
-                  <FilterOutlined className='mt-1 mr-2'/>
-                  <p>Filtrar</p>
-                </div>
-              </Button>
-            </Col>
-          </Row>
-        </Panel>
-    </Collapse>
+    <RangePicker 
+      allowClear={false}
+      value={rangeDate}
+      onChange={onChangeRangeDate}
+      renderExtraFooter={() => [
+      <Button key="1" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentYear")}>
+        Año actual
+      </Button>,
+      <Button key="2" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("lastMonth")}>
+        Mes pasado
+      </Button>,
+      <Button key="3" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentMonth")}>
+        Mes actual
+      </Button>,
+      <Button key="4" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("lastWeek")}>
+        Semana pasada
+      </Button>,
+      <Button key="5" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("currentWeek")}>
+        Semana actual
+      </Button>,
+      <Button key="6" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("yesterday")}>
+        Ayer
+      </Button>,
+      <Button key="7" size='small' type='primary' className='mr-2' onClick={() => handleSelectDate("today")}>
+        Hoy
+      </Button>
+    ]} />
   )
 }
 

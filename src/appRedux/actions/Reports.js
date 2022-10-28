@@ -31,13 +31,13 @@ export const rxAddOrderSummaryTotalByClient = (orderSummaryTotal) => async dispa
 }
 
 //TODO: SALE'S REPORT FOR BRANCHOFFICES AND RANGE TIME
-export const rxReportSales = (nIdBranchOffice, from, to) => async dispatch => {
+export const rxReportSales = (nIdBranchOffice, from, to, nNumberTable) => async dispatch => {
     dispatch({type: FETCH_REP_SALES_START})
     try {
       const q = query(collection(db, "reportSale"), 
-                      where("nIdBranchOffice", "==", nIdBranchOffice),
-                      where("dInitService", ">=", from),
-                      where("dInitService", "<=", to),
+                  where("nIdBranchOffice", "==", nIdBranchOffice),
+                  where("dInitService", ">=", from),
+                  where("dInitService", "<=", to),
                 );
       const querySnapshot = await getDocs(q);
       const sales = []
@@ -45,7 +45,7 @@ export const rxReportSales = (nIdBranchOffice, from, to) => async dispatch => {
         sales.push({...doc.data(), nIdSale: doc.id}) 
       })
 
-      const result = sales.map(s => {
+      let result = sales.map(s => {
         let nPriceTotal = 0;
         s.orderSummaryTotal?.forEach(ot => {
           ot.dishes?.forEach(d => {
@@ -61,6 +61,10 @@ export const rxReportSales = (nIdBranchOffice, from, to) => async dispatch => {
           nPriceTotal
         }
       })
+
+      if(nNumberTable){
+        result = result.filter(r => Number(r.nNumberTable)=== Number(nNumberTable))
+      }
       dispatch({type: FETCH_REP_SALES_SUCCESS, payload: result})
     } catch (error) {
       dispatch({type: FETCH_REP_SALES_ERROR})
@@ -69,14 +73,15 @@ export const rxReportSales = (nIdBranchOffice, from, to) => async dispatch => {
   }
 
   //TODO: ORDER'S REPORT FOR BRANCHOFFICES AND RANGE TIME
-export const rxReportOrders = (nIdBranchOffice, from, to) => async dispatch => {
+export const rxReportOrders = (nIdBranchOffice, from, to, nNumberTable) => async dispatch => {
   dispatch({type: FETCH_REP_ORDERS_START})
   try {
     const q = query(collection(db, "reportSale"), 
-                    where("nIdBranchOffice", "==", nIdBranchOffice),
-                    where("dInitService", ">=", from),
-                    where("dInitService", "<=", to),
+                  where("nIdBranchOffice", "==", nIdBranchOffice),
+                  where("dInitService", ">=", from),
+                  where("dInitService", "<=", to),
               );
+    
     const querySnapshot = await getDocs(q);
     const sales = []
     querySnapshot.forEach(doc => {
@@ -98,6 +103,11 @@ export const rxReportOrders = (nIdBranchOffice, from, to) => async dispatch => {
         })
       })
     })
+
+    if(nNumberTable){
+      dishes = dishes.filter(d => Number(d.nNumberTable) === Number(nNumberTable))
+    }
+
     dispatch({type: FETCH_REP_ORDERS_SUCCESS, payload: dishes})
   } catch (error) {
     dispatch({type: FETCH_REP_ORDERS_ERROR})
@@ -106,19 +116,25 @@ export const rxReportOrders = (nIdBranchOffice, from, to) => async dispatch => {
 }
 
   //TODO: RATE'S REPORT FOR BRANCHOFFICES AND RANGE TIME
-  export const rxReportRates = (nIdBranchOffice, from, to) => async dispatch => {
+  export const rxReportRates = (nIdBranchOffice, from, to, nNumberTable) => async dispatch => {
     dispatch({type: FETCH_REP_RATES_START})
     try {
       const q = query(collection(db, "rates"), 
-                      where("nIdBranchOffice", "==", nIdBranchOffice),
-                      where("dCreated", ">=", from),
-                      where("dCreated", "<=", to),
-                );
+                where("nIdBranchOffice", "==", nIdBranchOffice),
+                where("dCreated", ">=", from),
+                where("dCreated", "<=", to),
+            );
+      
       const querySnapshot = await getDocs(q);
-      const rates = [];
+      let rates = [];
       querySnapshot.forEach(doc => {
         rates.push({...doc.data(), nIdRate: doc.id}) 
       })  
+
+      if(nNumberTable){
+        rates = rates.filter(r => Number(r.nNumberTable) === Number(nNumberTable))
+      }
+
       dispatch({type: FETCH_REP_RATES_SUCCESS, payload: rates})
     } catch (error) {
       dispatch({type: FETCH_REP_RATES_ERROR})

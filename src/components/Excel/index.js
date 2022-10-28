@@ -16,7 +16,7 @@ const Excel = ({permission = false, dataSource = [], columns = [], fileName = ""
                 <ExcelFile 
                     element={
                         <Tooltip title="Exportar a Excel">
-                            <Button type="default" className="text-white bg-green-700 hover:bg-green-600 hover:text-white hover:border-green-700">
+                            <Button style={{background: "green", color: "white", border: "1px solid white"}} type="default">
                                 <div className="flex">
                                     <FileExcelOutlined className="mt-1 mr-2" />
                                     <p>Excel</p>
