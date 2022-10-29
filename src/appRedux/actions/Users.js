@@ -244,7 +244,7 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
 
   export const rxShowVerifyUser = (payload) => ({type: SHOW_VERIFY_USER, payload});
 
-  export const rxVerifyUser = (sUsername, sPassword) => async dispatch =>{
+  export const rxVerifyUser = (sUsername, sPassword, cb = null) => async dispatch => {
     dispatch({type: FETCH_VERIFY_USER_START})
     try {
       const sPasswordEncrypt = btoa(sPassword);
@@ -258,10 +258,12 @@ export const rxRegisterUser = (user, cb = null) => async dispatch => {
           if(user.sUsername === sUsername && sPasswordDecryp === sPassword){
             dispatch({type: FETCH_VERIFY_USER_SUCCESS, payload: true})
           }else {
+            cb && cb()
             dispatch({type: FETCH_VERIFY_USER_ERROR})
           }
         })
       }else {
+        cb && cb()
         dispatch({type: FETCH_VERIFY_USER_ERROR})
       }
     } catch (error) {

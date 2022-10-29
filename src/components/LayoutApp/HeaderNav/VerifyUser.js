@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Button, Col, Row, Form, Input } from "antd";
+import { Modal, Button, Form, Input } from "antd";
 import { AuditOutlined, SaveOutlined } from '@ant-design/icons';
 import { requiredField } from '../../../util/config';
+import { useAuth } from '../../../Hooks/auth';
 import {  rxShowVerifyUser, rxVerifyUser } from '../../../appRedux/actions';
 
 const { Item } = Form
@@ -13,11 +14,19 @@ const VerifyUser = () => {
   const [ form ] = Form.useForm();
   const { validateFields } = form;
 
+  const auth = useAuth()
+
   const dispatch = useDispatch();
 
   const handleVerifyUser = () => {
     validateFields().then((values) => {
-        dispatch(rxVerifyUser(values.sUsername, values.sPassword))
+        if(auth.sUsername === values.sUsername){
+            dispatch(rxVerifyUser(auth.sUsername, values.sPassword, () => {
+                dispatch(rxShowVerifyUser(false))
+            }))
+        }else {
+            dispatch(rxShowVerifyUser(false))
+        }
     })
   }
 
@@ -47,27 +56,20 @@ const VerifyUser = () => {
             name="verify-user"
             onFinish={handleVerifyUser}
             layout="vertical"
+            autoComplete="off"
         >
-            <Row gutter={12}>
-                <Col span={24}>
-                    <Item name="sUsername" label="Usuario" rules={requiredField}>
-                        <Input/>
-                    </Item>
-                </Col>
-                <Col span={24}>
-                    <Item name="sPassword" label="Contraseña" rules={requiredField}>
-                        <Input.Password/>
-                    </Item>
-                </Col>
-                <Col span={24}>
-                    <Button type="primary" block htmlType='submit'>
-                        <div className='flex justify-center'>
-                            <SaveOutlined className="mt-1 mr-2"/>
-                            <p>Verificar</p>
-                        </div>
-                    </Button>
-                </Col>
-            </Row>
+            <Item name="sUsername" label="Usuario" rules={requiredField}>
+                <Input/>
+            </Item>
+            <Item name="sPassword" label="Contraseña" rules={requiredField}>
+                <Input/>
+            </Item>
+            <Button type="primary" block htmlType='submit'>
+                <div className='flex justify-center'>
+                    <SaveOutlined className="mt-1 mr-2"/>
+                    <p>Verificar</p>
+                </div>
+            </Button>
         </Form>
     </Modal>
   )
