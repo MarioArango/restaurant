@@ -134,7 +134,7 @@ const Orders = () => {
                   columns={columns}
                   loading={loadingListReportOrders}
                   dataSource={listReportOrders}
-                  rowKey={(dish) => dish?.nIdDish}
+                  rowKey={() => Math.random()}
                   rowClassName={(_) => "cursor-pointer"}
                   scroll={{y: "55vh", x: 1000}}
               />

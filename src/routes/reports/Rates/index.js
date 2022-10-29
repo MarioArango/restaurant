@@ -135,7 +135,7 @@ const Rates = () => {
                 columns={columns}
                 loading={loadingListReportRates}
                 dataSource={listReportRates}
-                rowKey={(rate) => rate?.nIdRate}
+                rowKey={() => Math.random()}
                 rowClassName={(_) => "cursor-pointer"}
                 scroll={{y: "55vh", x: 1000}}
             />

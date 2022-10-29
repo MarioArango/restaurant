@@ -148,7 +148,7 @@ const Sales = () => {
                   columns={columns}
                   loading={loadingListReportSales}
                   dataSource={listReportSales}
-                  rowKey={(sale) => sale?.nIdSale}
+                  rowKey={() => Math.random()}
                   rowClassName={(_) => "cursor-pointer"}
                   scroll={{y: "55vh", x: 1000}}
                   summary={(sales) => {
